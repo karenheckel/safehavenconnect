@@ -10,7 +10,7 @@
 Brianna Flores
 Jonathan Ho
 Karen Heckel
-Parul Sadisivuni
+Parul Sadasivuni
 Ali Novruzov
 
 
@@ -19,22 +19,22 @@ Our project will be a platform that organizes and provides domestic violence res
 
 
 ## Three data sources 
-https://apiportal.211.org/ - 211 National Data Platform (we can use this to find information on programs, hotlines, services) [Organizations and Resources]
-https://topapis.com/homeless-shelter-api/ - Homeless Shelter API (helpful to find information on shelters) [Resources]
-https://eventbrite.com - Events held across the US (online and in-person) [Events]
-https://data.hrsa.gov/tools/web-services - Medical centers API (use to find medical centers)
+- https://apiportal.211.org/ - 211 National Data Platform (we can use this to find information on programs, hotlines, services) [Organizations and Resources]
+- https://topapis.com/homeless-shelter-api/ - Homeless Shelter API (helpful to find information on shelters) [Resources]
+- https://eventbrite.com - Events held across the US (online and in-person) [Events]
+- https://data.hrsa.gov/tools/web-services - Medical centers API (use to find medical centers)
 
 
 ## Three Models
-Organizations
-Resources
-Events
+- Organizations
+- Resources
+- Events
 
 
 ## Number of instances of each model
-Organizations: 20
-Resources: 50
-Events: 50
+- Organizations: 20
+- Resources: 50
+- Events: 50
 
 
 ## Five Attributes per Model
@@ -44,23 +44,23 @@ Events: 50
 
 ## Instances of each model must connect to instances of at least two other models
 **Organizations**
-    Connect to resources: any resources put out by the organization
-    Any events held by the organization
+- Connect to resources: any resources put out by the organization
+- Any events held by the organization
 **Resources**
-    Connect to organizations that are referenced by resources
-    Connect to events related to the resource article
+- Connect to organizations that are referenced by resources
+- Connect to events related to the resource article
 **Events**
-    Connect to resources event may be promoting
-    Connect to organization that is hosting event
+- Connect to resources event may be promoting
+- Connect to organization that is hosting event
 
 
 ## Describe two types of media for each model
-**Organizations:** Link to organization, image of organization, text describing organization
-**Resources:** link to resource, text, images
-**Events:** link to event page, images of event, map for event location, countdown till event start
+- **Organizations:** Link to organization, image of organization, text describing organization
+- **Resources:** link to resource, text, images
+- **Events:** link to event page, images of event, map for event location, countdown till event start
 
 
 ## Describe three questions that your site will answer
-Where is the nearest domestic violence shelter and what services do they offer?
-What free or affordable legal resources can I access based on my situation?
-What upcoming events, workshops, or support groups are available for survivors in my area or online?
+- Where is the nearest domestic violence shelter and what services do they offer?
+- What free or affordable legal resources can I access based on my situation?
+- What upcoming events, workshops, or support groups are available for survivors in my area or online?
