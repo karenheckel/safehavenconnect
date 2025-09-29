@@ -7,11 +7,32 @@
 
 
 ## Member Names
-Brianna Flores
-Jonathan Ho
-Karen Heckel
-Parul Sadasivuni
-Ali Novruzov
+| Member | EID | GitLab ID |
+| ------ | ------ | ------ |
+| **Brianna Flores** | bf9566 | @Brianna-Flo |
+| **Jonathan Ho** |  | @ |
+| **Karen Heckel** |  | @ |
+| **Parul Sadasivuni** |  | @ |
+| **Ali Novruzov** |  | @ |
+
+# Git SHA
+
+# Project Leader
+
+# Link to GitLab pipelines
+
+# Link to website
+
+# Estimated Completion Time
+| Member | Estimated (hours) | Actual (hours) |
+| ------ | ------ | ------ |
+| **Brianna Flores** | 15 |  |
+| **Jonathan Ho** |  |  |
+| **Karen Heckel** |  |  |
+| **Parul Sadasivuni** |  |  |
+| **Ali Novruzov** |  |  |
+
+# Comments
 
 
 ## The Proposed Project
