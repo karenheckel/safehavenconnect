@@ -4,6 +4,7 @@ import Events from "../components/Events";
 import Organizations from "../components/Organizations";
 import Resources from "../components/Resources";
 import { Container, Row, Col, Button } from "react-bootstrap";
+import Information from "../components/Information";
 
 const Landing = () => {
   return (
@@ -25,7 +26,7 @@ const Landing = () => {
           </Row>
         </Container>
       </div>
-      
+      <Information />
       <Events />
       <Resources />
       <Organizations />
