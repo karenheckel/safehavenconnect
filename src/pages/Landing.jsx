@@ -1,44 +1,51 @@
 import React from "react";
+import NavBar from "../components/NavBar";
+import Card from "react-bootstrap/Card";
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 const Landing = () => {
   return (
     <>
-      <nav className="navbar navbar-light" style={{backgroundColor: "#cde5d7"}}>
-        <div className="d-flex justify-content-between align-items-center mx-3" style={{ width: "100%" }}>
-          <a class="navbar-brand" href="#">
-            SafeHavenConnect
-          </a>
-          <div>
-            <ul className="nav d-flex flex-row mb-2 gap-3 align-items-center navbar-nav">
-              <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="/">
-                  Home
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/">
-                  Model 1
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/">
-                  Model 2
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/">
-                  Model 3
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/about">
-                  About
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+      <NavBar />
+      
+      <Container>
+        <h1>Upcoming Events</h1>
+        <Row>
+            
+        <Card style={{ width: "18rem" }}>
+          <Card.Img variant="top" src="https://picsum.photos/180/100" />
+          <Card.Body>
+            <Card.Title>Event 1</Card.Title>
+            <Card.Text>
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
+            </Card.Text>
+          </Card.Body>
+        </Card>
+        <Card style={{ width: "18rem" }}>
+          <Card.Img variant="top" src="https://picsum.photos/180/100" />
+          <Card.Body>
+            <Card.Title>Event 2</Card.Title>
+            <Card.Text>
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
+            </Card.Text>
+          </Card.Body>
+        </Card>
+        <Card style={{ width: "18rem" }}>
+          <Card.Img variant="top" src="https://picsum.photos/180/100" />
+          <Card.Body>
+            <Card.Title>Event 3</Card.Title>
+            <Card.Text>
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      </Row>
+        </Container>
     </>
   );
 };
