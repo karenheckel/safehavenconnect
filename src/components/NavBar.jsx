@@ -19,17 +19,17 @@ const NavBar = () => {
             </li>
             <li className="nav-item">
               <a className="nav-link" href="/">
-                Model 1
+                Events
               </a>
             </li>
             <li className="nav-item">
               <a className="nav-link" href="/">
-                Model 2
+                Organizations
               </a>
             </li>
             <li className="nav-item">
               <a className="nav-link" href="/">
-                Model 3
+                Resources
               </a>
             </li>
             <li className="nav-item">

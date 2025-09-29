@@ -5,9 +5,9 @@ import Row from "react-bootstrap/Row";
 
 const Events = () => {
   return (
-    <Container>
+    <Container className="text-center my-5">
       <h1>Upcoming Events</h1>
-      <Row>
+      <Row className="justify-content-center">
         <Card style={{ width: "18rem" }}>
           <Card.Img variant="top" src="https://picsum.photos/180/100" />
           <Card.Body>
