@@ -1,8 +1,8 @@
 import React from "react";
 import NavBar from "../components/NavBar";
-import Events from "../components/Events";
-import Organizations from "../components/Organizations";
-import Resources from "../components/Resources";
+import EventsPreview from "../components/EventsPreview";
+import OrganizationsPreview from "../components/OrganizationsPreview";
+import ResourcesPreview from "../components/ResourcesPreview";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Information from "../components/Information";
 
@@ -27,9 +27,9 @@ const Landing = () => {
         </Container>
       </div>
       <Information />
-      <Events />
-      <Resources />
-      <Organizations />
+      <EventsPreview />
+      <ResourcesPreview />
+      <OrganizationsPreview />
     </>
   );
 };
