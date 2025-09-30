@@ -13,7 +13,7 @@ const Event2 = () => {
           <Col md={6}>
             <img
               src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1081174993%2F249324158147%2F1%2Foriginal.20250725-115152?w=940&auto=format%2Ccompress&q=75&sharp=10&rect=295%2C0%2C792%2C396&s=50166504b332a1ee1f268b31b16442fa"
-              alt="SAFE Alliance Logo"
+              alt="Adele Gladman & Associates Logo"
               className="img-fluid rounded"
             />
           </Col>

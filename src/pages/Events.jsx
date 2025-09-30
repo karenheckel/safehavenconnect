@@ -66,7 +66,7 @@ const Events = () => {
             <Card.Body>
               <Card.Title>TCFV’s 2025 Texas Town Hall</Card.Title>
               <Card.Text>
-                Location: Texas Tribune Headquarters, Austin
+                Location: Texas Tribune Headquarters, Austin, TX
               </Card.Text>
               <Card.Text>Time: 10:00 am - 12:00 pm</Card.Text>
               <Card.Text>Date: October 3, 2025</Card.Text>
