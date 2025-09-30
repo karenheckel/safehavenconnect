@@ -27,9 +27,6 @@ const Landing = () => {
         </Container>
       </div>
       <Information />
-      <EventsPreview />
-      <ResourcesPreview />
-      <OrganizationsPreview />
     </>
   );
 };

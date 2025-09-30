@@ -8,7 +8,7 @@ const Information = () => {
       <Row className="justify-content-center">
         <Col md={4} className="d-flex">
           <Card className="flex-fill text-center">
-            <Card.Img variant="top" src="https://picsum.photos/180/100" />
+            <Card.Img variant="top" src="https://images.pexels.com/photos/159213/hall-congress-architecture-building-159213.jpeg" />
             <Card.Body>
               <Card.Title>Events</Card.Title>
               <Card.Text>
@@ -21,7 +21,7 @@ const Information = () => {
 
         <Col md={4} className="d-flex">
           <Card className="flex-fill text-center">
-            <Card.Img variant="top" src="https://picsum.photos/180/100" />
+            <Card.Img variant="top" src="https://images.pexels.com/photos/159866/books-book-pages-read-literature-159866.jpeg" />
             <Card.Body>
               <Card.Title>Resources</Card.Title>
               <Card.Text>
@@ -33,7 +33,7 @@ const Information = () => {
         </Col>
         <Col md={4} className="d-flex">
           <Card className="flex-fill text-center">
-            <Card.Img variant="top" src="https://picsum.photos/180/100" />
+            <Card.Img variant="top" src="https://images.pexels.com/photos/1451040/pexels-photo-1451040.jpeg" />
             <Card.Body>
               <Card.Title>Organizations</Card.Title>
               <Card.Text>
