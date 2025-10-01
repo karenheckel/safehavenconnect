@@ -11,8 +11,8 @@ import Organizations2 from './pages/Organizations/Organization2'
 import Organizations3 from './pages/Organizations/Organization3'
 import Resources from './pages/Resources'
 import Resource1 from './pages/Resources/resource1'
-import Resource2 from './pages/Resources/Resource2'
-import Resource3 from './pages/Resources/Resource3'
+import Resource2 from './pages/Resources/resource2'
+import Resource3 from './pages/Resources/resource3'
 
 function App() {
   return (
