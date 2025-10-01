@@ -6,12 +6,10 @@ stages:
 variables:
   NODE_VERSION: "20"
 
-# Cache node_modules for faster builds
 cache:
   paths:
     - node_modules/
 
-# Test stage - runs on every push/MR
 test:
   stage: test
   image: node:$NODE_VERSION
@@ -26,7 +24,6 @@ test:
       - dist/
     expire_in: 1 hour
 
-# Build stage - creates production build
 build:
   stage: build
   image: node:$NODE_VERSION
@@ -42,7 +39,6 @@ build:
     - main
     - develop
 
-# Deploy to GitLab Pages
 pages:
   stage: deploy
   script:
