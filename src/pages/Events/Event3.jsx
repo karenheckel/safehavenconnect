@@ -16,7 +16,7 @@ const Event3 = () => {
               className="img-fluid rounded"
             />
           </Col>
-          <Col className="text-center"  md={6}>
+          <Col className="text-center" md={6}>
             <Card body className="shadow-sm">
               <p>Location: Texas Tribune Headquarters, Austin</p>
               <p>Date: October 3, 2025</p>
@@ -29,17 +29,28 @@ const Event3 = () => {
           <Col className="text-center" md={6}>
             <h3>Related Organizations</h3>
             <p>
-              <strong>Organizer:</strong> tcfv (Texas Council on Family Violence)
+              <strong>Organizer:</strong> tcfv (Texas Council on Family
+              Violence)
             </p>
-            <Button href="/">Organization Info</Button>
+            <Button href="/organizations">All Organization</Button>
             <p>
-              <strong>More Info:</strong>{" "}
-              <a href="https://tcfv.org/">tcfv</a>
+              <strong>More Info:</strong> <a href="https://tcfv.org/">tcfv</a>
             </p>
           </Col>
           <Col className="text-center" md={6}>
             <h3>Related Resources</h3>
           </Col>
+        </Row>
+        <Row>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3445.793039819381!2d-97.74373242486826!3d30.271477507779117!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8644b5a0aa0df2e7%3A0xc62c8585bc753d48!2sThe%20Texas%20Tribune!5e0!3m2!1sen!2sus!4v1759347405845!5m2!1sen!2sus"
+            width="600"
+            height="450"
+            style={{ border: 0 }}
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
         </Row>
       </Container>
     </>

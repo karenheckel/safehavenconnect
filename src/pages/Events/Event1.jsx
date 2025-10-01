@@ -16,7 +16,7 @@ const Event1 = () => {
               className="img-fluid rounded"
             />
           </Col>
-          <Col className="text-center"  md={6}>
+          <Col className="text-center" md={6}>
             <Card body className="shadow-sm">
               <p>Location: 1515 Grove Blvd, Austin, TX 78741</p>
               <p>Date: October 1, 2025</p>
@@ -31,7 +31,7 @@ const Event1 = () => {
             <p>
               <strong>Organizer:</strong> The SAFE Alliance
             </p>
-            <Button href="/">Organization Info</Button>
+            <Button href="/organization2">Organization Info</Button>
             <p>
               <strong>More Info:</strong>{" "}
               <a href="https://www.safeaustin.org/">SAFE Alliance</a>
@@ -40,6 +40,17 @@ const Event1 = () => {
           <Col className="text-center" md={6}>
             <h3>Related Resources</h3>
           </Col>
+        </Row>
+        <Row>
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d474.53467889163176!2d-97.70611084451984!3d30.2309014345067!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8644b502a80a8c0b%3A0xd1c23d702372dcd1!2sSAFE!5e0!3m2!1sen!2sus!4v1759346946221!5m2!1sen!2sus"
+            width="600"
+            height="450"
+            style={{border:0}}
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
         </Row>
       </Container>
     </>

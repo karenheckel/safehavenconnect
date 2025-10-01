@@ -7,8 +7,9 @@ const Event2 = () => {
     <>
       <NavBar />
       <Container className="my-5">
-        <h1 className="text-center">Understanding Domestic Abuse and the Impact on Children and
-        Families</h1>
+        <h1 className="text-center">
+          Understanding Domestic Abuse and the Impact on Children and Families
+        </h1>
         <Row className="my-3 align-items-center">
           <Col md={6}>
             <img
@@ -17,7 +18,7 @@ const Event2 = () => {
               className="img-fluid rounded"
             />
           </Col>
-          <Col className="text-center"  md={6}>
+          <Col className="text-center" md={6}>
             <Card body className="shadow-sm">
               <p>Location: Online</p>
               <p>Date: October 9, 2025</p>
@@ -32,15 +33,28 @@ const Event2 = () => {
             <p>
               <strong>Organizer:</strong> Adele Gladman & Associates
             </p>
-            <Button href="/">Organization Info</Button>
+            <Button href="/organizations">All Organizations</Button>
             <p>
               <strong>More Info:</strong>{" "}
-              <a href="https://www.adelegladman.co.uk/">Adele Gladman & Associates</a>
+              <a href="https://www.adelegladman.co.uk/">
+                Adele Gladman & Associates
+              </a>
             </p>
           </Col>
           <Col className="text-center" md={6}>
             <h3>Related Resources</h3>
           </Col>
+        </Row>
+        <Row>
+          <iframe
+            src=""
+            width="600"
+            height="450"
+            style={{ border: 0 }}
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
         </Row>
       </Container>
     </>
