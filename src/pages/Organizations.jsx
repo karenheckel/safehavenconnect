@@ -57,14 +57,7 @@ const Organizations = () => {
                 Services: Emergency Shelter, Counseling, Legal Advocacy
               </Card.Text>
               <Card.Text>
-                Hours: <br />
-                Monday 12:00 am - 4:00 pm <br />
-                Tuesday 12:00 am - 4:00 pm <br />
-                Wednesday 12:00 am - 4:00 pm <br />
-                Thursday 12:00 am - 4:00 pm <br />
-                Friday CLOSED <br />
-                Saturday CLOSED <br />
-                Sunday CLOSED
+                Hours: 24/7
               </Card.Text>
               <Card.Text>Online Availability: Yes</Card.Text>
               <Card.Text>
@@ -93,7 +86,7 @@ const Organizations = () => {
               <Card.Title>Texas Council on Family Violence</Card.Title>
               <Card.Text>Location: PO Box 163865, Austin, TX 78716</Card.Text>
               <Card.Text>Services: Trainings, Technical Assistance, Materials, Prevention Efforts</Card.Text>
-              <Card.Text>Hours: 24/7</Card.Text>
+              <Card.Text>Hours: n/a</Card.Text>
               <Card.Text>Online Availability: Yes</Card.Text>
               <Card.Text>
                 Target Users: Family Violence Programs and Advocates
