@@ -11,6 +11,7 @@ const team = [
     role: "Frontend Developer",
     bio: "I am a junior majoring in Computer Science. Currently, I am an Undergraduate Research Assistant at TACC and the Academic officer for HACS. Outside of school, I enjoy thrifting and watching movies!",
     commitName: "karenheckel",
+    gitlabUser: "karenheckel",
     unitTests: "0",
   },
   {
@@ -19,6 +20,7 @@ const team = [
     role: "Full Stack Developer",
     bio: "My name is Parul and I'm a junior in Computer Science and Business here at UT. I'm a research assistant with Dr. Caleb Kwon in the McCombs School of Business studying the impacts of minimum wage shocks on employment. In my free time, I enjoy music and watching Longhorn sports!",
     commitName: "Parul S Sadasivuni",
+    gitlabUser: "parul.sadasivuni",
     unitTests: "0",
   },
   {
@@ -27,6 +29,7 @@ const team = [
     role: "Full Stack Developer",
     bio: "Hello! I'm a junior studying Computer Science with a minor in Business. I currently serve as the Marketing Officer for the Hispanic Association of Computer Scientists (HACS) and am also a member of Longhorn Developers and TCUP. I also love to crochet and run a small business, StockysCrafts, where I sell handmade crochet plushies!",
     commitName: "Brianna-Flo",
+    gitlabUser: "Brianna-Flo",
     unitTests: "0",
   },
   {
@@ -35,6 +38,7 @@ const team = [
     role: "Backend Developer",
     bio: "My name is Ali and I'm in my final year at UT. I recently completed an AI Engineering position with Fujitsu. In my free time I like to learn history and watch sci-fi movies. Travel is also something I find really fun.",
     commitName: "anovruzov",
+    gitlabUser: "anovruzov",
     unitTests: "0",
   },
   {
@@ -43,6 +47,7 @@ const team = [
     role: "Full Stack Developer",
     bio: "Hi! My name is Jonathan Ho, and I'm currently a junior studying Computer Science and Business at UT Austin. Over the summer, I worked as a generative AI intern at Scale AI. In my free time, I enjoy playing basketball and absolutely nothing else.",
     commitName: "B4NAN4NA",
+    gitlabUser: "jnthnho",
     unitTests: "0",
   }
 ]
@@ -70,18 +75,26 @@ const About = () => {
   
             // Fetch issues
             const issuesRes = await fetch(
-              `https://gitlab.com/api/v4/projects/${projectId}/issues?state=closed&per_page=100`,
+              `https://gitlab.com/api/v4/projects/${projectId}/issues?per_page=100`,
               { headers }
             );
             const issues = await issuesRes.json();
-            const userIssues = issues.filter(
-              (i) => i.closed_by && i.closed_by.username === member.commitName
+
+            // Issues created by the user
+            const createdIssues = issues.filter(
+              (i) => i.author && i.author.username && i.author.username.toLowerCase().includes(member.gitlabUser.toLowerCase())
+            );
+
+            // Issues closed by the user
+            const closedIssues = issues.filter(
+              (i) => i.closed_by && i.closed_by.username && i.closed_by.username.toLowerCase().includes(member.gitlabUser.toLowerCase())
             );
     
             return {
               [member.commitName]: {
                 commits: userCommits.length,
-                issues: userIssues.length,
+                issuesCreated: createdIssues.length,
+                issuesClosed: closedIssues.length,
                 unitTests: member.unitTests,
               },
             };
@@ -106,7 +119,7 @@ const About = () => {
         <Container>
           <Row className="justify-content-center text-center">
             <Col md={8}>
-              <h1 className="display-4 fw-bold">About SafeHavenConnect</h1>
+              <h1 className="display-4 fw-bold">Our Mission</h1>
               <p className="lead mt-3">
                 SafeHavenConnect is a platform designed to help individuals
                 struggling to find trustworthy, accessible, and local resources
@@ -153,8 +166,12 @@ const About = () => {
                         {stats[member.commitName].commits}
                       </p>
                       <p>
-                        <strong>Issues:</strong>{" "}
-                        {stats[member.commitName].issues}
+                        <strong>Issues Created:</strong>{" "}
+                        {stats[member.commitName].issuesCreated}
+                      </p>
+                      <p>
+                        <strong>Issues Closed:</strong>{" "}
+                        {stats[member.commitName].issuesClosed}
                       </p>
                       <p>
                         <strong>Unit Tests:</strong>{" "}
