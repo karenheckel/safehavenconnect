@@ -10,6 +10,9 @@ import Organizations1 from './pages/Organizations/Organization1'
 import Organizations2 from './pages/Organizations/Organization2'
 import Organizations3 from './pages/Organizations/Organization3'
 import Resources from './pages/Resources'
+import Resource1 from './pages/Resources/Resource1'
+import Resource2 from './pages/Resources/Resource2'
+import Resource3 from './pages/Resources/Resource3'
 
 function App() {
   return (
@@ -27,6 +30,9 @@ function App() {
           <Route path="/organization1" element={<Organizations1 />} />
           <Route path="/organization2" element={<Organizations2 />} />
           <Route path="/organization3" element={<Organizations3 />} />
+          <Route path="/resource1" element={<Resource1 />} />
+          <Route path="/resource2" element={<Resource2 />} />
+          <Route path="/resource3" element={<Resource3 />} />
         </Routes>
       </BrowserRouter>
   )
