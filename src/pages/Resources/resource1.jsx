@@ -22,22 +22,19 @@ const Resource1 = () => {
               <p>Type: Shelter/Housing</p>
               <p>Hours: 24/7</p>
               <p>Online Availability: No</p>
-              <a href="https://www.safeaustin.org/event/volunteer-information-session-6-2-2-2-2/">
-                Event Link
-              </a>
             </Card>
           </Col>
         </Row>
         <Row>
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d474.53467889163176!2d-97.70611084451984!3d30.2309014345067!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8644b502a80a8c0b%3A0xd1c23d702372dcd1!2sSAFE!5e0!3m2!1sen!2sus!4v1759346946221!5m2!1sen!2sus"
+        <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6889.94812076731!2d-97.69342282483902!3d30.2948000747984!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8644b60468808c53%3A0x940d411111f829a9!2s4800%20Manor%20Rd%2C%20Austin%2C%20TX%2078723!5e0!3m2!1sen!2sus!4v1759359636456!5m2!1sen!2sus" 
             width="600"
             height="450"
             style={{ border: 0 }}
             allowfullscreen=""
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
+        ></iframe>
         </Row>
         <Row className="my-3">
           <Col className="text-center" md={6}>
