@@ -10,18 +10,20 @@ const Events = () => {
       time: "6:00 pm - 7:30 pm",
       date: "October 1, 2025",
       eventType: "Informational",
+      organization: "The SAFE Alliance",
       imgUrl: "https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png",
       pageLink: "/event1",
     },
     {
       title:
-        "Understanding Domestic Abuse and the Impact on Children and Families",
-      location: "Online",
-      time: "10:30 am - 11:30 am",
-      date: "October 9, 2025",
-      eventType: "Informational",
+        "Hope Alliance Survive. Thrive. Prevent 5K Run/Walk",
+      location: "445 E Morrow St, Georgetown, TX 78626 (San Gabriel Park)",
+      time: "9:00 am - 12:00 pm",
+      date: "October 11, 2025",
+      eventType: "Fundraising",
+      organization: "Hope Alliance",
       imgUrl:
-        "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1081174993%2F249324158147%2F1%2Foriginal.20250725-115152?w=940&auto=format%2Ccompress&q=75&sharp=10&rect=295%2C0%2C792%2C396&s=50166504b332a1ee1f268b31b16442fa",
+        "https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png",
       pageLink: "/event2",
     },
     {
@@ -30,6 +32,7 @@ const Events = () => {
       time: "10:00 am - 12:00 pm",
       date: "October 3, 2025",
       eventType: "Panel",
+      organization: "Texas Council on Family Violence",
       imgUrl: "https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg",
       pageLink: "/event3",
     },
@@ -50,6 +53,7 @@ const Events = () => {
                 <Card.Text>Time: {eventInfo.time}</Card.Text>
                 <Card.Text>Date: {eventInfo.date}</Card.Text>
                 <Card.Text>Event Type: {eventInfo.eventType}</Card.Text>
+                <Card.Text>Organization: {eventInfo.organization}</Card.Text>
                 <Button
                   style={{
                     color: "black",
