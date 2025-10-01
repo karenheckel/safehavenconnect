@@ -31,7 +31,7 @@ const Organizations = () => {
                 }}
                 href="/organization1"
               >
-                View Event
+                View Organization
               </Button>
             </Card.Body>
           </Card>
@@ -69,7 +69,7 @@ const Organizations = () => {
                 }}
                 href="/organization2"
               >
-                View Event
+                View Organization
               </Button>
             </Card.Body>
           </Card>
@@ -96,7 +96,7 @@ const Organizations = () => {
                 Saturday CLOSED <br />
                 Sunday CLOSED
               </Card.Text>
-              <Card.Text>Online Availability: Yes</Card.Text>``
+              <Card.Text>Online Availability: Yes</Card.Text>
               <Card.Text>
                 Target Demographic: Survivors of Domestic Violence and Sexual
                 Assault
@@ -109,7 +109,7 @@ const Organizations = () => {
                 }}
                 href="/organization3"
               >
-                View Event
+                View Organization
               </Button>
             </Card.Body>
           </Card>
