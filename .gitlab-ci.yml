@@ -1,0 +1,57 @@
+stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  NODE_VERSION: "20"
+
+# Cache node_modules for faster builds
+cache:
+  paths:
+    - node_modules/
+
+# Test stage - runs on every push/MR
+test:
+  stage: test
+  image: node:$NODE_VERSION
+  before_script:
+    - npm ci
+  script:
+    - npm run lint
+    - npm run build
+    - make status
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 hour
+
+# Build stage - creates production build
+build:
+  stage: build
+  image: node:$NODE_VERSION
+  before_script:
+    - npm ci
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
+  only:
+    - main
+    - develop
+
+# Deploy to GitLab Pages
+pages:
+  stage: deploy
+  script:
+    - mkdir public
+    - cp -r dist/* public/
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+  dependencies:
+    - build
