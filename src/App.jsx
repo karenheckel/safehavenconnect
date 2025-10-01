@@ -10,7 +10,7 @@ import Organizations1 from './pages/Organizations/Organization1'
 import Organizations2 from './pages/Organizations/Organization2'
 import Organizations3 from './pages/Organizations/Organization3'
 import Resources from './pages/Resources'
-import Resource1 from './pages/Resources/Resource1'
+import Resource1 from './pages/Resources/resource1'
 import Resource2 from './pages/Resources/Resource2'
 import Resource3 from './pages/Resources/Resource3'
 
@@ -26,7 +26,6 @@ function App() {
           <Route path="/event1" element={<Event1 />} />
           <Route path="/event2" element={<Event2 />} />
           <Route path="/event3" element={<Event3 />} />
-          <Route path="/organizations" element={<Organizations />} />
           <Route path="/organization1" element={<Organizations1 />} />
           <Route path="/organization2" element={<Organizations2 />} />
           <Route path="/organization3" element={<Organizations3 />} />
