@@ -41,13 +41,27 @@ const Organization2 = () => {
         <Row className="my-3">
           <Col className="text-center" md={6}>
             <h3>Related Events</h3>
-            <Button href="/event1">Upcoming Organization Events</Button>
-            <p>
-              <strong>More Info:</strong>{" "}
-              <a href="https://www.safeaustin.org/get-involved/donate/events/">
-                The SAFE Alliance Events
-              </a>
-            </p>
+            <Card style={{ width: "18rem" }}>
+              <Card.Img variant="top" src="https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png" />
+              <Card.Body>
+                <Card.Title>Volunteer Information Session</Card.Title>
+                <Card.Text>Location: 1515 Grove Blvd, Austin, TX 78741</Card.Text>
+                <Card.Text>Time: 6:00 pm - 7:30 pm</Card.Text>
+                <Card.Text>Date: October 1, 2025</Card.Text>
+                <Card.Text>Event Type: Informational</Card.Text>
+                <Card.Text>Organization: The SAFE Alliance</Card.Text>
+                <Button
+                  style={{
+                    color: "black",
+                    backgroundColor: "#cde5d7",
+                    borderColor: "black",
+                  }}
+                  href="/event1"
+                >
+                  View Event
+                </Button>
+              </Card.Body>
+            </Card>
           </Col>
           <Col className="text-center" md={6}>
             <h3>Related Resources</h3>

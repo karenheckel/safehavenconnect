@@ -22,24 +22,10 @@ const Event3 = () => {
               <p>Date: October 3, 2025</p>
               <p>Time: 10:00 am - 12:00 pm</p>
               <p>Event Type: Panel</p>
-              <a href="https://tcfv.org/events/texas-town-hall-2025/#">Event Link</a>
+              <a href="https://tcfv.org/events/texas-town-hall-2025/#">
+                Event Link
+              </a>
             </Card>
-          </Col>
-        </Row>
-        <Row className="my-3">
-          <Col className="text-center" md={6}>
-            <h3>Related Organizations</h3>
-            <p>
-              <strong>Organizer:</strong> tcfv (Texas Council on Family
-              Violence)
-            </p>
-            <Button href="/organization1">Organization Info</Button>
-            <p>
-              <strong>More Info:</strong> <a href="https://tcfv.org/">tcfv</a>
-            </p>
-          </Col>
-          <Col className="text-center" md={6}>
-            <h3>Related Resources</h3>
           </Col>
         </Row>
         <Row>
@@ -52,6 +38,43 @@ const Event3 = () => {
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
           ></iframe>
+        </Row>
+        <Row className="my-3">
+          <Col className="text-center" md={6}>
+            <h3>Related Organizations</h3>
+            <Card style={{ width: "18rem" }}>
+              <Card.Img
+                variant="top"
+                src="https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg"
+              />
+              <Card.Body>
+                <Card.Title>Texas Council on Family Violence</Card.Title>
+                <Card.Text>Location: PO Box 163865, Austin, TX 78716</Card.Text>
+                <Card.Text>
+                  Services: Trainings, Technical Assistance, Materials,
+                  Prevention Efforts
+                </Card.Text>
+                <Card.Text>Hours: 24/7</Card.Text>
+                <Card.Text>Online Availability: Yes</Card.Text>
+                <Card.Text>
+                  Target Users: Family Violence Programs and Advocates
+                </Card.Text>
+                <Button
+                  style={{
+                    color: "black",
+                    backgroundColor: "#cde5d7",
+                    borderColor: "black",
+                  }}
+                  href="/organization1"
+                >
+                  View Organization
+                </Button>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col className="text-center" md={6}>
+            <h3>Related Resources</h3>
+          </Col>
         </Row>
       </Container>
     </>

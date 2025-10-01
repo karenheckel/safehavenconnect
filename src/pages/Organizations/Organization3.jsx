@@ -41,13 +41,27 @@ const Organization3 = () => {
         <Row className="my-3">
           <Col className="text-center" md={6}>
             <h3>Related Events</h3>
-            <Button href="/event2">Upcoming Organization Events</Button>
-            <p>
-              <strong>More Info:</strong>{" "}
-              <a href="https://www.hopealliancetx.org/events/">
-                Hope Alliance Events
-              </a>
-            </p>
+            <Card style={{ width: "18rem" }}>
+              <Card.Img variant="top" src="https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png" />
+              <Card.Body>
+                <Card.Title>Hope Alliance Survive. Thrive. Prevent 5K Run/Walk</Card.Title>
+                <Card.Text>Location: 445 E Morrow St, Georgetown, TX 78626 (San Gabriel Park)</Card.Text>
+                <Card.Text>Time: 9:00 am - 12:00 pm</Card.Text>
+                <Card.Text>Date: October 11, 2025</Card.Text>
+                <Card.Text>Event Type: Fundraising</Card.Text>
+                <Card.Text>Organization: Hope Alliance</Card.Text>
+                <Button
+                  style={{
+                    color: "black",
+                    backgroundColor: "#cde5d7",
+                    borderColor: "black",
+                  }}
+                  href="/event2"
+                >
+                  View Event
+                </Button>
+              </Card.Body>
+            </Card>
           </Col>
           <Col className="text-center" md={6}>
             <h3>Related Resources</h3>
