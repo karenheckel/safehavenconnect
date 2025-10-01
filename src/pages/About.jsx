@@ -10,7 +10,7 @@ const team = [
     name: "Karen Heckel",
     role: "Frontend Developer",
     bio: "I am a junior majoring in Computer Science. Currently, I am an Undergraduate Research Assistant at TACC and the Academic officer for HACS. Outside of school, I enjoy thrifting and watching movies!",
-    gitlabUser: "karenheckel",
+    commitName: "karenheckel",
     unitTests: "0",
   },
   {
@@ -18,7 +18,7 @@ const team = [
     name: "Parul Sadasivuni",
     role: "Full Stack Developer",
     bio: "My name is Parul and I'm a junior in Computer Science and Business here at UT. I'm a research assistant with Dr. Caleb Kwon in the McCombs School of Business studying the impacts of minimum wage shocks on employment. In my free time, I enjoy music and watching Longhorn sports!",
-    gitlabUser: "parul.sadasivuni",
+    commitName: "Parul S Sadasivuni",
     unitTests: "0",
   },
   {
@@ -26,7 +26,7 @@ const team = [
     name: "Brianna Flores",
     role: "Full Stack Developer",
     bio: "Hello! I'm a junior studying Computer Science with a minor in Business. I currently serve as the Marketing Officer for the Hispanic Association of Computer Scientists (HACS) and am also a member of Longhorn Developers and TCUP. I also love to crochet and run a small business, StockysCrafts, where I sell handmade crochet plushies!",
-    gitlabUser: "Brianna-Flo",
+    commitName: "Brianna-Flo",
     unitTests: "0",
   },
   {
@@ -34,7 +34,7 @@ const team = [
     name: "Ali Novruzov",
     role: "Backend Developer",
     bio: "My name is Ali and I'm in my final year at UT. I recently completed an AI Engineering position with Fujitsu. In my free time I like to learn history and watch sci-fi movies. Travel is also something I find really fun.",
-    gitlabUser: "anovruzov",
+    commitName: "anovruzov",
     unitTests: "0",
   },
   {
@@ -42,7 +42,7 @@ const team = [
     name: "Jonathan Ho",
     role: "Full Stack Developer",
     bio: "Hi! My name is Jonathan Ho, and I'm currently a junior studying Computer Science and Business at UT Austin. Over the summer, I worked as a generative AI intern at Scale AI. In my free time, I enjoy playing basketball and absolutely nothing else.",
-    gitlabUser: "jnthnho",
+    commitName: "B4NAN4NA",
     unitTests: "0",
   }
 ]
@@ -62,8 +62,10 @@ const About = () => {
               { headers }
             );
             const commits = await commitsRes.json();
+            console.log(commits);
+
             const userCommits = commits.filter(
-              (c) => c.author_name.toLowerCase().includes(member.gitlabUser.toLowerCase())
+              (c) => c.author_name.toLowerCase().includes(member.commitName.toLowerCase())
             );
   
             // Fetch issues
@@ -73,11 +75,11 @@ const About = () => {
             );
             const issues = await issuesRes.json();
             const userIssues = issues.filter(
-              (i) => i.closed_by && i.closed_by.username === member.gitlabUser
+              (i) => i.closed_by && i.closed_by.username === member.commitName
             );
     
             return {
-              [member.gitlabUser]: {
+              [member.commitName]: {
                 commits: userCommits.length,
                 issues: userIssues.length,
                 unitTests: member.unitTests,
@@ -144,19 +146,19 @@ const About = () => {
                   <h5 className="fw-bold">{member.name}</h5>
                   <p className="text-muted">{member.role}</p>
                   <p>{member.bio}</p>
-                  {stats[member.gitlabUser] ? (
+                  {stats[member.commitName] ? (
                     <>
                       <p>
                         <strong>Commits:</strong>{" "}
-                        {stats[member.gitlabUser].commits}
+                        {stats[member.commitName].commits}
                       </p>
                       <p>
                         <strong>Issues:</strong>{" "}
-                        {stats[member.gitlabUser].issues}
+                        {stats[member.commitName].issues}
                       </p>
                       <p>
                         <strong>Unit Tests:</strong>{" "}
-                        {stats[member.gitlabUser].unitTests}
+                        {stats[member.commitName].unitTests}
                       </p>
                     </>
                   ) : (
