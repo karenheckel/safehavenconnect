@@ -2,67 +2,66 @@ import React from "react";
 import { Card, Container, Row, Col, Button } from "react-bootstrap";
 import NavBar from "../../components/NavBar";
 
-const Resource2 = () => {
+const Event2 = () => {
   return (
     <>
       <NavBar />
       <Container className="my-5">
-        <h1 className="text-center">Kelly White Family Shelter</h1>
+        <h1 className="text-center">
+          24 Hour HOPELine
+        </h1>
         <Row className="my-3 align-items-center">
           <Col md={6}>
             <img
-              src="https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png"
-              alt="SAFE Alliance Logo"
+              src="https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png"
+              alt="Adele Gladman & Associates Logo"
               className="img-fluid rounded"
             />
           </Col>
           <Col className="text-center" md={6}>
             <Card body className="shadow-sm">
-              <p>Location: 4800 Manor Rd A, Austin, TX 78723</p>
-              <p>Type: Shelter/Housing</p>
+              <p>
+                Location: 1-800-460-7233
+              </p>
+              <p>Type: Hotline</p>
               <p>Hours: 24/7</p>
-              <p>Online Availability: No</p>
-              <a href="https://www.safeaustin.org/event/volunteer-information-session-6-2-2-2-2/">
-                Event Link
-              </a>
+              <p>Online Availability: Yes</p>
             </Card>
           </Col>
         </Row>
         <Row>
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d474.53467889163176!2d-97.70611084451984!3d30.2309014345067!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8644b502a80a8c0b%3A0xd1c23d702372dcd1!2sSAFE!5e0!3m2!1sen!2sus!4v1759346946221!5m2!1sen!2sus"
-            width="600"
-            height="450"
-            style={{ border: 0 }}
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
+          
         </Row>
         <Row className="my-3">
           <Col className="text-center" md={6}>
             <h3>Related Organizations</h3>
-
             <Card style={{ width: "18rem" }}>
               <Card.Img
                 variant="top"
-                src="https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png"
+                src="https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png"
               />
               <Card.Body>
-                <Card.Title>The SAFE Alliance</Card.Title>
+                <Card.Title>Hope Alliance</Card.Title>
                 <Card.Text>
-                  Location: 1515 Grove Blvd, Austin, TX 78741
+                  Location: 1011 Gattis School Rd, Ste 110 Round Rock, TX 78664
                 </Card.Text>
                 <Card.Text>
                   Services: Emergency Shelter, Counseling, Legal Advocacy
                 </Card.Text>
                 <Card.Text>
-                  Hours: 24/7
+                  Hours: <br />
+                  Monday 12:00 am - 4:00 pm <br />
+                  Tuesday 12:00 am - 4:00 pm <br />
+                  Wednesday 12:00 am - 4:00 pm <br />
+                  Thursday 12:00 am - 4:00 pm <br />
+                  Friday CLOSED <br />
+                  Saturday CLOSED <br />
+                  Sunday CLOSED
                 </Card.Text>
                 <Card.Text>Online Availability: Yes</Card.Text>
                 <Card.Text>
-                  Target Demographic: Survivors of Domestic Violence, Sexual
-                  Assault, and Human Trafficking
+                  Target Demographic: Survivors of Domestic Violence and Sexual
+                  Assault
                 </Card.Text>
                 <Button
                   style={{
@@ -70,7 +69,7 @@ const Resource2 = () => {
                     backgroundColor: "#cde5d7",
                     borderColor: "black",
                   }}
-                  href="/organization2"
+                  href="/organization3"
                 >
                   View Organization
                 </Button>
@@ -82,23 +81,30 @@ const Resource2 = () => {
             <Card style={{ width: "18rem" }}>
               <Card.Img
                 variant="top"
-                src="https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png"
+                src="https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png"
               />
               <Card.Body>
-                <Card.Title>The SAFE Alliance</Card.Title>
+                <Card.Title>Hope Alliance</Card.Title>
                 <Card.Text>
-                  Location: 1515 Grove Blvd, Austin, TX 78741
+                  Location: 1011 Gattis School Rd, Ste 110 Round Rock, TX 78664
                 </Card.Text>
                 <Card.Text>
                   Services: Emergency Shelter, Counseling, Legal Advocacy
                 </Card.Text>
                 <Card.Text>
-                  Hours: 24/7
+                  Hours: <br />
+                  Monday 12:00 am - 4:00 pm <br />
+                  Tuesday 12:00 am - 4:00 pm <br />
+                  Wednesday 12:00 am - 4:00 pm <br />
+                  Thursday 12:00 am - 4:00 pm <br />
+                  Friday CLOSED <br />
+                  Saturday CLOSED <br />
+                  Sunday CLOSED
                 </Card.Text>
                 <Card.Text>Online Availability: Yes</Card.Text>
                 <Card.Text>
-                  Target Demographic: Survivors of Domestic Violence, Sexual
-                  Assault, and Human Trafficking
+                  Target Demographic: Survivors of Domestic Violence and Sexual
+                  Assault
                 </Card.Text>
                 <Button
                   style={{
@@ -106,9 +112,9 @@ const Resource2 = () => {
                     backgroundColor: "#cde5d7",
                     borderColor: "black",
                   }}
-                  href="/organization2"
+                  href="/organization3"
                 >
-                  View Organization
+                  View Resource
                 </Button>
               </Card.Body>
             </Card>
@@ -119,4 +125,4 @@ const Resource2 = () => {
   );
 };
 
-export default Resource2;
+export default Event2;
