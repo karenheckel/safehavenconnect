@@ -10,10 +10,10 @@
 | Member | EID | GitLab ID |
 | ------ | ------ | ------ |
 | **Brianna Flores** | bf9566 | @Brianna-Flo |
-| **Jonathan Ho** |  | @ |
-| **Karen Heckel** |  | @ |
-| **Parul Sadasivuni** |  | @ |
-| **Ali Novruzov** |  | @ |
+| **Jonathan Ho** | jh77773 | @jnthnho |
+| **Karen Heckel** | kh38298 | @karenheckel |
+| **Parul Sadasivuni** | pss2326 | @parul.sadasivuni |
+| **Ali Novruzov** | msn782 | @anovruzov |
 
 # Git SHA
 
@@ -27,10 +27,10 @@
 | Member | Estimated (hours) | Actual (hours) |
 | ------ | ------ | ------ |
 | **Brianna Flores** | 15 |  |
-| **Jonathan Ho** |  |  |
-| **Karen Heckel** |  |  |
-| **Parul Sadasivuni** |  |  |
-| **Ali Novruzov** |  |  |
+| **Jonathan Ho** | 16 |  |
+| **Karen Heckel** | 15 |  |
+| **Parul Sadasivuni** | 20 |  |
+| **Ali Novruzov** | 10 |  |
 
 # Comments
 
