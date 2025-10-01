@@ -23,14 +23,7 @@ const Organizations = () => {
                 Services: Emergency Shelter, Counseling, Legal Advocacy
               </Card.Text>
               <Card.Text>
-                Hours: <br />
-                Monday 8:00 am - 4:00 pm <br />
-                Tuesday 8:00 am - 4:00 pm <br />
-                Wednesday 8:00 am - 4:00 pm <br />
-                Thursday 8:00 am - 4:00 pm <br />
-                Friday 8:00 am - 4:00 pm <br />
-                Saturday CLOSED <br />
-                Sunday CLOSED
+                Hours: 24/7
               </Card.Text>
               <Card.Text>Online Availability: Yes</Card.Text>
               <Card.Text>
