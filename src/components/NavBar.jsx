@@ -7,7 +7,7 @@ const NavBar = () => {
         className="d-flex justify-content-between align-items-center mx-3"
         style={{ width: "100%" }}
       >
-        <a class="navbar-brand" href="#">
+        <a className="navbar-brand" href="#">
           SafeHavenConnect
         </a>
         <div>
