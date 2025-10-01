@@ -5,6 +5,10 @@ import Events from './pages/Events'
 import Event1 from './pages/Events/Event1'
 import Event2 from './pages/Events/Event2'
 import Event3 from './pages/Events/Event3'
+import Organizations from './pages/Organizations'
+import Organizations1 from './pages/Organizations/Organization1'
+import Organizations2 from './pages/Organizations/Organization2'
+import Organizations3 from './pages/Organizations/Organization3'
 
 function App() {
   return (
@@ -16,6 +20,10 @@ function App() {
           <Route path="/event1" element={<Event1 />} />
           <Route path="/event2" element={<Event2 />} />
           <Route path="/event3" element={<Event3 />} />
+          <Route path="/organizations" element={<Organizations />} />
+          <Route path="/organization1" element={<Organizations1 />} />
+          <Route path="/organization2" element={<Organizations2 />} />
+          <Route path="/organization3" element={<Organizations3 />} />
         </Routes>
       </BrowserRouter>
   )
