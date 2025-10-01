@@ -22,6 +22,7 @@ const Event3 = () => {
               <p>Date: October 3, 2025</p>
               <p>Time: 10:00 am - 12:00 pm</p>
               <p>Event Type: Panel</p>
+              <a href="https://tcfv.org/events/texas-town-hall-2025/#">Event Link</a>
             </Card>
           </Col>
         </Row>
@@ -32,7 +33,7 @@ const Event3 = () => {
               <strong>Organizer:</strong> tcfv (Texas Council on Family
               Violence)
             </p>
-            <Button href="/organizations">All Organization</Button>
+            <Button href="/organization1">Organization Info</Button>
             <p>
               <strong>More Info:</strong> <a href="https://tcfv.org/">tcfv</a>
             </p>

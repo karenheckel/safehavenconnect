@@ -22,6 +22,7 @@ const Event1 = () => {
               <p>Date: October 1, 2025</p>
               <p>Time: 6:00 pm - 7:30 pm</p>
               <p>Event Type: Informational</p>
+              <a href="https://www.safeaustin.org/event/volunteer-information-session-6-2-2-2-2/">Event Link</a>
             </Card>
           </Col>
         </Row>

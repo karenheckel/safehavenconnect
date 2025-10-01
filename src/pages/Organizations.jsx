@@ -8,6 +8,7 @@ const Organizations = () => {
       <NavBar />
       <Container className="text-center my-5">
         <h1>Organizations</h1>
+        <p>Number of Organizations: 3</p>
         <Row className="justify-content-center">
 
           <Card style={{ width: "18rem" }}>

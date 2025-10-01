@@ -41,7 +41,7 @@ const Organization3 = () => {
         <Row className="my-3">
           <Col className="text-center" md={6}>
             <h3>Related Events</h3>
-            <Button href="/">All Organization Events</Button>
+            <Button href="/event2">Upcoming Organization Events</Button>
             <p>
               <strong>More Info:</strong>{" "}
               <a href="https://www.hopealliancetx.org/events/">
