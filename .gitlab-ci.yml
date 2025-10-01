@@ -47,12 +47,13 @@ pages:
     - echo "Creating public directory..."
     - mkdir -p public
     - echo "Copying files..."
-    - if [ -d "dist" ] && [ "$(ls -A dist)" ]; then
-        cp -r dist/* public/;
-        echo "Files copied successfully";
+    - |
+      if [ -d "dist" ] && [ "$(ls -A dist)" ]; then
+        cp -r dist/* public/
+        echo "Files copied successfully"
       else
-        echo "ERROR: dist directory is empty or missing";
-        exit 1;
+        echo "ERROR: dist directory is empty or missing"
+        exit 1
       fi
     - echo "Final public directory contents:"
     - ls -la public/
