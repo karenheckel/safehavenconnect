@@ -9,32 +9,7 @@ const Organizations = () => {
       <Container className="text-center my-5">
         <h1>Organizations</h1>
         <Row className="justify-content-center">
-          <Card style={{ width: "18rem" }}>
-            <Card.Img
-              variant="top"
-              src="https://www.thehotline.org/wp-content/themes/hotline-main/assets/images/logo-ndvh.svg"
-            />
-            <Card.Body>
-              <Card.Title>National Domestic Violence Hotline</Card.Title>
-              <Card.Text>Location: Online</Card.Text>
-              <Card.Text>Services: Counseling, Support Groups</Card.Text>
-              <Card.Text>Time: 24/7</Card.Text>
-              <Card.Text>Online Availability: Yes</Card.Text>
-              <Card.Text>
-                Target Demographic: Survivors of Domestic Violence
-              </Card.Text>
-              <Button
-                style={{
-                  color: "black",
-                  backgroundColor: "#cde5d7",
-                  borderColor: "black",
-                }}
-                href="/organization1"
-              >
-                View Organization
-              </Button>
-            </Card.Body>
-          </Card>
+
           <Card style={{ width: "18rem" }}>
             <Card.Img
               variant="top"
@@ -47,7 +22,7 @@ const Organizations = () => {
                 Services: Emergency Shelter, Counseling, Legal Advocacy
               </Card.Text>
               <Card.Text>
-                Time: <br />
+                Hours: <br />
                 Monday 8:00 am - 4:00 pm <br />
                 Tuesday 8:00 am - 4:00 pm <br />
                 Wednesday 8:00 am - 4:00 pm <br />
@@ -73,6 +48,7 @@ const Organizations = () => {
               </Button>
             </Card.Body>
           </Card>
+
           <Card style={{ width: "18rem" }}>
             <Card.Img
               variant="top"
@@ -87,7 +63,7 @@ const Organizations = () => {
                 Services: Emergency Shelter, Counseling, Legal Advocacy
               </Card.Text>
               <Card.Text>
-                Time: <br />
+                Hours: <br />
                 Monday 12:00 am - 4:00 pm <br />
                 Tuesday 12:00 am - 4:00 pm <br />
                 Wednesday 12:00 am - 4:00 pm <br />
@@ -108,6 +84,33 @@ const Organizations = () => {
                   borderColor: "black",
                 }}
                 href="/organization3"
+              >
+                View Organization
+              </Button>
+            </Card.Body>
+          </Card>
+
+          <Card style={{ width: "18rem" }}>
+            <Card.Img
+              variant="top"
+              src="https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg"
+            />
+            <Card.Body>
+              <Card.Title>Texas Council on Family Violence</Card.Title>
+              <Card.Text>Location: PO Box 163865, Austin, TX 78716</Card.Text>
+              <Card.Text>Services: Trainings, Technical Assistance, Materials, Prevention Efforts</Card.Text>
+              <Card.Text>Hours: 24/7</Card.Text>
+              <Card.Text>Online Availability: Yes</Card.Text>
+              <Card.Text>
+                Target Users: Family Violence Programs and Advocates
+              </Card.Text>
+              <Button
+                style={{
+                  color: "black",
+                  backgroundColor: "#cde5d7",
+                  borderColor: "black",
+                }}
+                href="/organization1"
               >
                 View Organization
               </Button>
