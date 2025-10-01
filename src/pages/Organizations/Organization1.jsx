@@ -29,7 +29,7 @@ const Organization1 = () => {
         <Row className="my-3">
           <Col className="text-center" md={6}>
             <h3>Related Events</h3>
-            <Button href="/">All Organization Events</Button>
+            <Button href="/event3">Upcoming Organization Event</Button>
             <p>
               <strong>More Info:</strong>{" "}
               <a href="https://www.thehotline.org/">National Domestic Violence Hotline Events</a>
