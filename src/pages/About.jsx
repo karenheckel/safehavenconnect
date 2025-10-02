@@ -10,7 +10,7 @@ const team = [
     name: "Karen Heckel",
     role: "Frontend Developer",
     bio: "I am a junior majoring in Computer Science. Currently, I am an Undergraduate Research Assistant at TACC and the Academic officer for HACS. Outside of school, I enjoy thrifting and watching movies!",
-    commitId: "karenheckel",
+    commitIds: ["karenheckel"],
     gitlabUser: "karenheckel",
     unitTests: "0",
   },
@@ -19,7 +19,7 @@ const team = [
     name: "Parul Sadasivuni",
     role: "Full Stack Developer",
     bio: "My name is Parul and I'm a junior in Computer Science and Business here at UT. I'm a research assistant with Dr. Caleb Kwon in the McCombs School of Business studying the impacts of minimum wage shocks on employment. In my free time, I enjoy music and watching Longhorn sports!",
-    commitId: "txpsree@gmail.com",
+    commitIds: ["txpsree@gmail.com", "Parul S Sadasivuni"],
     gitlabUser: "parul.sadasivuni",
     unitTests: "0",
   },
@@ -28,7 +28,7 @@ const team = [
     name: "Brianna Flores",
     role: "Full Stack Developer",
     bio: "Hello! I'm a junior studying Computer Science with a minor in Business. I currently serve as the Marketing Officer for the Hispanic Association of Computer Scientists (HACS) and am also a member of Longhorn Developers and TCUP. I also love to crochet and run a small business, StockysCrafts, where I sell handmade crochet plushies!",
-    commitId: "Brianna-Flo",
+    commitIds: ["Brianna-Flo"],
     gitlabUser: "Brianna-Flo",
     unitTests: "0",
   },
@@ -37,7 +37,7 @@ const team = [
     name: "Ali Novruzov",
     role: "Backend Developer",
     bio: "My name is Ali and I'm in my final year at UT. I recently completed an AI Engineering position with Fujitsu. In my free time I like to learn history and watch sci-fi movies. Travel is also something I find really fun.",
-    commitId: "anovruzov",
+    commitIds: ["anovruzov"],
     gitlabUser: "anovruzov",
     unitTests: "0",
   },
@@ -46,7 +46,7 @@ const team = [
     name: "Jonathan Ho",
     role: "Full Stack Developer",
     bio: "Hi! My name is Jonathan Ho, and I'm currently a junior studying Computer Science and Business at UT Austin. Over the summer, I worked as a generative AI intern at Scale AI. In my free time, I enjoy playing basketball and absolutely nothing else.",
-    commitId: "B4NAN4NA",
+    commitIds: ["B4NAN4NA"],
     gitlabUser: "jnthnho",
     unitTests: "0",
   }
@@ -61,23 +61,24 @@ const About = () => {
       try {
         const results = await Promise.all(
           team.map(async (member) => {
-            // Count commits across all commit names
+            /// Count commits across all commit names
             let totalCommits = 0;
-            let page = 1;
-            let commitsPage;
-            do {
-              const res = await fetch(
-                `https://gitlab.com/api/v4/projects/${projectId}/repository/commits?per_page=${perPage}&page=${page}&author=${member.commitId}`
-              );
-              commitsPage = await res.json();
-              totalCommits += commitsPage.length;
-              page++;
-            } while (commitsPage.length === perPage);
-
+            for (const commitId of member.commitIds) {
+              let page = 1;
+              let commitsPage;
+              do {
+                const res = await fetch(
+                  `https://gitlab.com/api/v4/projects/${projectId}/repository/commits?per_page=${perPage}&page=${page}&author=${encodeURIComponent(commitId)}`
+                );
+                commitsPage = await res.json();
+                totalCommits += commitsPage.length;
+                page++;
+              } while (commitsPage.length === perPage);
+            }
 
             // Fetch all issues
             let allIssues = [];
-            page = 1;
+            let page = 1;
             let issuesPage;
             do {
               const res = await fetch(
