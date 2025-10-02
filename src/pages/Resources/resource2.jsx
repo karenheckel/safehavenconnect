@@ -26,6 +26,7 @@ const Resource2 = () => {
               <p>Type: Hotline</p>
               <p>Hours: 24/7</p>
               <p>Online Availability: Yes</p>
+              <a href="https://www.hopealliancetx.org/24-hour-hotline/">Learn More</a>
             </Card>
           </Col>
         </Row>

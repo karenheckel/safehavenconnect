@@ -13,16 +13,18 @@ const Resource3 = () => {
             <img
               src="https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg"
               alt="tcfv logo"
+              style={{ height: "150px" }}
               className="img-fluid rounded"
             />
           </Col>
           <Col className="text-center" md={6}>
             <Card body className="shadow-sm">
-              <p>Location: https://tcfv.org/awareness/</p>
+              <p>Location: Online</p>
               <p>Type: Informational</p>
               <p>Hours: N/A</p>
               <p>Organization: Texas Council on Family Violence</p>
               <p>Online Availability: Yes</p>
+              <a href=" https://tcfv.org/awareness/">Access Resources</a>
             </Card>
           </Col>
         </Row>
