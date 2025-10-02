@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Card, Button } from "react-bootstrap";
-import NavBar from "../components/NavBar";
+import NavigationBar from "../components/NavigationBar";
 
 const Resources = () => {
   const resInfo = [
@@ -39,7 +39,7 @@ const Resources = () => {
   ];
   return (
     <>
-      <NavBar />
+      <NavigationBar />
       <Container className="text-center my-5">
         <h1>Resources</h1>
         <p>Number of resources: {resInfo.length}</p>

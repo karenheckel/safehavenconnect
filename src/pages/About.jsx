@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import NavBar from '../components/NavBar';
+import NavigationBar from '../components/NavigationBar';
 import { Container, Row, Col, Card, Image, Spinner } from "react-bootstrap";
 
 
@@ -120,7 +120,7 @@ const About = () => {
 
   return (
     <>
-      <NavBar />
+      <NavigationBar />
       {/* Title section */}
       <div style={{ backgroundColor: "#f5f7f6", padding: "4rem 0" }}>
         <Container>
