@@ -35,6 +35,7 @@ const Organization1 = () => {
                 Target Demographic: Survivors of Domestic Violence, Sexual
                 Assault, and Human Trafficking
               </p>
+              <a href="https://www.safeaustin.org/">Learn more about SAFE</a>
             </Card>
           </Col>
         </Row>

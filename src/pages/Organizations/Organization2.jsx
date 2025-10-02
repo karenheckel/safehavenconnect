@@ -35,6 +35,7 @@ const Organization2 = () => {
                 Target Demographic: Survivors of Domestic Violence and Sexual
                 Assault
               </p>
+              <a href="https://www.hopealliancetx.org/">Learn more about Hope Alliance</a>
             </Card>
           </Col>
         </Row>

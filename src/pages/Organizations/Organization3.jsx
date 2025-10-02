@@ -23,6 +23,7 @@ const Organization3 = () => {
               <p>Hours: N/A</p>
               <p>Online Availability: Yes</p>
               <p>Target Users: Family Violence Programs and Advocates</p>
+              <a href="https://tcfv.org/">Learn more about Texas Council on Family Violence</a>
             </Card>
           </Col>
         </Row>
