@@ -253,7 +253,7 @@ const About = () => {
                   View our Postman workspace with all API endpoints and documentation.
                 </Card.Text>
                 <a
-                  href="https://www.postman.com/karen-heckel-749077/group-3-workspace/overview"
+                  href="https://www.postman.com/karen-heckel-749077/group-3-workspace/collection/p7zssag/safehavenconnect-api?action=share&creator=48953322"
                   target="_blank"
                   rel="noreferrer"
                   className="btn btn-primary"
