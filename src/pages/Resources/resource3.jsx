@@ -52,7 +52,7 @@ const Resource3 = () => {
                     backgroundColor: "#cde5d7",
                     borderColor: "black",
                   }}
-                  href="/organization1"
+                  href="/organization3"
                 >
                   View Organization
                 </Button>

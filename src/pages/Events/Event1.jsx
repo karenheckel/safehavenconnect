@@ -77,7 +77,7 @@ const Event1 = () => {
                     backgroundColor: "#cde5d7",
                     borderColor: "black",
                   }}
-                  href="/organization2"
+                  href="/organization1"
                 >
                   View Organization
                 </Button>
