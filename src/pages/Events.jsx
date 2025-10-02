@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Card, Button } from "react-bootstrap";
-import NavBar from "../components/NavBar";
+import NavigationBar from "../components/NavigationBar";
 
 const Events = () => {
   const eventsInfo = [
@@ -39,7 +39,7 @@ const Events = () => {
   ];
   return (
     <>
-      <NavBar />
+      <NavigationBar />
       <Container className="text-center my-5">
         <h1>Upcoming Events</h1>
         <p>Number of events: {eventsInfo.length}</p>

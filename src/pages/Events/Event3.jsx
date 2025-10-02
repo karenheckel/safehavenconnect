@@ -1,11 +1,11 @@
 import React from "react";
 import { Card, Container, Row, Col, Button } from "react-bootstrap";
-import NavBar from "../../components/NavBar";
+import NavigationBar from "../../components/NavigationBar";
 
 const Event3 = () => {
   return (
     <>
-      <NavBar />
+      <NavigationBar />
       <Container className="my-5">
         <h1 className="text-center">TCFV’s 2025 Texas Town Hall</h1>
         <Row className="my-3 align-items-center">

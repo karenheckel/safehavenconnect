@@ -1,5 +1,5 @@
 import React from "react";
-import NavBar from "../components/NavBar";
+import NavigationBar from "../components/NavigationBar";
 import EventsPreview from "../components/EventsPreview";
 import OrganizationsPreview from "../components/OrganizationsPreview";
 import ResourcesPreview from "../components/ResourcesPreview";
@@ -9,7 +9,7 @@ import Information from "../components/Information";
 const Landing = () => {
   return (
     <>
-      <NavBar />
+      <NavigationBar />
       {/* Title section */}
       <div style={{ backgroundColor: "#f5f7f6", padding: "4rem 0" }}>
         <Container>

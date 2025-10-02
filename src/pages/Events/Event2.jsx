@@ -1,11 +1,11 @@
 import React from "react";
 import { Card, Container, Row, Col, Button } from "react-bootstrap";
-import NavBar from "../../components/NavBar";
+import NavigationBar from "../../components/NavigationBar";
 
 const Event2 = () => {
   return (
     <>
-      <NavBar />
+      <NavigationBar />
       <Container className="my-5">
         <h1 className="text-center">
           Hope Alliance Survive. Thrive. Prevent 5K Run/Walk
