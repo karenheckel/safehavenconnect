@@ -65,13 +65,31 @@ const Organization2 = () => {
           </Col>
           <Col className="text-center" md={6}>
             <h3>Related Resources</h3>
-            <Button href="/">All Organization Resources</Button>
-            <p>
-              <strong>More Info:</strong>{" "}
-              <a href="https://www.hopealliancetx.org/#">
-                Hope Alliance Resources
-              </a>
-            </p>
+            <Card style={{ width: "18rem" }}>
+                          <Card.Img
+                            variant="top"
+                            src="https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png"
+                          />
+                          <Card.Body>
+                            <Card.Title>24-Hour HOPELine</Card.Title>
+                            <p>
+                            Location: 1-800-460-7233
+                          </p>
+                          <p>Type: Hotline</p>
+                          <p>Hours: 24/7</p>
+                          <p>Online Availability: Yes</p>
+                            <Button
+                              style={{
+                                color: "black",
+                                backgroundColor: "#cde5d7",
+                                borderColor: "black",
+                              }}
+                              href="/resource2"
+                            >
+                              View Resource
+                            </Button>
+                          </Card.Body>
+                        </Card>
           </Col>
         </Row>
       </Container>

@@ -60,13 +60,30 @@ const Organization3 = () => {
           </Col>
           <Col className="text-center" md={6}>
             <h3>Related Resources</h3>
-            <Button href="/">All Organization Resources</Button>
-            <p>
-              <strong>More Info:</strong>{" "}
-              <a href="https://www.thehotline.org/get-help/">
-                National Domestic Violence Hotline Resources
-              </a>
-            </p>
+            <Card style={{ width: "18rem" }}>
+                          <Card.Img
+                            variant="top"
+                            src="https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg"
+                          />
+                          <Card.Body>
+                            <Card.Title>Texas Council on Family Violence</Card.Title>
+                            <p>Location: https://tcfv.org/awareness/</p>
+                          <p>Type: Informational</p>
+                          <p>Hours: N/A</p>
+                          <p>Organization: Texas Council on Family Violence</p>
+                          <p>Online Availability: Yes</p>
+                            <Button
+                              style={{
+                                color: "black",
+                                backgroundColor: "#cde5d7",
+                                borderColor: "black",
+                              }}
+                              href="/resource3"
+                            >
+                              View Resource
+                            </Button>
+                          </Card.Body>
+                        </Card>
           </Col>
         </Row>
       </Container>

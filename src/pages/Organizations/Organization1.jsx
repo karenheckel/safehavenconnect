@@ -65,13 +65,29 @@ const Organization1 = () => {
           </Col>
           <Col className="text-center" md={6}>
             <h3>Related Resources</h3>
-            <Button href="/">All Organization Resources</Button>
-            <p>
-              <strong>More Info:</strong>{" "}
-              <a href="https://www.safeaustin.org/our-services/">
-                The SAFE Alliance Resources
-              </a>
-            </p>
+            <Card style={{ width: "18rem" }}>
+                          <Card.Img
+                            variant="top"
+                            src="https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png"
+                          />
+                          <Card.Body>
+                            <Card.Title>Kelly White Family Shelter</Card.Title>
+                            <p>Location: 4800 Manor Rd A, Austin, TX 78723</p>
+                          <p>Type: Shelter/Housing</p>
+                          <p>Hours: 24/7</p>
+                          <p>Online Availability: No</p>
+                            <Button
+                              style={{
+                                color: "black",
+                                backgroundColor: "#cde5d7",
+                                borderColor: "black",
+                              }}
+                              href="/resource1"
+                            >
+                              View Resource
+                            </Button>
+                          </Card.Body>
+                        </Card>
           </Col>
         </Row>
       </Container>
