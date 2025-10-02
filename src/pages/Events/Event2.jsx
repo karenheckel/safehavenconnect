@@ -11,7 +11,7 @@ const Event2 = () => {
           Hope Alliance Survive. Thrive. Prevent 5K Run/Walk
         </h1>
         <Row className="my-3 align-items-center">
-          <Col md={6}>
+          <Col md={6} className="d-flex justify-content-center">
             <img
               src="https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png"
               alt="Hope Alliance Logo"
@@ -47,7 +47,7 @@ const Event2 = () => {
         <Row className="my-3">
           <Col className="text-center" md={6}>
             <h3>Related Organizations</h3>
-            <Card style={{ width: "18rem" }}>
+            <Card className="mx-auto" style={{ width: "18rem" }}>
               <Card.Img
                 variant="top"
                 src="https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png"
@@ -90,7 +90,7 @@ const Event2 = () => {
           </Col>
           <Col className="text-center" md={6}>
             <h3>Related Resources</h3>
-            <Card style={{ width: "18rem" }}>
+            <Card className="mx-auto" style={{ width: "18rem" }}>
               <Card.Img
                 variant="top"
                 src="https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png"
