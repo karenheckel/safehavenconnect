@@ -7,22 +7,22 @@ const Organization1 = () => {
     <>
       <NavBar />
       <Container className="my-5">
-        <h1 className="text-center">National Domestic Violence Hotline</h1>
+        <h1 className="text-center">Texas Council on Family Violence</h1>
         <Row className="my-3 align-items-center">
           <Col md={6}>
             <img
-              src="https://www.thehotline.org/wp-content/themes/hotline-main/assets/images/logo-ndvh.svg"
-              alt="National Domestic Violence Hotline Logo"
+              src="https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg"
+              alt="Texas Council on Family Violence Logo"
               className="img-fluid rounded"
             />
           </Col>
           <Col className="text-center" md={6}>
             <Card body className="shadow-sm">
-              <p>Location: Online</p>
-              <p>Services: Counseling, Support Groups</p>
-              <p>Time: 24/7</p>
+              <p>Location: PO Box 163865, Austin, TX 78716</p>
+              <p>Services: Trainings, Technical Assistance, Materials, Prevention Efforts</p>
+              <p>Hours: N/A</p>
               <p>Online Availability: Yes</p>
-              <p>Target Demographic: Survivors of Domestic Violence</p>
+              <p>Target Users: Family Violence Programs and Advocates</p>
             </Card>
           </Col>
         </Row>
