@@ -31,9 +31,9 @@ https://safehavenconnect.me/
 | ------ | ------ | ------ |
 | **Brianna Flores** | 15 |  |
 | **Jonathan Ho** | 16 |  |
-| **Karen Heckel** | 15 |  |
+| **Karen Heckel** | 15 | 17 |
 | **Parul Sadasivuni** | 20 |  |
-| **Ali Novruzov** | 10 |  |
+| **Ali Novruzov** | 10 |8  |
 
 # Comments
 

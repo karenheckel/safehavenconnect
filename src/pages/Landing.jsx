@@ -1,8 +1,5 @@
 import React from "react";
 import NavigationBar from "../components/NavigationBar";
-import EventsPreview from "../components/EventsPreview";
-import OrganizationsPreview from "../components/OrganizationsPreview";
-import ResourcesPreview from "../components/ResourcesPreview";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Information from "../components/Information";
 
