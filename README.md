@@ -17,12 +17,14 @@
 
 # Git SHA
 
-# Project Leader
+# Project Leader: Brianna Flores
+- Initiated the project, delegated tasks to team members, and ensured everyone completed their responsibilities on time. 
 
 # Link to GitLab pipelines
 https://gitlab.com/parul.sadasivuni/cs373-fall-2025-55085_03/-/pipelines
 
 # Link to website
+https://safehavenconnect.me/
 
 # Estimated Completion Time
 | Member | Estimated (hours) | Actual (hours) |
