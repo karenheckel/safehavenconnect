@@ -6,7 +6,7 @@ import { Container, Row, Col, Card, Image, Spinner } from "react-bootstrap";
 /* Team list */
 const team = [
   {
-    photo: "/src/assets/photos/karen_photo.jpg",
+    photo: "/photos/karen_photo.jpg",
     name: "Karen Heckel",
     role: "Frontend Developer",
     bio: "I am a junior majoring in Computer Science. Currently, I am an Undergraduate Research Assistant at TACC and the Academic officer for HACS. Outside of school, I enjoy thrifting and watching movies!",
@@ -15,7 +15,7 @@ const team = [
     unitTests: "0",
   },
   {
-    photo: "/src/assets/photos/parul_photo.jpeg",
+    photo: "/photos/parul_photo.jpeg",
     name: "Parul Sadasivuni",
     role: "Full Stack Developer",
     bio: "My name is Parul and I'm a junior in Computer Science and Business here at UT. I'm a research assistant with Dr. Caleb Kwon in the McCombs School of Business studying the impacts of minimum wage shocks on employment. In my free time, I enjoy music and watching Longhorn sports!",
@@ -24,7 +24,7 @@ const team = [
     unitTests: "0",
   },
   {
-    photo: "/src/assets/photos/brianna_photo.jpeg",
+    photo: "/photos/brianna_photo.jpeg",
     name: "Brianna Flores",
     role: "Full Stack Developer",
     bio: "Hello! I'm a junior studying Computer Science with a minor in Business. I currently serve as the Marketing Officer for the Hispanic Association of Computer Scientists (HACS) and am also a member of Longhorn Developers and TCUP. I also love to crochet and run a small business, StockysCrafts, where I sell handmade crochet plushies!",
@@ -33,7 +33,7 @@ const team = [
     unitTests: "0",
   },
   {
-    photo: "/src/assets/photos/ali_photo.jpg",
+    photo: "/photos/ali_photo.jpg",
     name: "Ali Novruzov",
     role: "Backend Developer",
     bio: "My name is Ali and I'm in my final year at UT. I recently completed an AI Engineering position with Fujitsu. In my free time I like to learn history and watch sci-fi movies. Travel is also something I find really fun.",
@@ -42,7 +42,7 @@ const team = [
     unitTests: "0",
   },
   {
-    photo: "/src/assets/photos/jonathan_photo.jpg",
+    photo: "/photos/jonathan_photo.jpg",
     name: "Jonathan Ho",
     role: "Full Stack Developer",
     bio: "Hi! My name is Jonathan Ho, and I'm currently a junior studying Computer Science and Business at UT Austin. Over the summer, I worked as a generative AI intern at Scale AI. In my free time, I enjoy playing basketball and absolutely nothing else.",
