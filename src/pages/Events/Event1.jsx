@@ -9,7 +9,7 @@ const Event1 = () => {
       <Container className="my-5">
         <h1 className="text-center">Volunteer Information Session</h1>
         <Row className="my-3 align-items-center">
-          <Col md={6}>
+          <Col md={6} className="d-flex justify-content-center">
             <img
               src="https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png"
               alt="SAFE Alliance Logo"
@@ -43,7 +43,7 @@ const Event1 = () => {
           <Col className="text-center" md={6}>
             <h3>Related Organizations</h3>
 
-            <Card style={{ width: "18rem" }}>
+            <Card className="mx-auto" style={{ width: "18rem" }}>
               <Card.Img
                 variant="top"
                 src="https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png"
@@ -86,7 +86,7 @@ const Event1 = () => {
           </Col>
           <Col className="text-center" md={6}>
             <h3>Related Resources</h3>
-            <Card style={{ width: "18rem" }}>
+            <Card className="mx-auto" style={{ width: "18rem" }}>
               <Card.Img
                 variant="top"
                 src="https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png"

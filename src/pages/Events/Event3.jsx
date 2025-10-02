@@ -9,7 +9,7 @@ const Event3 = () => {
       <Container className="my-5">
         <h1 className="text-center">TCFV’s 2025 Texas Town Hall</h1>
         <Row className="my-3 align-items-center">
-          <Col md={6}>
+          <Col md={6} className="d-flex justify-content-center">
             <img
               src="https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg"
               alt="tcfv logo"
@@ -42,7 +42,7 @@ const Event3 = () => {
         <Row className="my-3">
           <Col className="text-center" md={6}>
             <h3>Related Organizations</h3>
-            <Card style={{ width: "18rem" }}>
+            <Card className="mx-auto" style={{ width: "18rem" }}>
               <Card.Img
                 variant="top"
                 src="https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg"
@@ -74,7 +74,7 @@ const Event3 = () => {
           </Col>
           <Col className="text-center" md={6}>
             <h3>Related Resources</h3>
-            <Card style={{ width: "18rem" }}>
+            <Card className="mx-auto" style={{ width: "18rem" }}>
               <Card.Img
                 variant="top"
                 src="https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg"
