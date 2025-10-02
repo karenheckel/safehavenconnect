@@ -57,7 +57,7 @@ const Organizations = () => {
                 Services: Emergency Shelter, Counseling, Legal Advocacy
               </Card.Text>
               <Card.Text>
-                Hours: 24/7
+                Hours: 24/7 for Emergency Shelter and Hotline
               </Card.Text>
               <Card.Text>Online Availability: Yes</Card.Text>
               <Card.Text>
