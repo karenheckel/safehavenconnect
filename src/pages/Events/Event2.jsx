@@ -14,7 +14,7 @@ const Event2 = () => {
           <Col md={6}>
             <img
               src="https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png"
-              alt="Adele Gladman & Associates Logo"
+              alt="Hope Alliance Logo"
               className="img-fluid rounded"
             />
           </Col>

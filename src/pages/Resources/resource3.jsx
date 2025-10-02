@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Container, Row, Col, Button } from "react-bootstrap";
 import NavBar from "../../components/NavBar";
 
-const Event3 = () => {
+const Resource3 = () => {
   return (
     <>
       <NavBar />
@@ -60,24 +60,22 @@ const Event3 = () => {
             </Card>
           </Col>
           <Col className="text-center" md={6}>
-            <h3>Related Resources</h3>
+            <h3>Related Events</h3>
             <Card style={{ width: "18rem" }}>
               <Card.Img
                 variant="top"
                 src="https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg"
               />
               <Card.Body>
-                <Card.Title>Texas Council on Family Violence</Card.Title>
-                <Card.Text>Location: PO Box 163865, Austin, TX 78716</Card.Text>
-                <Card.Text>
-                  Services: Trainings, Technical Assistance, Materials,
-                  Prevention Efforts
-                </Card.Text>
-                <Card.Text>Hours: 24/7</Card.Text>
-                <Card.Text>Online Availability: Yes</Card.Text>
-                <Card.Text>
-                  Target Users: Family Violence Programs and Advocates
-                </Card.Text>
+                <p>Location: Texas Tribune Headquarters, Austin</p>
+              <p>Date: October 3, 2025</p>
+              <p>Time: 10:00 am - 12:00 pm</p>
+              <p>Event Type: Panel</p>
+              <p>
+                <a href="https://tcfv.org/events/texas-town-hall-2025/#">
+                Event Link
+              </a>
+                </p>
                 <Button
                   style={{
                     color: "black",
@@ -86,7 +84,7 @@ const Event3 = () => {
                   }}
                   href="/organization1"
                 >
-                  View Organization
+                  View Event
                 </Button>
               </Card.Body>
             </Card>
@@ -97,4 +95,4 @@ const Event3 = () => {
   );
 };
 
-export default Event3;
+export default Resource3;

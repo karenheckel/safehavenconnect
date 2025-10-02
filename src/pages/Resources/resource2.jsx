@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Container, Row, Col, Button } from "react-bootstrap";
 import NavBar from "../../components/NavBar";
 
-const Event2 = () => {
+const Resource2 = () => {
   return (
     <>
       <NavBar />
@@ -14,7 +14,7 @@ const Event2 = () => {
           <Col md={6}>
             <img
               src="https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png"
-              alt="Adele Gladman & Associates Logo"
+              alt="Hope Alliance Logo"
               className="img-fluid rounded"
             />
           </Col>
@@ -28,9 +28,6 @@ const Event2 = () => {
               <p>Online Availability: Yes</p>
             </Card>
           </Col>
-        </Row>
-        <Row>
-          
         </Row>
         <Row className="my-3">
           <Col className="text-center" md={6}>
@@ -84,28 +81,21 @@ const Event2 = () => {
                 src="https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png"
               />
               <Card.Body>
-                <Card.Title>Hope Alliance</Card.Title>
-                <Card.Text>
-                  Location: 1011 Gattis School Rd, Ste 110 Round Rock, TX 78664
-                </Card.Text>
-                <Card.Text>
-                  Services: Emergency Shelter, Counseling, Legal Advocacy
-                </Card.Text>
-                <Card.Text>
-                  Hours: <br />
-                  Monday 12:00 am - 4:00 pm <br />
-                  Tuesday 12:00 am - 4:00 pm <br />
-                  Wednesday 12:00 am - 4:00 pm <br />
-                  Thursday 12:00 am - 4:00 pm <br />
-                  Friday CLOSED <br />
-                  Saturday CLOSED <br />
-                  Sunday CLOSED
-                </Card.Text>
-                <Card.Text>Online Availability: Yes</Card.Text>
-                <Card.Text>
-                  Target Demographic: Survivors of Domestic Violence and Sexual
-                  Assault
-                </Card.Text>
+                <Card.Title>Hope Alliance Survive. Thrive. Prevent 5K Run/Walk</Card.Title>
+                <Card>
+                              <p>
+                                Location: San Gabriel Park, 445 E Morrow St, Georgetown, TX
+                                78626
+                              </p>
+                              <p>Date: October 11, 2025</p>
+                              <p>Time: 9:00 am - 12:00 pm</p>
+                              <p>Event Type: Fundraising</p>
+                              <p>
+                                <a href="https://runsignup.com/Race/TX/Georgetown/HopeAllianceSurvivetoThrive5K">
+                                Event Link
+                              </a>
+                              </p>
+                            </Card>
                 <Button
                   style={{
                     color: "black",
@@ -114,7 +104,7 @@ const Event2 = () => {
                   }}
                   href="/organization3"
                 >
-                  View Resource
+                  View Event
                 </Button>
               </Card.Body>
             </Card>
@@ -125,4 +115,4 @@ const Event2 = () => {
   );
 };
 
-export default Event2;
+export default Resource2;

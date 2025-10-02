@@ -82,30 +82,24 @@ const Resource1 = () => {
                 src="https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png"
               />
               <Card.Body>
-                <Card.Title>The SAFE Alliance</Card.Title>
-                <Card.Text>
-                  Location: 1515 Grove Blvd, Austin, TX 78741
-                </Card.Text>
-                <Card.Text>
-                  Services: Emergency Shelter, Counseling, Legal Advocacy
-                </Card.Text>
-                <Card.Text>
-                  Hours: 24/7
-                </Card.Text>
-                <Card.Text>Online Availability: Yes</Card.Text>
-                <Card.Text>
-                  Target Demographic: Survivors of Domestic Violence, Sexual
-                  Assault, and Human Trafficking
-                </Card.Text>
+                <Card.Title>Volunteer Information Session</Card.Title>
+                <p>Location: 1515 Grove Blvd, Austin, TX 78741</p>
+              <p>Date: October 1, 2025</p>
+              <p>Time: 6:00 pm - 7:30 pm</p>
+              <p>Event Type: Informational</p>
+              <p>
+                <a href="https://www.safeaustin.org/event/volunteer-information-session-6-2-2-2-2/">
+                Event Link</a>
+                </p>
                 <Button
                   style={{
                     color: "black",
                     backgroundColor: "#cde5d7",
                     borderColor: "black",
                   }}
-                  href="/organization2"
+                  href="/organization1"
                 >
-                  View Organization
+                  View Event
                 </Button>
               </Card.Body>
             </Card>
