@@ -36,7 +36,7 @@ const Organizations = () => {
                   backgroundColor: "#cde5d7",
                   borderColor: "black",
                 }}
-                href="/organization2"
+                href="/organization1"
               >
                 View Organization
               </Button>
@@ -70,7 +70,7 @@ const Organizations = () => {
                   backgroundColor: "#cde5d7",
                   borderColor: "black",
                 }}
-                href="/organization3"
+                href="/organization2"
               >
                 View Organization
               </Button>
@@ -97,7 +97,7 @@ const Organizations = () => {
                   backgroundColor: "#cde5d7",
                   borderColor: "black",
                 }}
-                href="/organization1"
+                href="/organization3"
               >
                 View Organization
               </Button>
