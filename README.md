@@ -16,6 +16,7 @@
 | **Ali Novruzov** | msn782 | @anovruzov |
 
 # Git SHA
+c67ca495bb1282db29a120feb89c99dd1c17467d
 
 # Project Leader: Brianna Flores
 - Initiated the project, delegated tasks to team members, and ensured everyone completed their responsibilities on time. 
@@ -29,7 +30,7 @@ https://safehavenconnect.me/
 # Estimated Completion Time
 | Member | Estimated (hours) | Actual (hours) |
 | ------ | ------ | ------ |
-| **Brianna Flores** | 15 |  |
+| **Brianna Flores** | 15 | 18 |
 | **Jonathan Ho** | 16 | 10 |
 | **Karen Heckel** | 15 | 17 |
 | **Parul Sadasivuni** | 20 | 12 |
