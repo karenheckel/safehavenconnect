@@ -16,7 +16,7 @@
 | **Ali Novruzov** | msn782 | @anovruzov |
 
 # Git SHA
-c67ca495bb1282db29a120feb89c99dd1c17467d
+71d77c875526342462836219eb146cf6aa7d7659
 
 # Project Leader: Brianna Flores
 - Initiated the project, delegated tasks to team members, and ensured everyone completed their responsibilities on time. 

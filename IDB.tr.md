@@ -9,7 +9,22 @@ SafeHavenConnect is a platform designed to help individuals struggling to find t
 ---
 
 ## User Stories
-**User stories were not provided**
+User stories were provided at 10:30 PM the day the project was due. We are working to discuss and refine the user stories’ scope and definition.
+**User Story #1: Finding a Nearby Shelter**
+As a survivor seeking safety, I want to find the nearest domestic violence shelter so that I can access immediate help. I want to see what services they offer and their capacity. This will allow me to quickly make informed decisions about where to go in an emergency. 
+
+**User Story #2: Accessing Legal Resources**
+As a user looking for legal aid, I want to browse free or low-cost legal resources so that I can understand my rights and options. I want to filter resources based on my specific situation and eligibility. This will help me navigate the legal process with confidence and safety. 
+
+**User Story #3: Discovering Support Events**
+As a survivor seeking community support, I want to find upcoming workshops, support groups, and events near me or online. I want to see event details like date, location, duration, and registration availability. This will allow me to participate in helpful programs and connect with others in similar situations. 
+
+**User Story #4: Exploring Organization Services**
+As a user looking for comprehensive support, I want to explore organizations that provide multiple services like medical care, counseling, and financial aid. I want to see images, links, and descriptions of these organizations. This will help me choose the most suitable organization for my specific needs. 
+
+**User Story #5: Multilingual Resource Access**
+As a non-English speaker, I want to filter resources and organizations by languages supported so that I can find help in a language I understand. I want to see which services are available in my preferred language. This will ensure I can access critical information without communication barriers. 
+
 
 ---
 
