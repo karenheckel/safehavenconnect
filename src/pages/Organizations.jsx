@@ -1,11 +1,11 @@
 import React from "react";
 import { Container, Row, Card, Button } from "react-bootstrap";
-import NavBar from "../components/NavBar";
+import NavigationBar from "../components/NavigationBar";
 
 const Organizations = () => {
   return (
     <>
-      <NavBar />
+      <NavigationBar />
       <Container className="text-center my-5">
         <h1>Organizations</h1>
         <p>Number of Organizations: 3</p>
