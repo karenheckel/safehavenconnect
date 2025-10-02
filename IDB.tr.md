@@ -156,4 +156,4 @@ Domain name generated from Namecheap
     - GitLab API Integration to retrieve commits, issues created, issues closed, and unit tests
 
 ## Challenges 
-- The biggest challenge was beginning the project, such as figuring out a frame work to use, how to approach the problem, adn how to organize the website with no strict guidelines. We decided to utilize react and React-Bootstrap as per the suggestion and collaborated to determine how best to go about organizing the site. 
+- The biggest challenge was beginning the project, such as figuring out a framework to use, how to approach the problem, and how to organize the website with no strict guidelines. We decided to utilize React and React-Bootstrap as per the suggestion and collaborated to determine how best to go about organizing the site.
