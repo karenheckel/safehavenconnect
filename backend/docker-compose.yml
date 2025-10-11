@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: safehavenconnect-db
+    environment:
+      POSTGRES_USER: safehaven
+      POSTGRES_PASSWORD: safehaven123
+      POSTGRES_DB: safehavenconnect
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U safehaven"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Flask Backend API
+  backend:
+    build: .
+    container_name: safehavenconnect-backend
+    environment:
+      DATABASE_URL: postgresql://safehaven:safehaven123@db:5432/safehavenconnect
+      FLASK_ENV: development
+      SECRET_KEY: dev-secret-key-change-in-production
+      PORT: 5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    command: python app.py
+
+volumes:
+  postgres_data:
