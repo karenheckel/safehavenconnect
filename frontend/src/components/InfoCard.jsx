@@ -48,9 +48,9 @@ const InfoCard = ({ cardType, cardInfo }) => {
         <Card.Title>{title}</Card.Title>
         {infoToPresent[cardType].map(
             (info, index) => (
-                <Card.text key={index}>
+                <Card.Text key={index}>
                     {info.label}: {info.value}
-                </Card.text>
+                </Card.Text>
             )
         )}
         <Button
