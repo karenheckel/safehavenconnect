@@ -14,6 +14,7 @@ test:
   stage: test
   image: node:$NODE_VERSION
   before_script:
+    - cd frontend
     - npm ci
   script:
     - npm run lint
@@ -21,19 +22,20 @@ test:
     - make status
   artifacts:
     paths:
-      - dist/
+      - frontend/dist/
     expire_in: 1 hour
 
 build:
   stage: build
   image: node:$NODE_VERSION
   before_script:
+    - cd frontend
     - npm ci
   script:
     - npm run build
   artifacts:
     paths:
-      - dist/
+      - frontend/dist/
     expire_in: 1 week
   only:
     - main
@@ -42,6 +44,7 @@ build:
 pages:
   stage: deploy
   script:
+    - cd frontend
     - echo "Checking dist directory..."
     - ls -la dist/ || echo "dist directory not found"
     - echo "Creating public directory..."
