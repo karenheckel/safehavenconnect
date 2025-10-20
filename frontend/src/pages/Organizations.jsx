@@ -19,7 +19,8 @@ const Organizations = () => {
           title: org.name,
           location: org.location,
           services: org.services,
-          hours: org.hours || "N/A",
+          // TODO Need attribute added to App.py
+          // hours: org.hours || "N/A",
           online: org.online_availability ? "Yes" : "No",
           orgType: org.organization_type,
           imgUrl: org.image_url,
