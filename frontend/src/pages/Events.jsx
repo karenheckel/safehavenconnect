@@ -16,6 +16,7 @@ const Events = () => {
       try {
         const res = await axios.get(DATABASE_URL, "/api/events");
         const formatEvents = res.data.map((event) => ({
+          eventId: event.id,
           title: event.name,
           location: event.location,
           time: event.start_time,
@@ -87,7 +88,7 @@ const Events = () => {
         <p>Number of events: {eventsInfo.length}</p>
         <Row className="justify-content-center">
           {eventsInfo.map((eventInfo, index) => (
-            <InfoCard key={index} cardType="event" cardInfo={eventInfo} />
+            <InfoCard key={index} cardType="event" cardInfo={eventInfo} cardId={eventInfo.eventId} />
           ))}
         </Row>
       </Container>
