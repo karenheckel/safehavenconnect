@@ -107,9 +107,9 @@ c41cd3f3bb0dbd6ff0be8c739fd6da431484b446
 - Connect to organization that is hosting event
 
 ## Describe two types of media for each model
-1. **Organizations:** Link to organization, image of organization, text describing organization
-2. **Resources:** link to resource, text, images
-3. **Events:** link to event page, images of event, map for event location, countdown till event start
+**Organizations:** Link to organization, image of organization, text describing organization
+**Resources:** link to resource, text, images
+**Events:** link to event page, images of event, map for event location, countdown till event start
 
 ## Questions that our site will answer
 1. Where is the nearest domestic violence shelter and what services do they offer?
