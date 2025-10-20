@@ -4,18 +4,17 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import NavigationBar from "../../components/NavigationBar";
-import EventCard from "../../components/EventCard";
 import InfoCard from "../../components/InfoCard";
 
 const EventPage = () => {
-  const { eventId } = useParams();
+  const { id } = useParams();
   const [eventInfo, setEventInfo] = useState(null);
 
   useEffect(() => {
     const getEventInfo = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5001/api/events/${eventId}`
+          `http://localhost:5001/api/events/${id}`
         );
         setEventInfo(res.data);
       } catch (err) {
@@ -24,7 +23,7 @@ const EventPage = () => {
     };
 
     getEventInfo();
-  }, [eventId]);
+  }, [id]);
 
   if (!eventInfo) {
     return <p>Loading event info</p>;

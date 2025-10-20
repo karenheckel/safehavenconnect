@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const InfoCard = ({ cardType, cardInfo, cardId }) => {
+const InfoCard = ({ cardType, cardInfo, id }) => {
     const navigate = useNavigate()
     const {
         title,
@@ -43,8 +43,8 @@ const InfoCard = ({ cardType, cardInfo, cardId }) => {
         ],
       };
 
-  const handleButtonClick = () => {
-    navigate(`/${cardType}s/${cardId}`)
+  const handleCardClick = () => {
+    navigate(`/${cardType}s/${id}`)
   }
   
   return (
@@ -65,7 +65,7 @@ const InfoCard = ({ cardType, cardInfo, cardId }) => {
             backgroundColor: "#cde5d7",
             borderColor: "black",
           }}
-          onClick={handleButtonClick}
+          onClick={handleCardClick}
         >
           View {cardType.charAt(0).toUpperCase() + cardType.slice(1)}
         </Button>

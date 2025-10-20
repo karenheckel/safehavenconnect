@@ -88,7 +88,7 @@ const Events = () => {
         <p>Number of events: {eventsInfo.length}</p>
         <Row className="justify-content-center">
           {eventsInfo.map((eventInfo, index) => (
-            <InfoCard key={index} cardType="event" cardInfo={eventInfo} cardId={eventInfo.eventId} />
+            <InfoCard key={index} cardType="event" cardInfo={eventInfo} id={eventInfo.eventId} />
           ))}
         </Row>
       </Container>
