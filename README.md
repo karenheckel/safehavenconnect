@@ -96,19 +96,26 @@ c41cd3f3bb0dbd6ff0be8c739fd6da431484b446
 3. Events: name, location, start time, date, duration, type of event, in person/online, registration open
 
 ## Instances of each model must connect to instances of at least two other models
+
 **Organizations**
 - Connect to resources: any resources put out by the organization
 - Any events held by the organization
+
 **Resources**
 - Connect to organizations that are referenced by resources
 - Connect to events related to the resource article
+
 **Events**
 - Connect to resources event may be promoting
-- Connect to organization that is hosting event
+- Connect to organization that is
+ hosting event
 
 ## Describe two types of media for each model
+
 **Organizations:** Link to organization, image of organization, text describing organization
+
 **Resources:** link to resource, text, images
+
 **Events:** link to event page, images of event, map for event location, countdown till event start
 
 ## Questions that our site will answer
