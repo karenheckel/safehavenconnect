@@ -58,7 +58,8 @@ c41cd3f3bb0dbd6ff0be8c739fd6da431484b446
 | **Parul Sadasivuni** |  |  |
 | **Ali Novruzov** |  |  |
 
-#### Phase 3 Project Leader:
+
+## Phase 3
 - Project Leader:
 - 
 
