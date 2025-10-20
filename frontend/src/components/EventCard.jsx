@@ -4,7 +4,7 @@ import { Card, Button } from "react-bootstrap";
 const EventCard = (eventInfo) => {
   return (
     <Card style={{ width: "18rem" }}>
-      <Card.Img variant="top" src={eventInfo.imgUrl} />
+      <Card.Img variant="top" src={eventInfo.imgUrl} alt={eventInfo.imgAlt}/>
       <Card.Body>
         <Card.Title>{eventInfo.title}</Card.Title>
         <Card.Text>Location: {eventInfo.location}</Card.Text>
