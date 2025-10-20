@@ -13,6 +13,7 @@ import Resources from './pages/Resources'
 import Resource1 from './pages/Resources/resource1'
 import Resource2 from './pages/Resources/resource2'
 import Resource3 from './pages/Resources/resource3'
+import EventPage from './pages/Events/EventPage'
 
 function App() {
   return (
@@ -23,9 +24,7 @@ function App() {
           <Route path="/organizations" element={<Organizations />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/events" element={<Events />} />
-          <Route path="/event1" element={<Event1 />} />
-          <Route path="/event2" element={<Event2 />} />
-          <Route path="/event3" element={<Event3 />} />
+          <Route path="/events/:id" element={<EventPage />} />
           <Route path="/organization1" element={<Organizations1 />} />
           <Route path="/organization2" element={<Organizations2 />} />
           <Route path="/organization3" element={<Organizations3 />} />
