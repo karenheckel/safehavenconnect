@@ -1,111 +1,62 @@
 import React from "react";
-import { Container, Row, Card, Button } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import { Container, Row } from "react-bootstrap";
 import NavigationBar from "../components/NavigationBar";
+import InfoCard from "../components/InfoCard";
+import axios from "axios";
+
+const DATABASE_URL = "http://localhost:5001";
 
 const Organizations = () => {
+  const [organizations, setOrganizations] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getOrganizations = async () => {
+      try {
+        const res = await axios.get(`${DATABASE_URL}/api/organizations`);        ;
+        const formatOrgs = res.data.map((org) => ({
+          title: org.name,
+          location: org.location,
+          services: org.services,
+          hours: org.hours || "N/A",
+          online: org.online_availability ? "Yes" : "No",
+          orgType: org.organization_type,
+          imgUrl: org.image_url,
+          pageLink: org.website_url,
+      }));
+      setOrganizations(formatOrgs);
+      } catch (error) {
+        console.error("Error fetching organizations:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getOrganizations();
+  }, []);
+
+  if (loading) {
+    return (
+      <>
+        <NavigationBar />
+        <p>Loading organizations</p>
+      </>
+    );
+  }
+
   return (
     <>
       <NavigationBar />
       <Container className="text-center my-5">
         <h1>Organizations</h1>
-        <p>Number of Organizations: 3</p>
+        <p>Number of Organizations: {organizations.length}</p>
         <Row className="justify-content-center">
-
-          <Card style={{ width: "18rem" }}>
-            <Card.Img
-              variant="top"
-              src="https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png"
-            />
-            <Card.Body>
-              <Card.Title>The SAFE Alliance</Card.Title>
-              <Card.Text>Location: 1515 Grove Blvd, Austin, TX 78741</Card.Text>
-              <Card.Text>
-                Services: Emergency Shelter, Counseling, Legal Advocacy
-              </Card.Text>
-              <Card.Text>
-                Hours: 24/7
-              </Card.Text>
-              <Card.Text>Online Availability: Yes</Card.Text>
-              <Card.Text>
-                Target Demographic: Survivors of Domestic Violence, Sexual
-                Assault, and Human Trafficking
-              </Card.Text>
-              <Button
-                style={{
-                  color: "black",
-                  backgroundColor: "#cde5d7",
-                  borderColor: "black",
-                }}
-                href="/organization1"
-              >
-                View Organization
-              </Button>
-            </Card.Body>
-          </Card>
-
-          <Card style={{ width: "18rem" }}>
-            <Card.Img
-              variant="top"
-              src="https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png"
-            />
-            <Card.Body>
-              <Card.Title>Hope Alliance</Card.Title>
-              <Card.Text>
-                Location: 1011 Gattis School Rd, Ste 110 Round Rock, TX 78664
-              </Card.Text>
-              <Card.Text>
-                Services: Emergency Shelter, Counseling, Legal Advocacy
-              </Card.Text>
-              <Card.Text>
-                Hours: 24/7 for Emergency Shelter and Hotline
-              </Card.Text>
-              <Card.Text>Online Availability: Yes</Card.Text>
-              <Card.Text>
-                Target Demographic: Survivors of Domestic Violence and Sexual
-                Assault
-              </Card.Text>
-              <Button
-                style={{
-                  color: "black",
-                  backgroundColor: "#cde5d7",
-                  borderColor: "black",
-                }}
-                href="/organization2"
-              >
-                View Organization
-              </Button>
-            </Card.Body>
-          </Card>
-
-          <Card style={{ width: "18rem" }}>
-            <Card.Img
-              variant="top"
-              src="https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg"
-            />
-            <Card.Body>
-              <Card.Title>Texas Council on Family Violence</Card.Title>
-              <Card.Text>Location: PO Box 163865, Austin, TX 78716</Card.Text>
-              <Card.Text>Services: Trainings, Technical Assistance, Materials, Prevention Efforts</Card.Text>
-              <Card.Text>Hours: n/a</Card.Text>
-              <Card.Text>Online Availability: Yes</Card.Text>
-              <Card.Text>
-                Target Users: Family Violence Programs and Advocates
-              </Card.Text>
-              <Button
-                style={{
-                  color: "black",
-                  backgroundColor: "#cde5d7",
-                  borderColor: "black",
-                }}
-                href="/organization3"
-              >
-                View Organization
-              </Button>
-            </Card.Body>
-          </Card>
-        </Row>
-      </Container>
-    </>
+          {organizations.map((org, index) => (
+            <InfoCard key={index} cardType="organization" cardInfo={org} />
+          ))}
+          </Row>
+        </Container>
+      </>
   );
 };
 
