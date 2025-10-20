@@ -48,21 +48,21 @@ pages:
     - echo "Checking dist directory..."
     - ls -la dist/ || echo "dist directory not found"
     - echo "Creating public directory..."
-    - mkdir -p public
+    - mkdir -p ../public
     - echo "Copying files..."
     - |
       if [ -d "dist" ] && [ "$(ls -A dist)" ]; then
-        cp -r dist/* public/
+        cp -r dist/* ../public/
         echo "Files copied successfully"
       else
         echo "ERROR: dist directory is empty or missing"
         exit 1
       fi
     - echo "Final public directory contents:"
-    - ls -la public/
+    - ls -la ../public/
   artifacts:
     paths:
-      - frontend/public/
+      - public
   only:
     - main
   dependencies:
