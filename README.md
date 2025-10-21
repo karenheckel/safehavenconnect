@@ -22,8 +22,11 @@ https://safehavenconnect.me/
 https://gitlab.com/parul.sadasivuni/cs373-fall-2025-55085_03/-/pipelines
 
 ## Link to backend API
+https://safehavenconnect-anovruz.us-east-1.awsapprunner.com (AWS App Runner)
+Local: http://localhost:5000
 
 ## Link to API Documentation
+https://gitlab.com/parul.sadasivuni/cs373-fall-2025-55085_03/-/blob/main/backend/API_DOCUMENTATION.md
 
 
 ## Phase 1 
@@ -48,15 +51,16 @@ c41cd3f3bb0dbd6ff0be8c739fd6da431484b446
 - Divided up work and made sure everyone stayed on track, asking for updates when needed.
 
 #### Phase 2 Git SHA
+96b6cea4b58c441395f11a944aaa75dbe5ebd09a
 
 #### Phase 2 Estimated and Actual Completion Time
 | Member | Estimated (hours) | Actual (hours) |
 | ------ | ------ | ------ |
-| **Brianna Flores** | 15 |  |
-| **Jonathan Ho** |  |  |
-| **Karen Heckel** | 15 |  |
-| **Parul Sadasivuni** |  |  |
-| **Ali Novruzov** |  |  |
+| **Brianna Flores** | 15 | TBD |
+| **Jonathan Ho** | 15 | TBD |
+| **Karen Heckel** | 15 | TBD |
+| **Parul Sadasivuni** | 15 | TBD |
+| **Ali Novruzov** | 12 | TBD |
 
 
 ## Phase 3
