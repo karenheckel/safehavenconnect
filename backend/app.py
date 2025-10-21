@@ -3,6 +3,74 @@ from flask_cors import CORS
 from config import config
 from models import db, Organization, Resource, Event
 import os
+from sqlalchemy import inspect, text
+from datetime import datetime, date, timedelta
+
+
+def parse_datetime(value):
+    if not value:
+        return None
+    try:
+        return datetime.fromisoformat(value)
+    except Exception:
+        return None
+
+
+def parse_date(value):
+    if not value:
+        return None
+    try:
+        return date.fromisoformat(value)
+    except Exception:
+        return None
+
+
+def ensure_columns():
+    eng = db.engine
+    insp = inspect(eng)
+    tables = {}
+    for t in ['events', 'organizations', 'resources']:
+        try:
+            if insp.has_table(t):
+                tables[t] = {c['name'] for c in insp.get_columns(t)}
+        except Exception:
+            pass
+    conn = eng.connect()
+    try:
+        if 'events' in tables and 'end_time' not in tables['events']:
+            if eng.name == 'postgresql':
+                conn.execute(text('ALTER TABLE events ADD COLUMN end_time TIMESTAMP NULL'))
+            else:
+                conn.execute(text('ALTER TABLE events ADD COLUMN end_time TIMESTAMP'))
+        if 'organizations' in tables and 'hours_of_operation' not in tables['organizations']:
+            conn.execute(text('ALTER TABLE organizations ADD COLUMN hours_of_operation TEXT'))
+        if 'resources' in tables:
+            if 'online_availability' not in tables['resources']:
+                if eng.name == 'postgresql':
+                    conn.execute(text('ALTER TABLE resources ADD COLUMN online_availability BOOLEAN'))
+                else:
+                    conn.execute(text('ALTER TABLE resources ADD COLUMN online_availability BOOLEAN'))
+            if 'hours_of_operation' not in tables['resources']:
+                conn.execute(text('ALTER TABLE resources ADD COLUMN hours_of_operation TEXT'))
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def backfill_events_end_time():
+    try:
+        missing = Event.query.filter(Event.end_time.is_(None), Event.start_time.isnot(None), Event.duration.isnot(None)).all()
+        updated = 0
+        for e in missing:
+            try:
+                e.end_time = e.start_time + timedelta(minutes=int(e.duration))
+                updated += 1
+            except Exception:
+                pass
+        if updated:
+            db.session.commit()
+    except Exception:
+        db.session.rollback()
 
 
 def create_app(config_name='default'):
@@ -15,6 +83,8 @@ def create_app(config_name='default'):
     
     with app.app_context():
         db.create_all()
+        ensure_columns()
+        backfill_events_end_time()
     
     @app.route('/api/organizations', methods=['GET'])
     def get_organizations():
@@ -59,7 +129,8 @@ def create_app(config_name='default'):
                 organization_type=data.get('organization_type'),
                 image_url=data.get('image_url'),
                 website_url=data.get('website_url'),
-                description=data.get('description')
+                description=data.get('description'),
+                hours_of_operation=data.get('hours_of_operation')
             )
             
             db.session.add(organization)
@@ -103,6 +174,7 @@ def create_app(config_name='default'):
             topic = request.args.get('topic')
             location = request.args.get('location')
             service = request.args.get('service')
+            online = request.args.get('online')
             
             query = Resource.query
             
@@ -112,6 +184,8 @@ def create_app(config_name='default'):
                 query = query.filter(Resource.location.ilike(f'%{location}%'))
             if service:
                 query = query.filter(Resource.services.ilike(f'%{service}%'))
+            if online is not None:
+                query = query.filter(Resource.online_availability == (online.lower() == 'true'))
             
             resources = query.all()
             return jsonify([resource.to_dict() for resource in resources]), 200
@@ -139,6 +213,8 @@ def create_app(config_name='default'):
                 languages_supported=data.get('languages_supported'),
                 location=data.get('location'),
                 topic=data.get('topic'),
+                online_availability=data.get('online_availability', False),
+                hours_of_operation=data.get('hours_of_operation'),
                 resource_url=data.get('resource_url'),
                 image_url=data.get('image_url'),
                 description=data.get('description')
@@ -215,13 +291,34 @@ def create_app(config_name='default'):
     def create_event():
         try:
             data = request.get_json()
-            
+            start_time = parse_datetime(data.get('start_time'))
+            end_time = parse_datetime(data.get('end_time'))
+            d = data.get('duration')
+            if end_time is None and start_time is not None and d is not None:
+                try:
+                    end_time = start_time + timedelta(minutes=int(d))
+                except Exception:
+                    end_time = None
+            event_date = parse_date(data.get('date'))
+            duration_minutes = None
+            if start_time and end_time:
+                try:
+                    duration_minutes = int((end_time - start_time).total_seconds() // 60)
+                except Exception:
+                    duration_minutes = None
+            elif d is not None:
+                try:
+                    duration_minutes = int(d)
+                except Exception:
+                    duration_minutes = None
+
             event = Event(
                 name=data.get('name'),
                 location=data.get('location'),
-                start_time=data.get('start_time'),
-                date=data.get('date'),
-                duration=data.get('duration'),
+                start_time=start_time,
+                end_time=end_time,
+                date=event_date,
+                duration=duration_minutes,
                 event_type=data.get('event_type'),
                 is_online=data.get('is_online', False),
                 registration_open=data.get('registration_open', True),
@@ -244,10 +341,21 @@ def create_app(config_name='default'):
         try:
             event = Event.query.get_or_404(event_id)
             data = request.get_json()
-            
-            for key, value in data.items():
-                if hasattr(event, key):
-                    setattr(event, key, value)
+            if 'start_time' in data:
+                event.start_time = parse_datetime(data.get('start_time'))
+            if 'end_time' in data:
+                event.end_time = parse_datetime(data.get('end_time'))
+            if 'date' in data:
+                event.date = parse_date(data.get('date'))
+            if 'duration' in data and (('end_time' not in data) or not data.get('end_time')) and event.start_time:
+                try:
+                    event.end_time = event.start_time + timedelta(minutes=int(data.get('duration')))
+                    event.duration = int(data.get('duration'))
+                except Exception:
+                    pass
+            for key in ['name', 'location', 'event_type', 'is_online', 'registration_open', 'event_url', 'image_url', 'description', 'map_url']:
+                if key in data:
+                    setattr(event, key, data.get(key))
             
             db.session.commit()
             return jsonify(event.to_dict()), 200

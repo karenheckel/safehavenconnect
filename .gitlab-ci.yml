@@ -67,3 +67,128 @@ pages:
     - main
   dependencies:
     - build
+
+
+# Build and push backend image to AWS ECR
+backend_ecr_build_push:
+  stage: build
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+    AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+    ECR_REPO_NAME: ${ECR_REPO_NAME:-safehavenconnect-backend}
+    IMAGE_TAG: ${CI_COMMIT_SHORT_SHA}
+  before_script:
+    - apk add --no-cache python3 py3-pip bash curl jq git
+    - pip install --no-cache-dir awscli
+    - aws --version
+    - echo "Logging in to ECR..."
+    - >
+      aws ecr describe-repositories --repository-names "$ECR_REPO_NAME" >/dev/null 2>&1 ||
+      aws ecr create-repository --repository-name "$ECR_REPO_NAME"
+    - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
+  script:
+    - echo "Building backend image..."
+    - docker build -t "$ECR_REPO_NAME:$IMAGE_TAG" -f backend/Dockerfile backend
+    - docker tag "$ECR_REPO_NAME:$IMAGE_TAG" "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$IMAGE_TAG"
+    - docker push "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$IMAGE_TAG"
+    - |
+      if [ "$CI_COMMIT_BRANCH" = "main" ]; then
+        docker tag "$ECR_REPO_NAME:$IMAGE_TAG" "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:latest"
+        docker push "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:latest"
+      fi
+  only:
+    - main
+    - develop
+
+
+# Deploy/update AWS App Runner service from ECR image
+# Requires CI variables: APPRUNNER_SERVICE_NAME, APPRUNNER_ROLE_ARN, SECRET_KEY, DATABASE_URL
+backend_deploy_apprunner:
+  stage: deploy
+  image: amazon/aws-cli:2.15.30
+  variables:
+    AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+    ECR_REPO_NAME: ${ECR_REPO_NAME:-safehavenconnect-backend}
+  before_script:
+    - aws --version
+  script:
+    - |
+      if [ "$CI_COMMIT_BRANCH" = "main" ]; then
+        ECR_IMAGE_URI="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:latest"
+      else
+        ECR_IMAGE_URI="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$CI_COMMIT_SHORT_SHA"
+      fi
+      echo "Using image: $ECR_IMAGE_URI"
+      SERVICE_ARN=$(aws apprunner list-services --query "ServiceSummaryList[?ServiceName=='$APPRUNNER_SERVICE_NAME'].ServiceArn | [0]" --output text)
+      if [ "$SERVICE_ARN" = "None" ] || [ -z "$SERVICE_ARN" ]; then
+        echo "Creating App Runner service $APPRUNNER_SERVICE_NAME..."
+        cat > apprunner.json <<EOF
+        {
+          "ServiceName": "$APPRUNNER_SERVICE_NAME",
+          "SourceConfiguration": {
+            "AuthenticationConfiguration": {"AccessRoleArn": "$APPRUNNER_ROLE_ARN"},
+            "AutoDeploymentsEnabled": true,
+            "ImageRepository": {
+              "ImageIdentifier": "$ECR_IMAGE_URI",
+              "ImageRepositoryType": "ECR",
+              "ImageConfiguration": {
+                "Port": "5000",
+                "RuntimeEnvironmentVariables": [
+                  {"Name":"FLASK_ENV","Value":"production"},
+                  {"Name":"SECRET_KEY","Value":"$SECRET_KEY"},
+                  {"Name":"DATABASE_URL","Value":"$DATABASE_URL"}
+                ]
+              }
+            }
+          },
+          "HealthCheckConfiguration": {
+            "Protocol":"HTTP",
+            "Path":"/api/health",
+            "Interval":5,
+            "Timeout":2,
+            "HealthyThreshold":1,
+            "UnhealthyThreshold":3
+          }
+        }
+EOF
+        aws apprunner create-service --cli-input-json file://apprunner.json
+      else
+        echo "Updating App Runner service $APPRUNNER_SERVICE_NAME ($SERVICE_ARN)..."
+        cat > apprunner-update.json <<EOF
+        {
+          "ServiceArn": "$SERVICE_ARN",
+          "SourceConfiguration": {
+            "AuthenticationConfiguration": {"AccessRoleArn": "$APPRUNNER_ROLE_ARN"},
+            "AutoDeploymentsEnabled": true,
+            "ImageRepository": {
+              "ImageIdentifier": "$ECR_IMAGE_URI",
+              "ImageRepositoryType": "ECR",
+              "ImageConfiguration": {
+                "Port": "5000",
+                "RuntimeEnvironmentVariables": [
+                  {"Name":"FLASK_ENV","Value":"production"},
+                  {"Name":"SECRET_KEY","Value":"$SECRET_KEY"},
+                  {"Name":"DATABASE_URL","Value":"$DATABASE_URL"}
+                ]
+              }
+            }
+          },
+          "HealthCheckConfiguration": {
+            "Protocol":"HTTP",
+            "Path":"/api/health",
+            "Interval":5,
+            "Timeout":2,
+            "HealthyThreshold":1,
+            "UnhealthyThreshold":3
+          }
+        }
+EOF
+        aws apprunner update-service --cli-input-json file://apprunner-update.json
+      fi
+  needs:
+    - backend_ecr_build_push
+  only:
+    - main

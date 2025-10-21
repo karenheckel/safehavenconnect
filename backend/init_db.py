@@ -29,7 +29,8 @@ def populate_sample_data():
             organization_type="Shelter",
             image_url="https://example.com/shelter1.jpg",
             website_url="https://safehavenshelter.org",
-            description="24/7 emergency shelter for domestic violence survivors"
+            description="24/7 emergency shelter for domestic violence survivors",
+            hours_of_operation="24/7"
         )
         
         org2 = Organization(
@@ -41,7 +42,8 @@ def populate_sample_data():
             organization_type="Support Center",
             image_url="https://example.com/support1.jpg",
             website_url="https://hopesupport.org",
-            description="Comprehensive support services for survivors"
+            description="Comprehensive support services for survivors",
+            hours_of_operation="Mon-Fri 9am-6pm"
         )
         
         resource1 = Resource(
@@ -52,6 +54,8 @@ def populate_sample_data():
             languages_supported="English, Spanish",
             location="Austin, TX",
             topic="Legal",
+            online_availability=True,
+            hours_of_operation="Mon-Fri 9am-5pm",
             resource_url="https://legalaid.org/dv",
             image_url="https://example.com/legal.jpg",
             description="Free legal services for domestic violence survivors"
@@ -65,6 +69,8 @@ def populate_sample_data():
             languages_supported="English, Spanish, Vietnamese",
             location="Houston, TX",
             topic="Mental Health",
+            online_availability=True,
+            hours_of_operation="Mon-Sat 9am-7pm",
             resource_url="https://wellness.org/counseling",
             image_url="https://example.com/counseling.jpg",
             description="Professional mental health support for survivors"
@@ -74,6 +80,7 @@ def populate_sample_data():
             name="Survivor Support Group",
             location="Austin Community Center",
             start_time=datetime(2025, 10, 15, 18, 0),
+            end_time=datetime(2025, 10, 15, 19, 30),
             date=date(2025, 10, 15),
             duration=90,
             event_type="Support Group",
@@ -89,6 +96,7 @@ def populate_sample_data():
             name="Online Safety Workshop",
             location="Virtual",
             start_time=datetime(2025, 10, 20, 19, 0),
+            end_time=datetime(2025, 10, 20, 20, 0),
             date=date(2025, 10, 20),
             duration=60,
             event_type="Workshop",

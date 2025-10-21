@@ -34,6 +34,7 @@ class Organization(db.Model):
     image_url = db.Column(db.String(500))
     website_url = db.Column(db.String(500))
     description = db.Column(db.Text)
+    hours_of_operation = db.Column(db.Text)
     
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -55,6 +56,7 @@ class Organization(db.Model):
             'image_url': self.image_url,
             'website_url': self.website_url,
             'description': self.description,
+            'hours_of_operation': self.hours_of_operation,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,
             'resource_ids': [r.id for r in self.resources],
@@ -74,6 +76,8 @@ class Resource(db.Model):
     languages_supported = db.Column(db.String(255))
     location = db.Column(db.String(255))
     topic = db.Column(db.String(100))
+    online_availability = db.Column(db.Boolean, default=False)
+    hours_of_operation = db.Column(db.Text)
     
     resource_url = db.Column(db.String(500))
     image_url = db.Column(db.String(500))
@@ -97,6 +101,8 @@ class Resource(db.Model):
             'languages_supported': self.languages_supported,
             'location': self.location,
             'topic': self.topic,
+            'online_availability': self.online_availability,
+            'hours_of_operation': self.hours_of_operation,
             'resource_url': self.resource_url,
             'image_url': self.image_url,
             'description': self.description,
@@ -115,6 +121,7 @@ class Event(db.Model):
     name = db.Column(db.String(255), nullable=False)
     location = db.Column(db.String(255))
     start_time = db.Column(db.DateTime)
+    end_time = db.Column(db.DateTime)
     date = db.Column(db.Date)
     duration = db.Column(db.Integer)
     event_type = db.Column(db.String(100))
@@ -140,8 +147,9 @@ class Event(db.Model):
             'name': self.name,
             'location': self.location,
             'start_time': self.start_time.isoformat() if self.start_time else None,
+            'end_time': self.end_time.isoformat() if self.end_time else None,
             'date': self.date.isoformat() if self.date else None,
-            'duration': self.duration,
+            'duration': (int((self.end_time - self.start_time).total_seconds() // 60) if self.start_time and self.end_time else None),
             'event_type': self.event_type,
             'is_online': self.is_online,
             'registration_open': self.registration_open,
