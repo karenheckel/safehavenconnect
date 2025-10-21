@@ -125,21 +125,21 @@ backend_deploy_apprunner:
       SERVICE_ARN=$(aws apprunner list-services --query "ServiceSummaryList[?ServiceName=='$APPRUNNER_SERVICE_NAME'].ServiceArn | [0]" --output text)
       if [ "$SERVICE_ARN" = "None" ] || [ -z "$SERVICE_ARN" ]; then
         echo "Creating App Runner service $APPRUNNER_SERVICE_NAME..."
-        cat > apprunner.json <<EOF
+        cat > apprunner.json <<'JSONEOF'
         {
-          "ServiceName": "$APPRUNNER_SERVICE_NAME",
+          "ServiceName": "PLACEHOLDER_SERVICE_NAME",
           "SourceConfiguration": {
-            "AuthenticationConfiguration": {"AccessRoleArn": "$APPRUNNER_ROLE_ARN"},
+            "AuthenticationConfiguration": {"AccessRoleArn": "PLACEHOLDER_ROLE_ARN"},
             "AutoDeploymentsEnabled": true,
             "ImageRepository": {
-              "ImageIdentifier": "$ECR_IMAGE_URI",
+              "ImageIdentifier": "PLACEHOLDER_IMAGE_URI",
               "ImageRepositoryType": "ECR",
               "ImageConfiguration": {
                 "Port": "5000",
                 "RuntimeEnvironmentVariables": [
                   {"Name":"FLASK_ENV","Value":"production"},
-                  {"Name":"SECRET_KEY","Value":"$SECRET_KEY"},
-                  {"Name":"DATABASE_URL","Value":"$DATABASE_URL"}
+                  {"Name":"SECRET_KEY","Value":"PLACEHOLDER_SECRET"},
+                  {"Name":"DATABASE_URL","Value":"PLACEHOLDER_DB"}
                 ]
               }
             }
@@ -153,25 +153,30 @@ backend_deploy_apprunner:
             "UnhealthyThreshold":3
           }
         }
-EOF
+      JSONEOF
+        sed -i "s|PLACEHOLDER_SERVICE_NAME|$APPRUNNER_SERVICE_NAME|g" apprunner.json
+        sed -i "s|PLACEHOLDER_ROLE_ARN|$APPRUNNER_ROLE_ARN|g" apprunner.json
+        sed -i "s|PLACEHOLDER_IMAGE_URI|$ECR_IMAGE_URI|g" apprunner.json
+        sed -i "s|PLACEHOLDER_SECRET|$SECRET_KEY|g" apprunner.json
+        sed -i "s|PLACEHOLDER_DB|$DATABASE_URL|g" apprunner.json
         aws apprunner create-service --cli-input-json file://apprunner.json
       else
         echo "Updating App Runner service $APPRUNNER_SERVICE_NAME ($SERVICE_ARN)..."
-        cat > apprunner-update.json <<EOF
+        cat > apprunner-update.json <<'JSONEOF'
         {
-          "ServiceArn": "$SERVICE_ARN",
+          "ServiceArn": "PLACEHOLDER_SERVICE_ARN",
           "SourceConfiguration": {
-            "AuthenticationConfiguration": {"AccessRoleArn": "$APPRUNNER_ROLE_ARN"},
+            "AuthenticationConfiguration": {"AccessRoleArn": "PLACEHOLDER_ROLE_ARN"},
             "AutoDeploymentsEnabled": true,
             "ImageRepository": {
-              "ImageIdentifier": "$ECR_IMAGE_URI",
+              "ImageIdentifier": "PLACEHOLDER_IMAGE_URI",
               "ImageRepositoryType": "ECR",
               "ImageConfiguration": {
                 "Port": "5000",
                 "RuntimeEnvironmentVariables": [
                   {"Name":"FLASK_ENV","Value":"production"},
-                  {"Name":"SECRET_KEY","Value":"$SECRET_KEY"},
-                  {"Name":"DATABASE_URL","Value":"$DATABASE_URL"}
+                  {"Name":"SECRET_KEY","Value":"PLACEHOLDER_SECRET"},
+                  {"Name":"DATABASE_URL","Value":"PLACEHOLDER_DB"}
                 ]
               }
             }
@@ -185,7 +190,12 @@ EOF
             "UnhealthyThreshold":3
           }
         }
-EOF
+      JSONEOF
+        sed -i "s|PLACEHOLDER_SERVICE_ARN|$SERVICE_ARN|g" apprunner-update.json
+        sed -i "s|PLACEHOLDER_ROLE_ARN|$APPRUNNER_ROLE_ARN|g" apprunner-update.json
+        sed -i "s|PLACEHOLDER_IMAGE_URI|$ECR_IMAGE_URI|g" apprunner-update.json
+        sed -i "s|PLACEHOLDER_SECRET|$SECRET_KEY|g" apprunner-update.json
+        sed -i "s|PLACEHOLDER_DB|$DATABASE_URL|g" apprunner-update.json
         aws apprunner update-service --cli-input-json file://apprunner-update.json
       fi
   needs:
