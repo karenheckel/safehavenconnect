@@ -83,6 +83,15 @@ backend_ecr_build_push:
     - apk add --no-cache python3 py3-pip bash curl jq git
     - pip install --no-cache-dir awscli
     - aws --version
+    - |
+      if [ -n "$AWS_ACCOUNT_ID" ] && [ -n "$AWS_DEFAULT_REGION" ] && [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+        export ECR_REPO_NAME="${ECR_REPO_NAME:-safehavenconnect-backend}"
+        echo "Logging in to ECR..."
+        aws ecr describe-repositories --repository-names "$ECR_REPO_NAME" >/dev/null 2>&1 || aws ecr create-repository --repository-name "$ECR_REPO_NAME"
+        aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
+      else
+        echo "AWS credentials missing; skipping ECR login"
+      fi
     - export ECR_REPO_NAME="${ECR_REPO_NAME:-safehavenconnect-backend}"
     - echo "Logging in to ECR..."
     - >
@@ -94,7 +103,6 @@ backend_ecr_build_push:
       if [ -z "$AWS_ACCOUNT_ID" ] || [ -z "$AWS_DEFAULT_REGION" ] || [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
         echo "Skipping backend image build: required AWS credentials are not set."
         exit 0
-      fi
     - echo "Building backend image..."
     - docker build -t "$ECR_REPO_NAME:$IMAGE_TAG" -f backend/Dockerfile backend
     - docker tag "$ECR_REPO_NAME:$IMAGE_TAG" "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$IMAGE_TAG"
@@ -122,6 +130,7 @@ backend_deploy_apprunner:
         echo "Skipping App Runner deploy: required AWS/App Runner variables are not set."
         exit 0
       fi
+    - export ECR_REPO_NAME="${ECR_REPO_NAME:-safehavenconnect-backend}"
     - export ECR_REPO_NAME="${ECR_REPO_NAME:-safehavenconnect-backend}"
     - |
       if [ "$CI_COMMIT_BRANCH" = "main" ]; then
