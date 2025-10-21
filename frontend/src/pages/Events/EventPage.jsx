@@ -55,6 +55,7 @@ const EventPage = () => {
         {eventInfo.map_url && (
           <Row>
             <iframe
+              title="Map to Event"
               src={eventInfo.map_url}
               width="600"
               height="450"

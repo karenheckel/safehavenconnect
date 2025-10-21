@@ -1,13 +1,13 @@
-import { render, screen, waitFor} from "@testing-library/react";
+import { render, screen, waitFor, fireEvent} from "@testing-library/react";
 import { describe, test, expect, vi, beforeEach } from "vitest";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes, useNavigate } from "react-router-dom";
 import '@testing-library/jest-dom';
 import axios from "axios";
 import Landing from "../pages/Landing";
 import About from "../pages/About";
 import Events from "../pages/Events";
-
-
+import EventPage from "../pages/Events/EventPage";
+import InfoCard from "../components/InfoCard";
 
 describe("Landing", () => {
   test("renders hero text, call-to-action, and buttons", () => {
@@ -129,5 +129,132 @@ describe("Events Page", () => {
       expect(screen.getByText(/Upcoming Events/i)).toBeInTheDocument();
     });
     expect(screen.getByText(/Number of events: 0/i)).toBeInTheDocument();
+  });
+});
+
+// unit tests for events instance pages
+
+const mockEvent = {
+  id: "1",
+  name: "Sample Event",
+  location: "Austin, TX",
+  start_time: "10:00 AM",
+  date: "2025-10-25",
+  event_type: "Workshop",
+  image_url: "sample-event.jpg",
+  event_url: "https://example.com/sample-event",
+  map_url: "https://maps.google.com/sample",
+  organization_ids: [101, 102],
+  resource_ids: [201, 202],
+};
+
+describe("EventPage", () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  test("displays loading initially", () => {
+    axios.get.mockReturnValue(new Promise(() => {}));
+    render(
+      <MemoryRouter initialEntries={["/events/1"]}>
+        <Routes>
+          <Route path="/events/:id" element={<EventPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText(/Loading event info/i)).toBeInTheDocument();
+  });
+
+  test("renders event info after fetch", async () => {
+    axios.get.mockResolvedValue({ data: mockEvent });
+
+    render(
+      <MemoryRouter initialEntries={["/events/1"]}>
+        <Routes>
+          <Route path="/events/:id" element={<EventPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(/Sample Event/i)).toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/Location: Austin, TX/i)).toBeInTheDocument();
+    expect(screen.getByText(/Date: 2025-10-25/i)).toBeInTheDocument();
+    expect(screen.getByText(/Time: 10:00 AM/i)).toBeInTheDocument();
+    expect(screen.getByText(/Event Type: Workshop/i)).toBeInTheDocument();
+    expect(screen.getByText(/Event Link/i).closest("a")).toHaveAttribute(
+      "href",
+      "https://example.com/sample-event"
+    );
+
+    // Check map iframe
+    expect(screen.getByTitle(/Map to Event/i)).toHaveAttribute(
+      "src",
+      "https://maps.google.com/sample"
+    );
+  });
+});
+
+
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual("react-router-dom");
+  return {
+    ...actual,
+    useNavigate: vi.fn(),
+  };
+});
+
+describe("InfoCard", () => {
+  const mockNavigate = vi.fn();
+  beforeEach(() => {
+    useNavigate.mockReturnValue(mockNavigate);
+  });
+
+  const mockEventCard = {
+    title: "Sample Event",
+    location: "Austin, TX",
+    time: "10:00 AM",
+    date: "2025-10-25",
+    event_type: "Workshop",
+    organization: "SafeHavenConnect",
+    image_url: "/sample.jpg",
+  };
+
+  test("renders event card with correct info", () => {
+    render(
+      <MemoryRouter>
+        <InfoCard cardType="event" cardInfo={mockEventCard} id={1} />
+      </MemoryRouter>
+    );
+
+    // Check title and image
+    expect(screen.getByText("Sample Event")).toBeInTheDocument();
+    expect(screen.getByRole("img")).toHaveAttribute("src", "/sample.jpg");
+
+    // Check info fields
+    expect(screen.getByText(/Location: Austin, TX/i)).toBeInTheDocument();
+    expect(screen.getByText(/Time: 10:00 AM/i)).toBeInTheDocument();
+    expect(screen.getByText(/Date: 2025-10-25/i)).toBeInTheDocument();
+    expect(screen.getByText(/Event Type: Workshop/i)).toBeInTheDocument();
+    expect(screen.getByText(/Organization: SafeHavenConnect/i)).toBeInTheDocument();
+
+    // Check button
+    expect(screen.getByRole("button", { name: /View Event/i })).toBeInTheDocument();
+  });
+
+  test("navigates to correct route when button is clicked", () => {
+    render(
+      <MemoryRouter>
+        <InfoCard cardType="event" cardInfo={mockEventCard} id={1} />
+      </MemoryRouter>
+    );
+
+    const button = screen.getByRole("button", { name: /View Event/i });
+    fireEvent.click(button);
+
+    expect(mockNavigate).toHaveBeenCalledWith("/events/1");
   });
 });
