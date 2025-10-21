@@ -90,6 +90,11 @@ backend_ecr_build_push:
       aws ecr create-repository --repository-name "$ECR_REPO_NAME"
     - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
   script:
+    - |
+      if [ -z "$AWS_ACCOUNT_ID" ] || [ -z "$AWS_DEFAULT_REGION" ] || [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
+        echo "Skipping backend image build: required AWS credentials are not set."
+        exit 0
+      fi
     - echo "Building backend image..."
     - docker build -t "$ECR_REPO_NAME:$IMAGE_TAG" -f backend/Dockerfile backend
     - docker tag "$ECR_REPO_NAME:$IMAGE_TAG" "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$IMAGE_TAG"
@@ -115,6 +120,11 @@ backend_deploy_apprunner:
   before_script:
     - aws --version
   script:
+    - |
+      if [ -z "$AWS_ACCOUNT_ID" ] || [ -z "$AWS_DEFAULT_REGION" ] || [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$APPRUNNER_SERVICE_NAME" ] || [ -z "$APPRUNNER_ROLE_ARN" ] || [ -z "$SECRET_KEY" ] || [ -z "$DATABASE_URL" ]; then
+        echo "Skipping App Runner deploy: required AWS/App Runner variables are not set."
+        exit 0
+      fi
     - |
       if [ "$CI_COMMIT_BRANCH" = "main" ]; then
         ECR_IMAGE_URI="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:latest"
