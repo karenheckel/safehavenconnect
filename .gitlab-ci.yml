@@ -78,13 +78,12 @@ backend_ecr_build_push:
     - docker:24.0.5-dind
   variables:
     DOCKER_TLS_CERTDIR: ""
-    AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
-    ECR_REPO_NAME: ${ECR_REPO_NAME:-safehavenconnect-backend}
     IMAGE_TAG: ${CI_COMMIT_SHORT_SHA}
   before_script:
     - apk add --no-cache python3 py3-pip bash curl jq git
     - pip install --no-cache-dir awscli
     - aws --version
+    - export ECR_REPO_NAME="${ECR_REPO_NAME:-safehavenconnect-backend}"
     - echo "Logging in to ECR..."
     - >
       aws ecr describe-repositories --repository-names "$ECR_REPO_NAME" >/dev/null 2>&1 ||
@@ -115,9 +114,6 @@ backend_ecr_build_push:
 backend_deploy_apprunner:
   stage: deploy
   image: amazon/aws-cli:2.15.30
-  variables:
-    AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
-    ECR_REPO_NAME: ${ECR_REPO_NAME:-safehavenconnect-backend}
   before_script:
     - aws --version
   script:
@@ -126,6 +122,7 @@ backend_deploy_apprunner:
         echo "Skipping App Runner deploy: required AWS/App Runner variables are not set."
         exit 0
       fi
+    - export ECR_REPO_NAME="${ECR_REPO_NAME:-safehavenconnect-backend}"
     - |
       if [ "$CI_COMMIT_BRANCH" = "main" ]; then
         ECR_IMAGE_URI="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:latest"
