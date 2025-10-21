@@ -24,7 +24,8 @@ clean:
 	rm -rf dist/ node_modules/ .vite/
 
 test:
-	@echo "Tests not configured"
+	@echo "Running Selenium acceptance tests..."
+	python3 -m pytest frontend/src/tests/acceptance_tests.py
 
 check: lint build
 
