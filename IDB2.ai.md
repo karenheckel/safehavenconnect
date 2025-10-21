@@ -12,7 +12,7 @@ GPT-5 Pro
 - [ ] Bug location
 
 **Example:**
-<!-- When I had trouble with the pipeline failing, i was able to understand what caused it through claude. -->  Ali
+When I had trouble with the pipeline failing, I was able to understand what caused it through Claude.
 
 ---
 
@@ -20,7 +20,7 @@ GPT-5 Pro
 - [ ] Computer Science concepts
 
 **Example:**
-<!-- It was my first time using aws so i was able to understadn how to handle it on gitlab/Used it to create documentaition and reqs-->  Ali
+It was my first time using AWS so I was able to understand how to handle it on GitLab. Used it to create documentation and requirements.
 
 ---
 
@@ -28,7 +28,7 @@ GPT-5 Pro
 - [ ] Style improvements
 
 **Example:**
-<!-- Helped me strcuture my documentation and commentary -->  Ali
+Helped me structure my documentation and commentary.
 
 ---
 
@@ -37,12 +37,13 @@ GPT-5 Pro
 - [ ] Explored different implementation patterns
 
 **Example:**
-<!-- Found simplest way to store user session tines --> Ali
+Found simplest way to store user session times.
 
 ---
 
 #### 5. Other
-<!-- Describe any other ways AI assisted -->  Spelling mistakes
+**Example:**
+Helped catch spelling mistakes and typos in documentation.
 
 ---
 
@@ -50,13 +51,14 @@ GPT-5 Pro
 
 ### What specific improvements to your code or understanding came from this AI interaction?
 
-Helped me mostly to understand CI/CD as well as how to handle adding aws variables into git. Furthermore,  it guided me through the entire sign up process - Ali
+Helped me mostly to understand CI/CD as well as how to handle adding AWS variables into GitLab. Furthermore, it guided me through the entire AWS sign up process and IAM role configuration.
 
 ---
 
 ### How did you decide what to keep or ignore from the AI's suggestions?
 
-By verifiying with another LLM that it was correct, cross verification between deep thinking models - Ali
+By verifying with another LLM that it was correct, using cross verification between deep thinking models to ensure accuracy.
+
 ---
 
 ### Did the AI ever produce an incorrect or misleading suggestion? How did you detect that?
@@ -128,7 +130,6 @@ I learned how SQLAlchemy relationships work and why timestamps are crucial to be
 
 **"I confirm that the AI was used only as a helper (explainer, debugger, reviewer) and not as a code generator. All code submitted is my own work."**
 
-**Signed:** Ali Novruz
 **Date:** October 21, 2025
 
 ---
