@@ -28,6 +28,10 @@ Local: http://localhost:5000
 ## Link to API Documentation
 https://gitlab.com/parul.sadasivuni/cs373-fall-2025-55085_03/-/blob/main/backend/API_DOCUMENTATION.md
 
+## Link to Database
+PostgreSQL (Docker): localhost:5432/safehavenconnect
+Production: Configured via DATABASE_URL environment variable in AWS App Runner
+
 
 ## Phase 1 
 - Project Leader: Brianna Flores
