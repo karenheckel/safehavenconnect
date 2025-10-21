@@ -86,7 +86,6 @@ GET /api/organizations/1
   "id": 1,
   "name": "Safe Haven Shelter",
   "location": "Austin, TX",
-  ...
 }
 ```
 
