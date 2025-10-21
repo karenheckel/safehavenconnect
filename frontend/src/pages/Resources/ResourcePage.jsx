@@ -6,74 +6,74 @@ import axios from "axios";
 import NavigationBar from "../../components/NavigationBar";
 import InfoCard from "../../components/InfoCard";
 
-const OrganizationPage = () => {
+const ResourcePage = () => {
   const { id } = useParams();
-  const [orgInfo, setOrgInfo] = useState(null);
+  const [resourceInfo, setResourceInfo] = useState(null);
 
   useEffect(() => {
-    const getOrgInfo = async () => {
+    const getResourceInfo = async () => {
       try {
         const res = await axios.get(
           `http://localhost:5001/api/events/${id}`
         );
-        setOrgInfo(res.data);
+        setResourceInfo(res.data);
       } catch (err) {
-        console.error("Error fetching organization:", err);
+        console.error("Error fetching resource:", err);
       }
     };
 
-    getOrgInfo();
+    getResourceInfo();
   }, [id]);
 
-  if (!orgInfo) {
-    return <p>Loading organization info</p>;
+  if (!resourceInfo) {
+    return <p>Loading resource info</p>;
   }
 
   return (
     <>
       <NavigationBar />
       <Container className="my-5">
-        <h1 className="text-center">{orgInfo.name}</h1>
+        <h1 className="text-center">{resourceInfo.name}</h1>
         <Row className="my-3 align-items-center">
           <Col md={6} className="d-flex justify-content-center">
             <img
-              src={orgInfo.image_url}
-              alt={orgInfo.name}
+              src={resourceInfo.image_url}
+              alt={resourceInfo.name}
               className="img-fluid rounded"
             />
           </Col>
           <Col className="text-center" md={6}>
             <Card body className="shadow-sm">
-              <p>Location: {orgInfo.location}</p>
-              <p>Services: {orgInfo.services}</p>
-              {/* TODO add organization hours/times */}
-              <p>Time: {orgInfo.time}</p> 
-              <p>Online Availability: {orgInfo.online_availability}</p>
-              <a href={orgInfo.website_url}>Learn more about {orgInfo.name}</a>
+              <p>Location: {resourceInfo.location}</p>
+              {/* TODO add resource type, online availability, hours/times */}
+              <p>Type: {resourceInfo.type}</p>
+              <p>Hours: {resourceInfo.hours}</p> 
+              <p>Online Availability: {resourceInfo.online_availability}</p>
+              <a href={resourceInfo.resource_url}>Learn more about {resourceInfo.name}</a>
             </Card>
           </Col>
         </Row>
         <Row className="my-3">
           <Col className="text-center" md={6}>
-            <h3>Related Events</h3>
+            <h3>Related Organizations</h3>
             {
               // list of instances
-              orgInfo.event_ids.map((eventId) => (
+              resourceInfo.organization_ids.map((orgId) => (
                 <InfoCard
-                  key={eventId}
-                  cardType="event"
-                  cardInfo={{ id: eventId }}
+                  key={orgId}
+                  cardType="organization"
+                  cardInfo={{ id: orgId }}
                 />
               ))
             }
           </Col>
           <Col className="text-center" md={6}>
-            <h3>Related Resources</h3>
-            {orgInfo.resource_ids.map((resourceId) => (
+            <h3>Related Events</h3>
+            {resourceInfo.event_ids.map((eventId) => (
               <InfoCard
-                key={resourceId}
-                cardType="resource"
-                cardInfo={{ id: resourceId }}
+                key={eventId}
+                cardType="event"
+                cardInfo={{ id: eventId }}
               />
             ))}
           </Col>
@@ -83,4 +83,4 @@ const OrganizationPage = () => {
   );
 };
 
-export default OrganizationPage;
+export default ResourcePage;
