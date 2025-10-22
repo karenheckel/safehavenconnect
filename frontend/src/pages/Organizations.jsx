@@ -9,6 +9,8 @@ const DATABASE_URL = "http://localhost:5001";
 const Organizations = () => {
   const [organizations, setOrganizations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currPage, setCurrPage] = useState(1)
+  const cardsOnPage = 10
 
   useEffect(() => {
     const getOrganizations = async () => {
@@ -42,16 +44,47 @@ const Organizations = () => {
     );
   }
 
+    const lastOrg = currPage * cardsOnPage
+    const firstOrg = lastOrg - cardsOnPage
+    const presentedOrgs = organizations.slice(firstOrg, lastOrg)
+    const numPages = Math.ceil(organizations.length / cardsOnPage)  
+
   return (
     <>
       <Container className="text-center my-5">
         <h1>Organizations</h1>
         <p>Number of Organizations: {organizations.length}</p>
         <Row className="justify-content-center">
-          {organizations.map((org, index) => (
+          {presentedOrgs.map((org, index) => (
             <InfoCard key={index} cardType="organization" cardInfo={org} />
           ))}
         </Row>
+
+        <Container className="d-flex justify-content-center mt-4">
+          <button
+            className="btn btn-secondary mx-2"
+            onClick={() => setCurrPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currPage === 1}
+          >
+            Previous
+          </button>
+
+          <span className="align-self-center mx-2">
+            Page {currPage} of {numPages}
+          </span>
+
+          <button
+            className="btn btn-secondary mx-2"
+            onClick={() =>
+              setCurrPage((prev) =>
+                prev < numPages ? prev + 1 : prev
+              )
+            }
+            disabled={currPage >= numPages}
+          >
+            Next
+          </button>
+        </Container>
       </Container>
     </>
   );

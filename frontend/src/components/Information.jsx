@@ -10,7 +10,7 @@ const Information = () => {
           <Card className="flex-fill text-center">
             <Card.Img
               variant="top"
-              src="/photos/desks.jpeg"
+              src="https://images.pexels.com/photos/159213/hall-congress-architecture-building-159213.jpeg"
               alt="image of tables and desks at an event"
             />
             <Card.Body>
@@ -37,7 +37,7 @@ const Information = () => {
           <Card className="flex-fill text-center">
             <Card.Img
               variant="top"
-              src="/photos/books.jpeg"
+              src="https://images.pexels.com/photos/159866/books-book-pages-read-literature-159866.jpeg"
               alt="Stack of books"
             />
             <Card.Body>
@@ -63,7 +63,7 @@ const Information = () => {
           <Card className="flex-fill text-center">
             <Card.Img
               variant="top"
-              src="/photos/umbrellas.jpeg"
+              src="https://images.pexels.com/photos/1451040/pexels-photo-1451040.jpeg"
               alt="colorful umbrellas"
             />
             <Card.Body>

@@ -9,6 +9,8 @@ const DATABASE_URL = "http://localhost:5001";
 const Events = () => {
   const [eventsInfo, setEventsInfo] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currPage, setCurrPage] = useState(1)
+  const cardsOnPage = 10
 
   useEffect(() => {
     const getEvents = async () => {
@@ -43,13 +45,18 @@ const Events = () => {
     );
   }
 
+  const lastEvent = currPage * cardsOnPage
+  const firstEvent = lastEvent - cardsOnPage
+  const presentedEvents = eventsInfo.slice(firstEvent, lastEvent)
+  const numPages = Math.ceil(eventsInfo.length / cardsOnPage)  
+
   return (
     <>
       <Container className="text-center my-5">
         <h1>Upcoming Events</h1>
         <p>Number of events: {eventsInfo.length}</p>
         <Row className="justify-content-center">
-          {eventsInfo.map((eventInfo, index) => (
+          {presentedEvents.map((eventInfo, index) => (
             <InfoCard
               key={index}
               cardType="event"
@@ -58,6 +65,32 @@ const Events = () => {
             />
           ))}
         </Row>
+
+        <Container className="d-flex justify-content-center mt-4">
+          <button
+            className="btn btn-secondary mx-2"
+            onClick={() => setCurrPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currPage === 1}
+          >
+            Previous
+          </button>
+
+          <span className="align-self-center mx-2">
+            Page {currPage} of {numPages}
+          </span>
+
+          <button
+            className="btn btn-secondary mx-2"
+            onClick={() =>
+              setCurrPage((prev) =>
+                prev < numPages ? prev + 1 : prev
+              )
+            }
+            disabled={currPage >= numPages}
+          >
+            Next
+          </button>
+        </Container>
       </Container>
     </>
   );

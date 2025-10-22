@@ -9,6 +9,8 @@ const DATABASE_URL = "http://localhost:5001";
 const Resources = () => {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currPage, setCurrPage] = useState(1)
+  const cardsOnPage = 10
 
   useEffect(() => {
     const getResources = async () => {
@@ -43,50 +45,47 @@ const Resources = () => {
     );
   }
 
-  // const resInfo = [
-  //   {
-  //     title: "Kelly White Family Shelter",
-  //     location: "4800 Manor Rd A, Austin, TX 78723",
-  //     type: "Shelter/Housing",
-  //     hours: "24/7",
-  //     organization: "The SAFE Alliance",
-  //     onlineAvailability: "No",
-  //     imgUrl: "https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png",
-  //     pageLink: "/resource1",
-  //   },
-  //   {
-  //     title:
-  //       "24 Hour HOPELine",
-  //     location: "1-800-460-7233",
-  //     type: "Crisis Hotline",
-  //     hours: "24/7",
-  //     organization: "Hope Alliance",
-  //     onlineAvailability: "Yes",
-  //     imgUrl:
-  //       "https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png",
-  //     pageLink: "/resource2",
-  //   },
-  //   {
-  //     title: "Domestic Violence Awareness Month Resources",
-  //     location: "https://tcfv.org/awareness/",
-  //     type: "Informational",
-  //     hours: "N/A",
-  //     organization: "Texas Council on Family Violence",
-  //     onlineAvailability: "Yes",
-  //     imgUrl: "https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg",
-  //     pageLink: "/resource3",
-  //   },
-  // ];
+  const lastEvent = currPage * cardsOnPage
+  const firstEvent = lastEvent - cardsOnPage
+  const presentedResources = resources.slice(firstEvent, lastEvent)
+  const numPages = Math.ceil(resources.length / cardsOnPage)
+
   return (
     <>
       <Container className="text-center my-5">
         <h1>Resources</h1>
         <p>Number of resources: {resources.length}</p>
         <Row className="justify-content-center">
-          {resources.map((res, index) => (
+          {presentedResources.map((res, index) => (
             <InfoCard key={index} cardType="resource" cardInfo={res} />
           ))}
         </Row>
+
+        <Container className="d-flex justify-content-center mt-4">
+          <button
+            className="btn btn-secondary mx-2"
+            onClick={() => setCurrPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currPage === 1}
+          >
+            Previous
+          </button>
+
+          <span className="align-self-center mx-2">
+            Page {currPage} of {numPages}
+          </span>
+
+          <button
+            className="btn btn-secondary mx-2"
+            onClick={() =>
+              setCurrPage((prev) =>
+                prev < numPages ? prev + 1 : prev
+              )
+            }
+            disabled={currPage >= numPages}
+          >
+            Next
+          </button>
+        </Container>
       </Container>
     </>
   );
