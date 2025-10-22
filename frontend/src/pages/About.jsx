@@ -153,6 +153,7 @@ const About = () => {
                 <Card.Body className="text-center">
                   <Image
                     src={member.photo}
+                    alt={member.name}
                     roundedCircle
                     className="mb-3"
                     style={{
