@@ -122,9 +122,14 @@ backend_ecr_build_push:
 # Requires CI variables: APPRUNNER_SERVICE_NAME, APPRUNNER_ROLE_ARN, SECRET_KEY, DATABASE_URL
 backend_deploy_apprunner:
   stage: deploy
-  image: amazon/aws-cli:2.15.30
-  entrypoint: ["sh", "-lc"]
+  image: docker:24.0.5            # use a shell-capable image
+  services:
+    - docker:24.0.5-dind
+  variables:
+    DOCKER_TLS_CERTDIR: ""
   before_script:
+    - apk add --no-cache python3 py3-pip bash curl jq git
+    - pip install --no-cache-dir awscli
     - aws --version
   script:
     - |
