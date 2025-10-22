@@ -78,6 +78,7 @@ class Resource(db.Model):
     topic = db.Column(db.String(100))
     online_availability = db.Column(db.Boolean, default=False)
     hours_of_operation = db.Column(db.Text)
+    category = db.Column(db.String(64))
     
     resource_url = db.Column(db.String(500))
     image_url = db.Column(db.String(500))
@@ -162,3 +163,16 @@ class Event(db.Model):
             'organization_ids': [o.id for o in self.organizations],
             'resource_ids': [r.id for r in self.resources]
         }
+
+class Shelter(db.Model):
+    __tablename__ = "shelters"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    address = db.Column(db.String(255))
+    city = db.Column(db.String(100))
+    state = db.Column(db.String(10))
+    zip_code = db.Column(db.String(20))
+    phone = db.Column(db.String(50))
+    website = db.Column(db.String(255))
+
