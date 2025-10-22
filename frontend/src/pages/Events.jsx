@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Container, Row } from "react-bootstrap";
-import NavigationBar from "../components/NavigationBar";
 import InfoCard from "../components/InfoCard";
 import axios from "axios";
 
@@ -39,7 +38,6 @@ const Events = () => {
   if (loading) {
     return (
       <>
-        <NavigationBar />
         <p>Loading events</p>
       </>
     );
@@ -47,7 +45,6 @@ const Events = () => {
 
   return (
     <>
-      <NavigationBar />
       <Container className="text-center my-5">
         <h1>Upcoming Events</h1>
         <p>Number of events: {eventsInfo.length}</p>

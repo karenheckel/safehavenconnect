@@ -6,7 +6,6 @@ import Information from "../components/Information";
 const Landing = () => {
   return (
     <>
-      <NavigationBar />
       {/* Title section */}
       <div style={{ backgroundColor: "#f5f7f6", padding: "4rem 0" }}>
         <Container>

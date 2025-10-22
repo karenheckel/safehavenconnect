@@ -1,11 +1,9 @@
 import React from "react";
 import { Card, Container, Row, Col, Button } from "react-bootstrap";
-import NavigationBar from "../../components/NavigationBar";
 
 const Event1 = () => {
   return (
     <>
-      <NavigationBar />
       <Container className="my-5">
         <h1 className="text-center">Volunteer Information Session</h1>
         <Row className="my-3 align-items-center">

@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Container, Row, Card, Button } from "react-bootstrap";
-import NavigationBar from "../components/NavigationBar";
 import InfoCard from "../components/InfoCard";
 import axios from "axios";
 
@@ -39,7 +38,6 @@ const Resources = () => {
   if (loading) {
     return (
       <>
-        <NavigationBar />
         <p className="text-center mt-5">Loading resources</p>
       </>
     );
@@ -81,7 +79,6 @@ const Resources = () => {
   // ];
   return (
     <>
-      <NavigationBar />
       <Container className="text-center my-5">
         <h1>Resources</h1>
         <p>Number of resources: {resources.length}</p>

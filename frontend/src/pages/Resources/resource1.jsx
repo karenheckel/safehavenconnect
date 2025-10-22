@@ -1,11 +1,9 @@
 import React from "react";
 import { Card, Container, Row, Col, Button } from "react-bootstrap";
-import NavigationBar from "../../components/NavigationBar";
 
 const Resource1 = () => {
   return (
     <>
-      <NavigationBar />
       <Container className="my-5">
         <h1 className="text-center">Kelly White Family Shelter</h1>
         <Row className="my-3 align-items-center">

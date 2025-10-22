@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import NavigationBar from '../components/NavigationBar';
 import { Container, Row, Col, Card, Image, Spinner } from "react-bootstrap";
 
 
@@ -120,7 +119,6 @@ const About = () => {
 
   return (
     <>
-      <NavigationBar />
       {/* Title section */}
       <div style={{ backgroundColor: "#f5f7f6", padding: "4rem 0" }}>
         <Container>

@@ -3,7 +3,6 @@ import { Card, Container, Row, Col, Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import NavigationBar from "../../components/NavigationBar";
 import InfoCard from "../../components/InfoCard";
 
 const OrganizationPage = () => {
@@ -31,7 +30,6 @@ const OrganizationPage = () => {
 
   return (
     <>
-      <NavigationBar />
       <Container className="my-5">
         <h1 className="text-center">{orgInfo.name}</h1>
         <Row className="my-3 align-items-center">

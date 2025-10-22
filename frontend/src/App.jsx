@@ -16,10 +16,15 @@ import Resource3 from './pages/Resources/resource3'
 import EventPage from './pages/Events/EventPage'
 import OrganizationPage from './pages/Organizations/OrganizationPage'
 import ResourcePage from './pages/Resources/ResourcePage'
+import GoogleTranslate from "./components/GoogleTranslate";
+import NavigationBar from "./components/NavigationBar";
 
 function App() {
   return (
       <BrowserRouter>
+        <NavigationBar />
+        <GoogleTranslate />
+
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/about" element={<About />} />
