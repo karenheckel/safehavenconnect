@@ -61,7 +61,7 @@ c41cd3f3bb0dbd6ff0be8c739fd6da431484b446
 | Member | Estimated (hours) | Actual (hours) |
 | ------ | ------ | ------ |
 | **Brianna Flores** | 15 | TBD |
-| **Jonathan Ho** | 15 | 11 |
+| **Jonathan Ho** | 15 | 12 |
 | **Karen Heckel** | 15 | TBD |
 | **Parul Sadasivuni** | 15 | TBD |
 | **Ali Novruzov** | 12 | TBD |
