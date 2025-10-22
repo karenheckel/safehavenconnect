@@ -103,6 +103,7 @@ backend_ecr_build_push:
       if [ -z "$AWS_ACCOUNT_ID" ] || [ -z "$AWS_DEFAULT_REGION" ] || [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
         echo "Skipping backend image build: required AWS credentials are not set."
         exit 0
+      fi
     - echo "Building backend image..."
     - docker build -t "$ECR_REPO_NAME:$IMAGE_TAG" -f backend/Dockerfile backend
     - docker tag "$ECR_REPO_NAME:$IMAGE_TAG" "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$IMAGE_TAG"
