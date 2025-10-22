@@ -123,6 +123,7 @@ backend_ecr_build_push:
 backend_deploy_apprunner:
   stage: deploy
   image: amazon/aws-cli:2.15.30
+  entrypoint: ["sh", "-lc"]
   before_script:
     - aws --version
   script:
