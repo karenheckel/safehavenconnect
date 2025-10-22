@@ -12,9 +12,7 @@ const EventPage = () => {
   useEffect(() => {
     const getEventInfo = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5001/api/events/${id}`
-        );
+        const res = await axios.get(`http://localhost:5001/api/events/${id}`);
         setEventInfo(res.data);
       } catch (err) {
         console.error("Error fetching event:", err);

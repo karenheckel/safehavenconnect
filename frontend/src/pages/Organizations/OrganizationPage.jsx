@@ -12,9 +12,7 @@ const OrganizationPage = () => {
   useEffect(() => {
     const getOrgInfo = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5001/api/events/${id}`
-        );
+        const res = await axios.get(`http://localhost:5001/api/events/${id}`);
         setOrgInfo(res.data);
       } catch (err) {
         console.error("Error fetching organization:", err);
@@ -45,7 +43,7 @@ const OrganizationPage = () => {
               <p>Location: {orgInfo.location}</p>
               <p>Services: {orgInfo.services}</p>
               {/* TODO add organization hours/times */}
-              <p>Time: {orgInfo.time}</p> 
+              <p>Time: {orgInfo.time}</p>
               <p>Online Availability: {orgInfo.online_availability}</p>
               <a href={orgInfo.website_url}>Learn more about {orgInfo.name}</a>
             </Card>

@@ -12,9 +12,7 @@ const ResourcePage = () => {
   useEffect(() => {
     const getResourceInfo = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5001/api/events/${id}`
-        );
+        const res = await axios.get(`http://localhost:5001/api/events/${id}`);
         setResourceInfo(res.data);
       } catch (err) {
         console.error("Error fetching resource:", err);
@@ -45,9 +43,11 @@ const ResourcePage = () => {
               <p>Location: {resourceInfo.location}</p>
               {/* TODO add resource type, online availability, hours/times */}
               <p>Type: {resourceInfo.type}</p>
-              <p>Hours: {resourceInfo.hours}</p> 
+              <p>Hours: {resourceInfo.hours}</p>
               <p>Online Availability: {resourceInfo.online_availability}</p>
-              <a href={resourceInfo.resource_url}>Learn more about {resourceInfo.name}</a>
+              <a href={resourceInfo.resource_url}>
+                Learn more about {resourceInfo.name}
+              </a>
             </Card>
           </Col>
         </Row>

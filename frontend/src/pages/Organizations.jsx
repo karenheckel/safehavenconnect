@@ -13,7 +13,7 @@ const Organizations = () => {
   useEffect(() => {
     const getOrganizations = async () => {
       try {
-        const res = await axios.get(`${DATABASE_URL}/api/organizations`);        ;
+        const res = await axios.get(`${DATABASE_URL}/api/organizations`);
         const formatOrgs = res.data.map((org) => ({
           title: org.name,
           location: org.location,
@@ -23,8 +23,8 @@ const Organizations = () => {
           orgType: org.organization_type,
           imgUrl: org.image_url,
           pageLink: org.website_url,
-      }));
-      setOrganizations(formatOrgs);
+        }));
+        setOrganizations(formatOrgs);
       } catch (error) {
         console.error("Error fetching organizations:", error);
       } finally {
@@ -51,9 +51,9 @@ const Organizations = () => {
           {organizations.map((org, index) => (
             <InfoCard key={index} cardType="organization" cardInfo={org} />
           ))}
-          </Row>
-        </Container>
-      </>
+        </Row>
+      </Container>
+    </>
   );
 };
 

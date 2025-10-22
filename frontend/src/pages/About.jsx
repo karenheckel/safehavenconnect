@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Image, Spinner } from "react-bootstrap";
-
 
 /* Team list */
 const team = [
@@ -48,8 +47,8 @@ const team = [
     commitIds: ["B4NAN4NA"],
     gitlabUser: "jnthnho",
     unitTests: "0",
-  }
-]
+  },
+];
 
 const About = () => {
   const [stats, setStats] = useState({});
@@ -67,7 +66,9 @@ const About = () => {
               let commitsPage;
               do {
                 const res = await fetch(
-                  `https://gitlab.com/api/v4/projects/${projectId}/repository/commits?per_page=${perPage}&page=${page}&author=${encodeURIComponent(commitId)}`
+                  `https://gitlab.com/api/v4/projects/${projectId}/repository/commits?per_page=${perPage}&page=${page}&author=${encodeURIComponent(
+                    commitId
+                  )}`
                 );
                 commitsPage = await res.json();
                 totalCommits += commitsPage.length;
@@ -90,10 +91,20 @@ const About = () => {
 
             // Count issues created & closed by the member
             const createdIssues = allIssues.filter(
-              (i) => i.author && i.author.username && i.author.username.toLowerCase().includes(member.gitlabUser.toLowerCase())
+              (i) =>
+                i.author &&
+                i.author.username &&
+                i.author.username
+                  .toLowerCase()
+                  .includes(member.gitlabUser.toLowerCase())
             );
             const closedIssues = allIssues.filter(
-              (i) => i.closed_by && i.closed_by.username && i.closed_by.username.toLowerCase().includes(member.gitlabUser.toLowerCase())
+              (i) =>
+                i.closed_by &&
+                i.closed_by.username &&
+                i.closed_by.username
+                  .toLowerCase()
+                  .includes(member.gitlabUser.toLowerCase())
             );
 
             return {
@@ -130,8 +141,8 @@ const About = () => {
                 struggling to find trustworthy, accessible, and local resources
                 for safety, legal, medical, financial, and community support.
                 Our goal is to connect users with verified organizations and
-                events while providing platform that empowers them
-                to take the next steps toward safety and recovery.
+                events while providing platform that empowers them to take the
+                next steps toward safety and recovery.
               </p>
               <p className="mt-3">
                 <strong>Intended users:</strong> survivors of domestic violence,
@@ -168,8 +179,7 @@ const About = () => {
                   {stats[member.name] ? (
                     <>
                       <p>
-                        <strong>Commits:</strong>{" "}
-                        {stats[member.name].commits}
+                        <strong>Commits:</strong> {stats[member.name].commits}
                       </p>
                       <p>
                         <strong>Issues Created:</strong>{" "}
@@ -200,19 +210,24 @@ const About = () => {
           <h2 className="text-center mb-4">Tools We Used</h2>
           <ul>
             <li>
-              <strong>React.js & Bootstrap:</strong> Frontend design and layout with reusable components.
+              <strong>React.js & Bootstrap:</strong> Frontend design and layout
+              with reusable components.
             </li>
             <li>
-              <strong>Vite:</strong> Fast development server and build tool for running and bundling the React app.
+              <strong>Vite:</strong> Fast development server and build tool for
+              running and bundling the React app.
             </li>
             <li>
-              <strong>GitLab:</strong> Version control, issues, and commit tracking.
+              <strong>GitLab:</strong> Version control, issues, and commit
+              tracking.
             </li>
             <li>
-              <strong>Postman:</strong> Used to design and document our API endpoints for SafeHavenConnect.
+              <strong>Postman:</strong> Used to design and document our API
+              endpoints for SafeHavenConnect.
             </li>
             <li>
-              <strong>Amazon Web Services (AWS):</strong> Hosting and deploying web services for our application.
+              <strong>Amazon Web Services (AWS):</strong> Hosting and deploying
+              web services for our application.
             </li>
           </ul>
         </Container>
@@ -228,14 +243,19 @@ const About = () => {
               <Card.Body>
                 <Card.Title>GitLab Repository</Card.Title>
                 <Card.Text>
-                  Explore the full project repository, including code, commits, and issues.
+                  Explore the full project repository, including code, commits,
+                  and issues.
                 </Card.Text>
                 <a
                   href="https://gitlab.com/parul.sadasivuni/cs373-fall-2025-55085_03"
                   target="_blank"
                   rel="noreferrer"
                   className="btn btn-primary"
-                  style={{ backgroundColor: "#cde5d7", color: "#000000", border: "none" }}
+                  style={{
+                    backgroundColor: "#cde5d7",
+                    color: "#000000",
+                    border: "none",
+                  }}
                 >
                   Visit GitLab
                 </a>
@@ -249,14 +269,19 @@ const About = () => {
               <Card.Body>
                 <Card.Title>Postman API Collection</Card.Title>
                 <Card.Text>
-                  View our Postman workspace with all API endpoints and documentation.
+                  View our Postman workspace with all API endpoints and
+                  documentation.
                 </Card.Text>
                 <a
                   href="https://www.postman.com/karen-heckel-749077/group-3-workspace/collection/p7zssag/safehavenconnect-api?action=share&creator=48953322"
                   target="_blank"
                   rel="noreferrer"
                   className="btn btn-primary"
-                  style={{ backgroundColor: "#cde5d7", color: "#000000", border: "none" }}
+                  style={{
+                    backgroundColor: "#cde5d7",
+                    color: "#000000",
+                    border: "none",
+                  }}
                 >
                   View API
                 </a>
@@ -277,7 +302,11 @@ const About = () => {
                   target="_blank"
                   rel="noreferrer"
                   className="btn btn-primary mb-2"
-                  style={{ backgroundColor: "#cde5d7", color: "#000000", border: "none" }}
+                  style={{
+                    backgroundColor: "#cde5d7",
+                    color: "#000000",
+                    border: "none",
+                  }}
                 >
                   211 National Data Platform
                 </a>
@@ -287,7 +316,11 @@ const About = () => {
                   target="_blank"
                   rel="noreferrer"
                   className="btn btn-primary mb-2"
-                  style={{ backgroundColor: "#cde5d7", color: "#000000", border: "none" }}
+                  style={{
+                    backgroundColor: "#cde5d7",
+                    color: "#000000",
+                    border: "none",
+                  }}
                 >
                   Homeless Shelter API
                 </a>
@@ -297,7 +330,11 @@ const About = () => {
                   target="_blank"
                   rel="noreferrer"
                   className="btn btn-primary mb-2"
-                  style={{ backgroundColor: "#cde5d7", color: "#000000", border: "none" }}
+                  style={{
+                    backgroundColor: "#cde5d7",
+                    color: "#000000",
+                    border: "none",
+                  }}
                 >
                   Eventbrite API
                 </a>
@@ -307,7 +344,11 @@ const About = () => {
                   target="_blank"
                   rel="noreferrer"
                   className="btn btn-primary"
-                  style={{ backgroundColor: "#cde5d7", color: "#000000", border: "none" }}
+                  style={{
+                    backgroundColor: "#cde5d7",
+                    color: "#000000",
+                    border: "none",
+                  }}
                 >
                   Medical Centers API
                 </a>
@@ -316,9 +357,8 @@ const About = () => {
           </Col>
         </Row>
       </Container>
-
     </>
   );
-}
+};
 
 export default About;
