@@ -55,7 +55,7 @@ c41cd3f3bb0dbd6ff0be8c739fd6da431484b446
 - Divided up work and made sure everyone stayed on track, asking for updates when needed.
 
 #### Phase 2 Git SHA
-96b6cea4b58c441395f11a944aaa75dbe5ebd09a
+
 
 #### Phase 2 Estimated and Actual Completion Time
 | Member | Estimated (hours) | Actual (hours) |
