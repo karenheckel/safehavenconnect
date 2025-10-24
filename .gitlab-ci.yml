@@ -117,130 +117,32 @@ backend_ecr_build_push:
     - main
     - develop
 
-
-# Deploy/update AWS App Runner service from ECR image
-# Requires CI variables: APPRUNNER_SERVICE_NAME, APPRUNNER_ROLE_ARN, SECRET_KEY, DATABASE_URL
-backend_deploy_apprunner:
+# Deploy backend to EC2 via SSH
+backend_deploy_ec2:
   stage: deploy
-  image: docker:24.0.5            # use a shell-capable image
-  services:
-    - docker:24.0.5-dind
-  variables:
-    DOCKER_TLS_CERTDIR: ""
+  image: alpine:latest
   before_script:
-    - apk add --no-cache python3 py3-pip bash curl jq git
-    - pip install --no-cache-dir awscli
-    - aws --version
+    - apk add --no-cache openssh-client rsync
+    - mkdir -p ~/.ssh
+    - echo "$EC2_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - echo "$EC2_HOST_IP" > /tmp/ec2_host
   script:
     - |
-      # debug: show which critical variables are set (don't print secrets)
-      echo "CI_COMMIT_BRANCH=$CI_COMMIT_BRANCH"
-      echo "APPRUNNER_SERVICE_NAME=${APPRUNNER_SERVICE_NAME:-<not set>}"
-      echo "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID:-<not set>}"
-      echo "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-<not set>}"
-      # verify AWS credentials work
-      if ! aws sts get-caller-identity >/dev/null 2>&1; then
-        echo "ERROR: AWS credentials appear invalid or not configured in CI. Aborting."
-        exit 1
-      fi
-    - |
-      # require variables
-      if [ -z "$AWS_ACCOUNT_ID" ] || [ -z "$AWS_DEFAULT_REGION" ] || [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$APPRUNNER_SERVICE_NAME" ] || [ -z "$APPRUNNER_ROLE_ARN" ] || [ -z "$SECRET_KEY" ] || [ -z "$DATABASE_URL" ]; then
-        echo "Skipping App Runner deploy: required AWS/App Runner variables are not set."
-        exit 0
-      fi
-    - export ECR_REPO_NAME="${ECR_REPO_NAME:-safehavenconnect-backend}"
-    - |
-      # choose image tag by branch
-      if [ "$CI_COMMIT_BRANCH" = "main" ]; then
-        ECR_IMAGE_URI="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:latest"
-      else
-        ECR_IMAGE_URI="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$CI_COMMIT_SHORT_SHA"
-      fi
-      echo "Using image: $ECR_IMAGE_URI"
-    - |
-      # escape single quotes in service name so it is safe inside the --query single-quoted expression
-      SERVICE_NAME_ESCAPED=$(printf %s "$APPRUNNER_SERVICE_NAME" | sed "s/'/'\\\\''/g")
-      SERVICE_ARN=$(aws apprunner list-services --query "ServiceSummaryList[?ServiceName=='${SERVICE_NAME_ESCAPED}'].ServiceArn | [0]" --output text)
-      echo "SERVICE_ARN: $SERVICE_ARN"
-      if [ "$SERVICE_ARN" = "None" ] || [ -z "$SERVICE_ARN" ]; then
-        echo "Creating App Runner service $APPRUNNER_SERVICE_NAME..."
-        # create service (kept as before)
-        cat > apprunner.json <<'JSONEOF'
-        {
-          "ServiceName": "PLACEHOLDER_SERVICE_NAME",
-          "SourceConfiguration": {
-            "AuthenticationConfiguration": {"AccessRoleArn": "PLACEHOLDER_ROLE_ARN"},
-            "AutoDeploymentsEnabled": true,
-            "ImageRepository": {
-              "ImageIdentifier": "PLACEHOLDER_IMAGE_URI",
-              "ImageRepositoryType": "ECR",
-              "ImageConfiguration": {
-                "Port": "5000",
-                "RuntimeEnvironmentVariables": [
-                  {"Name":"FLASK_ENV","Value":"production"},
-                  {"Name":"SECRET_KEY","Value":"PLACEHOLDER_SECRET"},
-                  {"Name":"DATABASE_URL","Value":"PLACEHOLDER_DB"}
-                ]
-              }
-            }
-          },
-          "HealthCheckConfiguration": {
-            "Protocol":"HTTP",
-            "Path":"/api/health",
-            "Interval":5,
-            "Timeout":2,
-            "HealthyThreshold":1,
-            "UnhealthyThreshold":3
-          }
-        }
-      JSONEOF
-        sed -i "s|PLACEHOLDER_SERVICE_NAME|$APPRUNNER_SERVICE_NAME|g" apprunner.json
-        sed -i "s|PLACEHOLDER_ROLE_ARN|$APPRUNNER_ROLE_ARN|g" apprunner.json
-        sed -i "s|PLACEHOLDER_IMAGE_URI|$ECR_IMAGE_URI|g" apprunner.json
-        sed -i "s|PLACEHOLDER_SECRET|$SECRET_KEY|g" apprunner.json
-        sed -i "s|PLACEHOLDER_DB|$DATABASE_URL|g" apprunner.json
-        aws apprunner create-service --cli-input-json file://apprunner.json
-      else
-        echo "Updating App Runner service $APPRUNNER_SERVICE_NAME ($SERVICE_ARN)..."
-        # update flow (kept as before)
-        cat > apprunner-update.json <<'JSONEOF'
-        {
-          "ServiceArn": "PLACEHOLDER_SERVICE_ARN",
-          "SourceConfiguration": {
-            "AuthenticationConfiguration": {"AccessRoleArn": "PLACEHOLDER_ROLE_ARN"},
-            "AutoDeploymentsEnabled": true,
-            "ImageRepository": {
-              "ImageIdentifier": "PLACEHOLDER_IMAGE_URI",
-              "ImageRepositoryType": "ECR",
-              "ImageConfiguration": {
-                "Port": "5000",
-                "RuntimeEnvironmentVariables": [
-                  {"Name":"FLASK_ENV","Value":"production"},
-                  {"Name":"SECRET_KEY","Value":"PLACEHOLDER_SECRET"},
-                  {"Name":"DATABASE_URL","Value":"PLACEHOLDER_DB"}
-                ]
-              }
-            }
-          },
-          "HealthCheckConfiguration": {
-            "Protocol":"HTTP",
-            "Path":"/api/health",
-            "Interval":5,
-            "Timeout":2,
-            "HealthyThreshold":1,
-            "UnhealthyThreshold":3
-          }
-        }
-      JSONEOF
-        sed -i "s|PLACEHOLDER_SERVICE_ARN|$SERVICE_ARN|g" apprunner-update.json
-        sed -i "s|PLACEHOLDER_ROLE_ARN|$APPRUNNER_ROLE_ARN|g" apprunner-update.json
-        sed -i "s|PLACEHOLDER_IMAGE_URI|$ECR_IMAGE_URI|g" apprunner-update.json
-        sed -i "s|PLACEHOLDER_SECRET|$SECRET_KEY|g" apprunner-update.json
-        sed -i "s|PLACEHOLDER_DB|$DATABASE_URL|g" apprunner-update.json
-        aws apprunner update-service --cli-input-json file://apprunner-update.json
-      fi
-  needs:
-    - backend_ecr_build_push
+      EC2_HOST=$(cat /tmp/ec2_host)
+      # Copy backend files to EC2
+      ssh -o StrictHostKeyChecking=no ubuntu@$EC2_HOST "mkdir -p ~/app/backend"
+      rsync -avz --delete ./backend/ ubuntu@$EC2_HOST:~/app/backend/
+      
+      # Install dependencies and restart service
+      ssh ubuntu@$EC2_HOST << 'ENDSSH'
+        cd ~/app/backend
+        source venv/bin/activate || python3 -m venv venv && source venv/bin/activate
+        pip install -r requirements.txt
+        sudo systemctl restart safehavenconnect
+      ENDSSH
   only:
     - main
+  needs:
+    - build
+  when: manual  # change to on_success for automatic deploy
