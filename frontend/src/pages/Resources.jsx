@@ -4,7 +4,7 @@ import { Container, Row, Card, Button } from "react-bootstrap";
 import InfoCard from "../components/InfoCard";
 import axios from "axios";
 
-const DATABASE_URL = "https://backend.safehavenconnect.me";
+const BACKEND_URL = "https://backend.safehavenconnect.me";
 
 const Resources = () => {
   const [resources, setResources] = useState([]);
@@ -15,7 +15,7 @@ const Resources = () => {
   useEffect(() => {
     const getResources = async () => {
       try {
-        const res = await axios.get(`${DATABASE_URL}/api/resources`);
+        const res = await axios.get(`${BACKEND_URL}/api/resources`);
         const formatResources = res.data.map((resource) => ({
           title: resource.title,
           location: resource.location,

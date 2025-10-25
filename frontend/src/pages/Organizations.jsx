@@ -4,7 +4,7 @@ import { Container, Row } from "react-bootstrap";
 import InfoCard from "../components/InfoCard";
 import axios from "axios";
 
-const DATABASE_URL = "https://backend.safehavenconnect.me";
+const BACKEND_URL = "https://backend.safehavenconnect.me";
 
 const Organizations = () => {
   const [organizations, setOrganizations] = useState([]);
@@ -15,7 +15,7 @@ const Organizations = () => {
   useEffect(() => {
     const getOrganizations = async () => {
       try {
-        const res = await axios.get(`${DATABASE_URL}/api/organizations`);
+        const res = await axios.get(`${BACKEND_URL}/api/organizations`);
         const formatOrgs = res.data.map((org) => ({
           title: org.name,
           location: org.location,
