@@ -12,7 +12,7 @@ const ResourcePage = () => {
   useEffect(() => {
     const getResourceInfo = async () => {
       try {
-        const res = await axios.get(`http://localhost:5001/api/events/${id}`);
+        const res = await axios.get(`https://backend.safehavenconnect.me/api/resources/${id}`);
         setResourceInfo(res.data);
       } catch (err) {
         console.error("Error fetching resource:", err);
@@ -23,7 +23,12 @@ const ResourcePage = () => {
   }, [id]);
 
   if (!resourceInfo) {
-    return <p>Loading resource info</p>;
+    return (
+      <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
+        <div className="spinner-border mb-3" role="status"></div>
+        <h4 className="mt-2">Loading Resource Info...</h4>
+      </Container>
+    );
   }
 
   return (

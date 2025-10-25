@@ -12,7 +12,7 @@ const EventPage = () => {
   useEffect(() => {
     const getEventInfo = async () => {
       try {
-        const res = await axios.get(`http://localhost:5001/api/events/${id}`);
+        const res = await axios.get(`https://backend.safehavenconnect.me/api/events/${id}`);
         setEventInfo(res.data);
       } catch (err) {
         console.error("Error fetching event:", err);
@@ -23,7 +23,12 @@ const EventPage = () => {
   }, [id]);
 
   if (!eventInfo) {
-    return <p>Loading event info</p>;
+    return (
+      <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
+        <div className="spinner-border mb-3" role="status"></div>
+        <h4 className="mt-2">Loading Event Info...</h4>
+      </Container>
+    );
   }
 
   return (

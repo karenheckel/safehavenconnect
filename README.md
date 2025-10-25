@@ -22,15 +22,10 @@ https://safehavenconnect.me/
 https://gitlab.com/parul.sadasivuni/cs373-fall-2025-55085_03/-/pipelines
 
 ## Link to backend API
-https://safehavenconnect-anovruz.us-east-1.awsapprunner.com (AWS App Runner)
-Local: http://localhost:5000
+https://backend.safehavenconnect.me
 
 ## Link to API Documentation
 https://gitlab.com/parul.sadasivuni/cs373-fall-2025-55085_03/-/blob/main/backend/API_DOCUMENTATION.md
-
-## Link to Database
-PostgreSQL (Docker): localhost:5432/safehavenconnect
-Production: Configured via DATABASE_URL environment variable in AWS App Runner
 
 
 ## Phase 1 

@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 from config import config
 from models import db, Organization, Resource, Event
@@ -73,6 +73,16 @@ def backfill_events_end_time():
         db.session.rollback()
 
 
+def _get_or_404(model, obj_id):
+    """SQLAlchemy 2.0-safe loader to replace legacy Query.get_or_404.
+    Uses Session.get and aborts with 404 if not found.
+    """
+    obj = db.session.get(model, obj_id)
+    if obj is None:
+        abort(404)
+    return obj
+
+
 def create_app(config_name='default'):
     app = Flask(__name__)
     
@@ -115,7 +125,7 @@ def create_app(config_name='default'):
     @app.route('/api/organizations/<int:org_id>', methods=['GET'])
     def get_organization(org_id):
         try:
-            organization = Organization.query.get_or_404(org_id)
+            organization = _get_or_404(Organization, org_id)
             return jsonify(organization.to_dict()), 200
         except Exception as e:
             return jsonify({'error': str(e)}), 404
@@ -149,7 +159,7 @@ def create_app(config_name='default'):
     @app.route('/api/organizations/<int:org_id>', methods=['PUT'])
     def update_organization(org_id):
         try:
-            organization = Organization.query.get_or_404(org_id)
+            organization = _get_or_404(Organization, org_id)
             data = request.get_json()
             
             for key, value in data.items():
@@ -165,7 +175,7 @@ def create_app(config_name='default'):
     @app.route('/api/organizations/<int:org_id>', methods=['DELETE'])
     def delete_organization(org_id):
         try:
-            organization = Organization.query.get_or_404(org_id)
+            organization = _get_or_404(Organization, org_id)
             db.session.delete(organization)
             db.session.commit()
             return jsonify({'message': 'Organization deleted successfully'}), 200
@@ -200,7 +210,7 @@ def create_app(config_name='default'):
     @app.route('/api/resources/<int:resource_id>', methods=['GET'])
     def get_resource(resource_id):
         try:
-            resource = Resource.query.get_or_404(resource_id)
+            resource = _get_or_404(Resource, resource_id)
             return jsonify(resource.to_dict()), 200
         except Exception as e:
             return jsonify({'error': str(e)}), 404
@@ -236,7 +246,7 @@ def create_app(config_name='default'):
     @app.route('/api/resources/<int:resource_id>', methods=['PUT'])
     def update_resource(resource_id):
         try:
-            resource = Resource.query.get_or_404(resource_id)
+            resource = _get_or_404(Resource, resource_id)
             data = request.get_json()
             
             for key, value in data.items():
@@ -252,7 +262,7 @@ def create_app(config_name='default'):
     @app.route('/api/resources/<int:resource_id>', methods=['DELETE'])
     def delete_resource(resource_id):
         try:
-            resource = Resource.query.get_or_404(resource_id)
+            resource = _get_or_404(Resource, resource_id)
             db.session.delete(resource)
             db.session.commit()
             return jsonify({'message': 'Resource deleted successfully'}), 200
@@ -287,7 +297,7 @@ def create_app(config_name='default'):
     @app.route('/api/events/<int:event_id>', methods=['GET'])
     def get_event(event_id):
         try:
-            event = Event.query.get_or_404(event_id)
+            event = _get_or_404(Event, event_id)
             return jsonify(event.to_dict()), 200
         except Exception as e:
             return jsonify({'error': str(e)}), 404
@@ -344,7 +354,7 @@ def create_app(config_name='default'):
     @app.route('/api/events/<int:event_id>', methods=['PUT'])
     def update_event(event_id):
         try:
-            event = Event.query.get_or_404(event_id)
+            event = _get_or_404(Event, event_id)
             data = request.get_json()
             if 'start_time' in data:
                 event.start_time = parse_datetime(data.get('start_time'))
@@ -371,7 +381,7 @@ def create_app(config_name='default'):
     @app.route('/api/events/<int:event_id>', methods=['DELETE'])
     def delete_event(event_id):
         try:
-            event = Event.query.get_or_404(event_id)
+            event = _get_or_404(Event, event_id)
             db.session.delete(event)
             db.session.commit()
             return jsonify({'message': 'Event deleted successfully'}), 200
@@ -382,7 +392,7 @@ def create_app(config_name='default'):
     @app.route('/api/organizations/<int:org_id>/resources', methods=['GET'])
     def get_organization_resources(org_id):
         try:
-            organization = Organization.query.get_or_404(org_id)
+            organization = _get_or_404(Organization, org_id)
             resources = organization.resources.all()
             return jsonify([resource.to_dict() for resource in resources]), 200
         except Exception as e:
@@ -391,7 +401,7 @@ def create_app(config_name='default'):
     @app.route('/api/organizations/<int:org_id>/events', methods=['GET'])
     def get_organization_events(org_id):
         try:
-            organization = Organization.query.get_or_404(org_id)
+            organization = _get_or_404(Organization, org_id)
             events = organization.events.all()
             return jsonify([event.to_dict() for event in events]), 200
         except Exception as e:
@@ -400,7 +410,7 @@ def create_app(config_name='default'):
     @app.route('/api/resources/<int:resource_id>/organizations', methods=['GET'])
     def get_resource_organizations(resource_id):
         try:
-            resource = Resource.query.get_or_404(resource_id)
+            resource = _get_or_404(Resource, resource_id)
             organizations = resource.organizations.all()
             return jsonify([org.to_dict() for org in organizations]), 200
         except Exception as e:
@@ -409,7 +419,7 @@ def create_app(config_name='default'):
     @app.route('/api/resources/<int:resource_id>/events', methods=['GET'])
     def get_resource_events(resource_id):
         try:
-            resource = Resource.query.get_or_404(resource_id)
+            resource = _get_or_404(Resource, resource_id)
             events = resource.events.all()
             return jsonify([event.to_dict() for event in events]), 200
         except Exception as e:
@@ -418,7 +428,7 @@ def create_app(config_name='default'):
     @app.route('/api/events/<int:event_id>/organizations', methods=['GET'])
     def get_event_organizations(event_id):
         try:
-            event = Event.query.get_or_404(event_id)
+            event = _get_or_404(Event, event_id)
             organizations = event.organizations.all()
             return jsonify([org.to_dict() for org in organizations]), 200
         except Exception as e:
@@ -427,7 +437,7 @@ def create_app(config_name='default'):
     @app.route('/api/events/<int:event_id>/resources', methods=['GET'])
     def get_event_resources(event_id):
         try:
-            event = Event.query.get_or_404(event_id)
+            event = _get_or_404(Event, event_id)
             resources = event.resources.all()
             return jsonify([resource.to_dict() for resource in resources]), 200
         except Exception as e:
