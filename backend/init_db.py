@@ -2,17 +2,24 @@
 Database initialization script
 Creates tables and optionally populates with sample data
 """
-from app import create_app
+from app import create_app, ensure_columns, backfill_events_end_time
 from models import db, Organization, Resource, Event
 from datetime import datetime, date
 
 
-def init_database():
+def init_database(drop=True):
     app = create_app()
     
     with app.app_context():
-        db.drop_all()
+        if drop:
+            db.drop_all()
         db.create_all()
+        # Ensure schema evolves safely
+        try:
+            ensure_columns()
+            backfill_events_end_time()
+        except Exception:
+            pass
         
 
 
@@ -129,8 +136,14 @@ def populate_sample_data():
 if __name__ == '__main__':
     import sys
     
-    if len(sys.argv) > 1 and sys.argv[1] == '--with-data':
-        init_database()
+    args = set(sys.argv[1:])
+    with_data = '--with-data' in args
+    create_only = '--create-only' in args
+
+    if with_data:
+        init_database(drop=not create_only)
         populate_sample_data()
+    elif create_only:
+        init_database(drop=False)
     else:
         init_database()

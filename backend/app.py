@@ -81,10 +81,15 @@ def create_app(config_name='default'):
     db.init_app(app)
     CORS(app)
     
-    with app.app_context():
-        db.create_all()
-        ensure_columns()
-        backfill_events_end_time()
+    run_schema_setup = os.environ.get("EAGER_SCHEMA_INIT", "").lower() in ("1", "true", "yes")
+    if app.debug or run_schema_setup:
+        with app.app_context():
+            try:
+                db.create_all()
+                ensure_columns()
+                backfill_events_end_time()
+            except Exception:
+                pass
     
     @app.route('/api/organizations', methods=['GET'])
     def get_organizations():
