@@ -164,15 +164,3 @@ class Event(db.Model):
             'resource_ids': [r.id for r in self.resources]
         }
 
-class Shelter(db.Model):
-    __tablename__ = "shelters"
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
-    address = db.Column(db.String(255))
-    city = db.Column(db.String(100))
-    state = db.Column(db.String(10))
-    zip_code = db.Column(db.String(20))
-    phone = db.Column(db.String(50))
-    website = db.Column(db.String(255))
-

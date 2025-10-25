@@ -1,86 +1,108 @@
-import os
 import requests
-from flask import Flask
-from models import db, Resource
-from config import Config
+from app import create_app, db
+from models import Organization, Resource
 
-# Flask app setup (to use SQLAlchemy outside app context)
-app = Flask(__name__)
-app.config.from_object(Config)
-db.init_app(app)
+app = create_app()
 
-# RapidAPI setup
-API_URL = "https://homeless-shelter.p.rapidapi.com/zipcode"
-HEADERS = {
-    "x-rapidapi-host": "homeless-shelter.p.rapidapi.com",
-    "x-rapidapi-key": os.getenv("RAPIDAPI_KEY") or "9d80279d88msh249473dcbd9a85bp1312f0jsn9eab5d8b0fe6"
-}
+def import_shelters():
+    headers = {
+        "x-rapidapi-host": "homeless-shelter.p.rapidapi.com",
+        "x-rapidapi-key": "9d80279d88msh249473dcbd9a85bp1312f0jsn9eab5d8b0fe6"
+    }
 
-# Texas ZIP codes (representative list — you can expand this later)
-ZIP_CODES = [
-    "78701", "75201", "75226", "78207", "78704", "77002", "77003", 
-]
+    cities = [
+        {"state": "Texas", "city": "Austin"},
+        {"state": "Texas", "city": "Houston"},
+        {"state": "Texas", "city": "Dallas"}
+    ]
 
-def fetch_shelters_for_zip(zipcode):
-    """Fetch shelter data for a specific ZIP code."""
-    try:
-        response = requests.get(API_URL, headers=HEADERS, params={"zipcode": zipcode}, timeout=10)
-        response.raise_for_status()
-        return response.json()
-    except Exception as e:
-        print(f"[ERROR] Failed fetching ZIP {zipcode}: {e}")
-        return []
+    for city in cities:
+        print(f"📍 Fetching shelters in {city['city']}, {city['state']}...")
+        url = f"https://homeless-shelter.p.rapidapi.com/state-city?state={city['state']}&city={city['city']}"
+        response = requests.get(url, headers=headers)
 
-
-def save_shelters_to_db(shelters_data):
-    """Save shelter data to the Resource table with category='shelter'."""
-    added_count = 0
-
-    for item in shelters_data:
-        name = item.get("name") or "Unnamed Shelter"
-        address = item.get("address") or ""
-        city = item.get("city") or ""
-        state = item.get("state") or ""
-        zip_code = item.get("zip") or ""
-        phone = item.get("phone")
-        website = item.get("website")
-
-        # Check for duplicates by name + zipcode
-        existing = Resource.query.filter_by(title=name, location=zip_code).first()
-        if existing:
+        try:
+            data = response.json()
+        except Exception as e:
+            print("❌ Error parsing JSON:", e)
             continue
 
-        description_text = f"Shelter located at {address}, {city}, {state} {zip_code}"
-        if phone:
-            description_text += f". Phone: {phone}"
+        # DEBUG: show what the API actually returned
+        if isinstance(data, dict):
+            print("🔍 Response keys:", list(data.keys()))
+            if "message" in data:
+                print("🧾 Message from API:", data["message"])
+        elif isinstance(data, list):
+            print(f"🔍 Response contains a list with {len(data)} items.")
+        else:
+            print("⚠️ Unexpected response format:", type(data))
+            continue
 
-        new_resource = Resource(
-            title=name,
-            organization_name=name,
-            description=description_text,
-            location=f"{address}, {city}, {state} {zip_code}",
-            topic="homeless shelter",
-            resource_url=website,
-            category="shelter"
-        )
+        # Normalize the structure
+        shelters = []
+        if isinstance(data, list):
+            shelters = data
+        elif isinstance(data, dict):
+            # try common keys used in APIs
+            for key in ["shelters", "results", "data"]:
+                if key in data and isinstance(data[key], list):
+                    shelters = data[key]
+                    break
+        else:
+            continue
 
-        db.session.add(new_resource)
-        added_count += 1
+        if not shelters:
+            print(f"⚠️ No shelters found for {city['city']}, skipping.")
+            continue
 
-    db.session.commit()
-    print(f"[INFO] Added {added_count} new shelters.")
+        # Now process each shelter
+        for item in shelters:
+            if not isinstance(item, dict):
+                print(f"⚠️ Skipping unexpected item: {item}")
+                continue
 
+            name = item.get("name")
+            address = item.get("address")
+            phone = item.get("phone")
+            website = item.get("website")
+            city_name = item.get("city")
+            state = item.get("state")
 
-def main():
-    with app.app_context():
-        for zipcode in ZIP_CODES:
-            print(f"Fetching shelters for ZIP: {zipcode}")
-            data = fetch_shelters_for_zip(zipcode)
-            if data:
-                save_shelters_to_db(data)
-            else:
-                print(f"[WARN] No data for {zipcode}")
+            if not name:
+                continue
+
+            # Avoid duplicates
+            organization = Organization.query.filter_by(name=name).first()
+            if not organization:
+                organization = Organization(
+                    name=name,
+                    location=f"{city_name}, {state}",
+                    organization_type="Shelter Organization",
+                    website_url=website,
+                    description=f"{name} provides shelter and support services in {city_name}.",
+                )
+                db.session.add(organization)
+
+            resource = Resource(
+                title=name,
+                organization_name=name,
+                services="Emergency housing, counseling, food, and basic needs.",
+                location=f"{address or 'Unknown'}, {city_name}, {state}",
+                topic="Homelessness Support",
+                category="Women's Shelter" if name and "women" in name.lower() else "General Shelter",
+                resource_url=website,
+                description=f"Shelter located in {city_name}, {state}. Contact: {phone or 'N/A'}"
+            )
+
+            resource.organizations.append(organization)
+            db.session.add(resource)
+
+        db.session.commit()
+        print(f"✅ Imported shelters for {city['city']}.")
+
+    print("🎉 Done importing all shelters!")
 
 
 if __name__ == "__main__":
-    main()
+    with app.app_context():
+        import_shelters()

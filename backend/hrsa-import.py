@@ -1,37 +1,54 @@
 """
-Imports HRSA Health Center data for all 50 U.S. states into the database.
+Imports HRSA Health Center data and tags shelters (e.g., women's or domestic violence support).
 """
 
 import requests
-from models import db, Resource
+from models import db, Resource, Organization, Event
 from app import create_app
+from datetime import datetime
 
-# HRSA endpoint and your token
 HRSA_API_URL = "https://data.hrsa.gov/HDWAPI3_External/api/v1/GetHealthCentersByArea"
 HRSA_TOKEN = "440ab3e7-e7dc-49cb-9fb2-6548d5f0d22b"
 
-# State abbreviations and FIPS codes for the 50 U.S. states
 STATE_FIPS_CODES = {
-    "AL": "01", "AK": "02", "AZ": "04", "AR": "05", "CA": "06",
-    "CO": "08", "CT": "09", "DE": "10", "FL": "12", "GA": "13",
-    "HI": "15", "ID": "16", "IL": "17", "IN": "18", "IA": "19",
-    "KS": "20", "KY": "21", "LA": "22", "ME": "23", "MD": "24",
-    "MA": "25", "MI": "26", "MN": "27", "MS": "28", "MO": "29",
-    "MT": "30", "NE": "31", "NV": "32", "NH": "33", "NJ": "34",
-    "NM": "35", "NY": "36", "NC": "37", "ND": "38", "OH": "39",
-    "OK": "40", "OR": "41", "PA": "42", "RI": "44", "SC": "45",
-    "SD": "46", "TN": "47", "TX": "48", "UT": "49", "VT": "50",
-    "VA": "51", "WA": "53", "WV": "54", "WI": "55", "WY": "56"
+    "CA": "06", "TX": "48", "NY": "36", "FL": "12", "IL": "17"
 }
 
+# keywords that imply domestic violence or women's shelter services
+WOMENS_KEYWORDS = ["women", "abuse", "domestic", "violence", "victim", "family support", "crisis"]
+
+def generate_tags(name, description):
+    """Generate tags based on text content."""
+    text = f"{name} {description}".lower()
+    if any(word in text for word in WOMENS_KEYWORDS):
+        return "women's shelter, domestic violence support"
+    return "health center, medical clinic, community service"
 
 def import_hrsa_data():
-    """Fetch and store HRSA health center data for each U.S. state."""
     app = create_app()
     with app.app_context():
-        for state_abbr, fips in STATE_FIPS_CODES.items():
-            print(f"Fetching data for {state_abbr} (FIPS {fips})...")
+        shared_event = Event.query.filter_by(name="National Health Access Week").first()
+        if not shared_event:
+            shared_event = Event(
+                name="National Health Access Week",
+                location="United States",
+                start_time=datetime(2025, 5, 1, 9, 0, 0),
+                end_time=datetime(2025, 5, 7, 17, 0, 0),
+                date=datetime(2025, 5, 1),
+                event_type="Community Health Awareness",
+                is_online=False,
+                registration_open=True,
+                description="A nationwide event promoting access to healthcare and resources.",
+                event_url="https://www.hrsa.gov/",
+                image_url="https://www.hrsa.gov/themes/custom/hrsa/images/hrsa-logo.png"
+            )
+            db.session.add(shared_event)
+            db.session.commit()
 
+        first_linked = False
+
+        for state_abbr, fips in STATE_FIPS_CODES.items():
+            print(f"📍 Fetching data for {state_abbr}...")
             payload = {
                 "StateFipsCode": fips,
                 "CountyFipsCode": "",
@@ -47,18 +64,17 @@ def import_hrsa_data():
                 continue
 
             if response.status_code != 200:
-                print(f"Error {response.status_code} for {state_abbr}")
-                print(f"Response: {response.text[:200]}")
+                print(f"Error {response.status_code} for {state_abbr}: {response.text[:200]}")
                 continue
 
             try:
                 data = response.json()
-            except ValueError:
-                print(f"Invalid JSON for {state_abbr}. Response: {response.text[:200]}")
+                centers = data.get("HCC", [])
+            except Exception as e:
+                print(f"Failed to parse response for {state_abbr}: {e}")
                 continue
 
-            centers = data.get("HCC", [])
-            print(f"Found {len(centers)} centers for {state_abbr}")
+            print(f"✅ Found {len(centers)} centers for {state_abbr}")
 
             for c in centers:
                 try:
@@ -70,33 +86,63 @@ def import_hrsa_data():
                     website = c.get("SITE_URL", "")
                     description = f"{c.get('HCC_TYP_DESC', '')} - {c.get('HCC_LOC_DESC', '')}"
 
-                    # Create Resource object
+                    tags = generate_tags(site_name, description)
+
+                    # Create organization
+                    organization = Organization(
+                        name=site_name,
+                        location=f"{city}, {state}",
+                        capacity=None,
+                        services="Healthcare, outreach, and preventive medical services.",
+                        online_availability=False,
+                        organization_type="Health Center",
+                        image_url=None,
+                        website_url=website,
+                        description=description,
+                        hours_of_operation="N/A",
+                    )
+
+                    # Create resource
                     resource = Resource(
-                        title=site_name,
+                        title=f"{site_name} Medical Services",
                         organization_name=site_name,
-                        services="Health Center",
-                        eligibility="Open to public",
+                        services="Health Center Services",
+                        eligibility="Open to the public",
                         languages_supported="English",
                         location=f"{address}, {city}, {state}",
-                        topic="Health Services",
+                        topic="Medical Assistance",
                         online_availability=False,
                         hours_of_operation="N/A",
                         resource_url=website,
                         image_url=None,
                         description=description,
-                        category="medical services"
+                        category="medical services",
                     )
 
+                    # Attach tags if supported
+                    if hasattr(resource, "tags"):
+                        resource.tags = tags
+                    if hasattr(organization, "tags"):
+                        organization.tags = tags
+
+                    db.session.add(organization)
                     db.session.add(resource)
+                    db.session.commit()
+
+                    organization.resources.append(resource)
+                    db.session.commit()
+
+                    if not first_linked:
+                        organization.events.append(shared_event)
+                        resource.events.append(shared_event)
+                        db.session.commit()
+                        first_linked = True
+
                 except Exception as e:
-                    print(f"Skipping one record in {state_abbr}: {e}")
+                    print(f"Skipping record in {state_abbr}: {e}")
                     db.session.rollback()
 
-            db.session.commit()
-            print(f"Imported all records for {state_abbr}\n")
-
-    print("HRSA data import complete!")
-
+        print("🎉 HRSA data import complete!")
 
 if __name__ == "__main__":
     import_hrsa_data()
