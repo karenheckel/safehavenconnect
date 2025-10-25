@@ -4,7 +4,7 @@ import { Container, Row, Card, Button } from "react-bootstrap";
 import InfoCard from "../components/InfoCard";
 import axios from "axios";
 
-const DATABASE_URL = "http://localhost:5001";
+const DATABASE_URL = "https://backend.safehavenconnect.me";
 
 const Resources = () => {
   const [resources, setResources] = useState([]);
@@ -39,9 +39,10 @@ const Resources = () => {
 
   if (loading) {
     return (
-      <>
-        <p className="text-center mt-5">Loading resources</p>
-      </>
+      <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
+        <div className="spinner-border mb-3" role="status"></div>
+        <h4 className="mt-2">Loading Resources...</h4>
+      </Container>
     );
   }
 

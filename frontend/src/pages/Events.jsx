@@ -4,7 +4,7 @@ import { Container, Row } from "react-bootstrap";
 import InfoCard from "../components/InfoCard";
 import axios from "axios";
 
-const DATABASE_URL = "http://localhost:5001";
+const DATABASE_URL = "https://backend.safehavenconnect.me";
 
 const Events = () => {
   const [eventsInfo, setEventsInfo] = useState([]);
@@ -39,11 +39,13 @@ const Events = () => {
 
   if (loading) {
     return (
-      <>
-        <p>Loading events</p>
-      </>
+      <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
+        <div className="spinner-border mb-3" role="status"></div>
+        <h4 className="mt-2">Loading Events...</h4>
+      </Container>
     );
   }
+  
 
   const lastEvent = currPage * cardsOnPage
   const firstEvent = lastEvent - cardsOnPage
