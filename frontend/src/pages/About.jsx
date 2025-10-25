@@ -138,7 +138,7 @@ const About = () => {
               <h1 className="display-4 fw-bold">Our Mission</h1>
               <p className="lead mt-3">
                 SafeHavenConnect is a platform designed to help individuals
-                struggling to find trustworthy, accessible, and local resources
+                impacted by domestic violence find trustworthy, accessible, and local resources
                 for safety, legal, medical, financial, and community support.
                 Our goal is to connect users with verified organizations and
                 events while providing platform that empowers them to take the
@@ -203,6 +203,30 @@ const About = () => {
           ))}
         </Row>
       </Container>
+
+{/* Data Integration Section */}
+<div style={{ backgroundColor: "#e9f4ef", padding: "3rem 0" }}>
+  <Container>
+    <Row className="justify-content-center text-center">
+      <Col md={9}>
+        <h2 className="fw-bold">Why Data Integration Matters</h2>
+        <p className="lead mt-3">
+          Survivors shouldn't have to dig through
+          websites, listings, and outdated information just to
+          find help. By integrating data from multiple trusted sources,
+          SafeHavenConnect brings together housing, crisis
+          support, legal aid, and community events into a single platform.
+        </p>
+        <p className="mt-3">
+          This approach makes it much easier for individuals to discover
+          resources they may not have known existed. Instead of searching
+          endlessly, users can now connect quickly with the support they need.
+        </p>
+      </Col>
+    </Row>
+  </Container>
+</div>
+
 
       {/* Tools Section */}
       <div style={{ backgroundColor: "#f5f7f6", padding: "3rem 0" }}>
