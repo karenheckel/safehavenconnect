@@ -122,7 +122,7 @@ backend_deploy_ec2:
   stage: deploy
   image: alpine:latest
   before_script:
-    - apk add --no-cache openssh-client rsync
+    - apk add --no-cache openssh-client rsync busybox-extras
     - mkdir -p ~/.ssh
     - echo "$EC2_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
@@ -130,12 +130,26 @@ backend_deploy_ec2:
   script:
     - |
       EC2_HOST=$(cat /tmp/ec2_host)
+      
+      # Preflight check: verify EC2 is reachable on port 22
+      echo "Checking SSH connectivity to $EC2_HOST..."
+      if ! nc -z -w 10 "$EC2_HOST" 22; then
+        echo "ERROR: Cannot reach $EC2_HOST on port 22"
+        echo "Please check:"
+        echo "  1. EC2 instance is running"
+        echo "  2. Security Group allows inbound SSH from GitLab runner IPs"
+        echo "  3. EC2 has a public IP address"
+        echo "  4. EC2_HOST_IP variable is set correctly"
+        exit 1
+      fi
+      echo "SSH port is reachable, proceeding with deployment..."
+      
       # Copy backend files to EC2
-      ssh -o StrictHostKeyChecking=no ubuntu@$EC2_HOST "mkdir -p ~/app/backend"
+      ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 ubuntu@$EC2_HOST "mkdir -p ~/app/backend"
       rsync -avz --delete ./backend/ ubuntu@$EC2_HOST:~/app/backend/
       
       # Install dependencies and restart service
-      ssh ubuntu@$EC2_HOST << 'ENDSSH'
+      ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 ubuntu@$EC2_HOST << 'ENDSSH'
         cd ~/app/backend
         source venv/bin/activate || python3 -m venv venv && source venv/bin/activate
         pip install -r requirements.txt
