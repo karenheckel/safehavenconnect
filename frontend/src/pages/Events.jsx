@@ -8,35 +8,38 @@ const BACKEND_URL = "https://backend.safehavenconnect.me";
 
 const backupEvents = [
   {
-    title: "Volunteer Information Session",
+    eventId: "default0",
+    name: "Volunteer Information Session",
     location: "1515 Grove Blvd, Austin, TX 78741",
-    time: "6:00 pm - 7:30 pm",
+    start_time: "6:00 pm - 7:30 pm",
     date: "October 1, 2025",
-    eventType: "Informational",
-    organization: "The SAFE Alliance",
-    imgUrl: "https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png",
-    pageLink: "/event1",
+    event_type: "Informational",
+    relatedOrganizations: [{ title: "The SAFE Alliance" }],
+    image_url: "https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png",
+    event_url: "/event1",
   },
   {
-    title: "Hope Alliance Survive. Thrive. Prevent 5K Run/Walk",
+    eventId: "default1",
+    name: "Hope Alliance Survive. Thrive. Prevent 5K Run/Walk",
     location: "445 E Morrow St, Georgetown, TX 78626 (San Gabriel Park)",
-    time: "9:00 am - 12:00 pm",
+    start_time: "9:00 am - 12:00 pm",
     date: "October 11, 2025",
-    eventType: "Fundraising",
-    organization: "Hope Alliance",
-    imgUrl:
+    event_type: "Fundraising",
+    relatedOrganizations: [{ title: "Hope Alliance" }],
+    image_url:
       "https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png",
-    pageLink: "/event2",
+    event_url: "/event2",
   },
   {
-    title: "TCFV’s 2025 Texas Town Hall",
+    eventId: "default2",
+    name: "TCFV’s 2025 Texas Town Hall",
     location: "Texas Tribune Headquarters, Austin, TX",
-    time: "10:00 am - 12:00 pm",
+    start_time: "10:00 am - 12:00 pm",
     date: "October 3, 2025",
-    eventType: "Panel",
-    organization: "Texas Council on Family Violence",
-    imgUrl: "https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg",
-    pageLink: "/event3",
+    event_type: "Panel",
+    relatedOrganizations: [{ title: "Texas Council on Family Violence" }],
+    image_url: "https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg",
+    event_url: "/event3",
   },
 ];
 
@@ -49,7 +52,7 @@ const Events = () => {
   useEffect(() => {
     const getEvents = async () => {
       try {
-        const res = await axios.get(BACKEND_URL, "/api/events");
+        const res = await axios.get(`${BACKEND_URL}/api/events`);
         const formatEvents = res.data.map((event) => ({
           eventId: event.id,
           title: event.name,
@@ -59,7 +62,7 @@ const Events = () => {
           eventType: event.event_type,
           organization: event.relatedOrganizations[0].title,
           imgUrl: event.image_url,
-          pageLink: event.event_url,
+          pageLink: `/events/${event.id}`,
         }));
         if (formatEvents.length === 0) {
           setEventsInfo(backupEvents);

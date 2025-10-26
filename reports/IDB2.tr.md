@@ -36,11 +36,16 @@ The frontend of our website was developed using React.js with Vite as the build 
   - We have implemented pagination within each of the model pages for events, resources, and organizations so that users can see the number of cards presented (total number of pages). We estimated this to take an hour, and it took a bit over an hour to figure out how to implement pagination for the first model (events page). Challenges arose in ensuring the math was correct, however once implemented we were able to easily implement it in the resources and organization model pages.
 5. As a user relying on assistive technology, I want to navigate the site easily, so that it’s inclusive, fast, and mobile-friendly. (like Lighthouse score ≥ 90 for performance and accessibility or Meets WCAG AA standards)
   - We ensured that the webpage is accessable by adding alt text to any images on the website, as well as improving the color contrast to be within WCAG AA standards. Challenges arose to meet lighthouse performance and accessability scores of ≥ 90. We used the google chrome developer tools to find specific points of danger such as the presence of unused javascript or latency from how we fetch data.
-6. 
-7. 
-8. 
-9. 
-10. 
+6. As a user looking for legal aid, I want to browse free or low-cost legal resources so that I can understand my rights and options. I want to filter resources based on my specific situation and eligibility. This will help me navigate the legal process with confidence and safety. 
+- This is a feature that will be implemented in phase 3 when filtering is supported.
+7. As a non-English speaker, I want to filter resources and organizations by languages supported so that I can find help in a language I understand. I want to see which services are available in my preferred language. This will ensure I can access critical information without communication barriers. 
+- This is a feature that will be implemented in phase 3 when filtering is supported.
+8. As a survivor seeking local help, I want to see all organizations and shelters on a map, so that I can visually find the closest resource to me. 
+- Once the database is fully updated, we will have an interactive map component to display resource locations.
+9. As a site maintainer, I want to test each API endpoint through Postman collections, so that I can verify correctness and performance before deployment. 
+- We created Postman collections tied directly to our backend routes. Running these before every update allows us to maintain a stable production pipeline and catch issues early.
+10. As a developer, I want to ensure that organizations, resources, and events maintain correct relationships, so that the data displayed on the frontend is consistent and accurate. (many-to-many relationships are defined properly) 
+- We defined explicit association tables and ensure users always see up to date and correctly linked information. 
 
 ---
 
