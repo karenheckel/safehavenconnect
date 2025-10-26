@@ -20,9 +20,8 @@ const Resources = () => {
         const formatResources = res.data.map((resource) => ({
           title: resource.title,
           location: resource.location,
-          type: resource.topic,
-          // TODO: Need these attributes to be added to App.py
-          // hours: resource.hours || "N/A",
+          resource_type: resource.topic,
+          hours: resource.hours_of_operation || "N/A",
           online_availability: resource.online_availability ? "Yes" : "No",
           organization: resource.organization_name,
           imgUrl: resource.image_url,

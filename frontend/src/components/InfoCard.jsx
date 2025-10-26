@@ -12,11 +12,11 @@ const InfoCard = ({ cardType, cardInfo, id }) => {
     online_availability,
     organization,
     services,
-    target_demographic,
     time,
     date,
     event_type,
     resource_type,
+    org_type,
   } = cardInfo;
 
   const infoToPresent = {
@@ -29,10 +29,10 @@ const InfoCard = ({ cardType, cardInfo, id }) => {
     ],
     organization: [
       { label: "Location", value: location },
+      { label: "Type", value: org_type },
       { label: "Services", value: services },
       { label: "Hours", value: hours },
       { label: "Online Availability", value: online_availability },
-      { label: "Target Demographic", value: target_demographic },
     ],
     event: [
       { label: "Location", value: location },

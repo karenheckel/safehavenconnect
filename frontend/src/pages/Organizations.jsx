@@ -22,7 +22,7 @@ const Organizations = () => {
           services: org.services,
           hours: org.hours_of_operation || "N/A",
           online_availability: org.online_availability ? "Yes" : "No",
-          orgType: org.organization_type,
+          org_type: org.organization_type,
           imgUrl: org.image_url,
           pageLink: org.website_url,
           id: org.id,
