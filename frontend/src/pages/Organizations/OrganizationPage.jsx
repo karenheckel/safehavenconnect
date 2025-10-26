@@ -4,27 +4,40 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import InfoCard from "../../components/InfoCard";
+import backupData from "../../backupData.json";
 
 const OrganizationPage = () => {
   const { id } = useParams();
   const [orgInfo, setOrgInfo] = useState(null);
 
   useEffect(() => {
-    const getOrgInfo = async () => {
-      try {
-        const res = await axios.get(`https://backend.safehavenconnect.me/api/organizations/${id}`);
-        setOrgInfo(res.data);
-      } catch (err) {
-        console.error("Error fetching organization:", err);
+    if (id.startsWith("default")) {
+      const backupOrg = backupData.organizations.find((org) => org.id === id);
+      if (backupOrg) {
+        setOrgInfo(backupOrg);
       }
-    };
+    } else {
+      const getOrgInfo = async () => {
+        try {
+          const res = await axios.get(
+            `https://backend.safehavenconnect.me/api/organizations/${id}`
+          );
+          setOrgInfo(res.data);
+        } catch (err) {
+          console.error("Error fetching organization:", err);
+        }
+      };
 
-    getOrgInfo();
+      getOrgInfo();
+    }
   }, [id]);
 
   if (!orgInfo) {
     return (
-      <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
+      <Container
+        className="d-flex flex-column justify-content-center align-items-center"
+        style={{ minHeight: "50vh" }}
+      >
         <div className="spinner-border mb-3" role="status"></div>
         <h4 className="mt-2">Loading Organization Info...</h4>
       </Container>
@@ -59,7 +72,7 @@ const OrganizationPage = () => {
             <h3>Related Events</h3>
             {
               // list of instances
-              orgInfo.event_ids.map((eventId) => (
+              orgInfo.event_ids?.map((eventId) => (
                 <InfoCard
                   key={eventId}
                   cardType="event"
@@ -70,7 +83,7 @@ const OrganizationPage = () => {
           </Col>
           <Col className="text-center" md={6}>
             <h3>Related Resources</h3>
-            {orgInfo.resource_ids.map((resourceId) => (
+            {orgInfo.resource_ids?.map((resourceId) => (
               <InfoCard
                 key={resourceId}
                 cardType="resource"

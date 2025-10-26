@@ -75,35 +75,35 @@
   "organizations": [
     {
       "id": "default0",
-      "title": "The SAFE Alliance",
+      "name": "The SAFE Alliance",
       "location": "1515 Grove Blvd, Austin, TX 78741",
       "services": "Emergency Shelter, Counseling, Legal Advocacy",
       "hours": "24/7",
       "onlineAvailability": "Yes",
       "targetDemographic": "Survivors of Domestic Violence, Sexual Assault, and Human Trafficking",
-      "imgUrl": "https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png",
+      "image_url": "https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png",
       "pageLink": "/organization1"
     },
     {
       "id": "default1",
-      "title": "Hope Alliance",
+      "name": "Hope Alliance",
       "location": "1011 Gattis School Rd, Ste 110 Round Rock, TX 78664",
       "services": "Emergency Shelter, Counseling, Legal Advocacy",
       "hours": "24/7 for Emergency Shelter and Hotline",
       "onlineAvailability": "Yes",
       "targetDemographic": "Survivors of Domestic Violence and Sexual Assault",
-      "imgUrl": "https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png",
+      "image_url": "https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png",
       "pageLink": "/organization2"
     },
     {
       "id": "default2",
-      "title": "Texas Council on Family Violence",
+      "name": "Texas Council on Family Violence",
       "location": "PO Box 163865, Austin, TX 78716",
       "services": "Trainings, Technical Assistance, Materials, Prevention Efforts",
       "hours": "N/A",
       "onlineAvailability": "Yes",
       "targetDemographic": "Family Violence Programs and Advocates",
-      "imgUrl": "https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg",
+      "image_url": "https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg",
       "pageLink": "/organization3"
     }
   ]
