@@ -55,7 +55,7 @@ c41cd3f3bb0dbd6ff0be8c739fd6da431484b446
 | ------ | ------ | ------ |
 | **Brianna Flores** | 15 | 22 |
 | **Jonathan Ho** | 15 | 32 |
-| **Karen Heckel** | 15 | TBD |
+| **Karen Heckel** | 15 | 30 |
 | **Parul Sadasivuni** | 15 | 20 |
 
 
