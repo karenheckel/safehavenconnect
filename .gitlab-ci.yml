@@ -6,11 +6,12 @@ stages:
 variables:
   NODE_VERSION: "20"
 
+# Cache frontend dependencies
 cache:
   paths:
-    - node_modules/
+    - frontend/node_modules/
 
-test:
+frontend_tests:
   stage: test
   image: node:$NODE_VERSION
   before_script:
@@ -19,12 +20,21 @@ test:
   script:
     - npm run lint
     - npm run build
-    - cd ..
-    - make status
+    - npm test -- --run
   artifacts:
     paths:
       - frontend/dist/
     expire_in: 1 hour
+
+backend_tests:
+  stage: test
+  image: python:3.11-slim
+  before_script:
+    - python --version
+    - python -m pip install --upgrade pip
+    - pip install -r backend/requirements.txt
+  script:
+    - pytest -q backend/test_api.py
 
 build:
   stage: build
