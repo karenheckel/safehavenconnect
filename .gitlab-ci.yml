@@ -159,5 +159,4 @@ backend_deploy_ec2:
     - main
   needs:
     - build
-  when: on_success  # change to on_success for automatic deploy
-
+  when: manual  # change to on_success for automatic deploy
