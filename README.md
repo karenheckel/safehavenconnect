@@ -25,7 +25,7 @@ https://gitlab.com/parul.sadasivuni/cs373-fall-2025-55085_03/-/pipelines
 https://backend.safehavenconnect.me
 
 ## Link to API Documentation
-https://gitlab.com/parul.sadasivuni/cs373-fall-2025-55085_03/-/blob/main/backend/API_DOCUMENTATION.md
+https://documenter.getpostman.com/view/48794305/2sB3WjzjPd
 
 
 ## Phase 1 

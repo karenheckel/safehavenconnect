@@ -52,7 +52,7 @@ const Resources = () => {
   useEffect(() => {
     const getResources = async () => {
       try {
-        const res = await axios.get(`${BACKEND_URL}/api/resources`);
+        const res = await axios.get(`${BACKEND_URL}/api/resource`);
         const formatResources = res.data.map((resource) => ({
           title: resource.title,
           location: resource.location,

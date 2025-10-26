@@ -21,7 +21,7 @@ The frontend of our website was developed using React.js with Vite as the build 
 ---
 
 ## Database
-
+For the database, we scraped data from the Health Resources and Services Administration's Data Warehouse API. We used the medical centers we found as resources and the organizations that they were part of as the organizations. We created a general event for the medical centers to be linked to. We also scraped an API on homeless shelters as another resource. We ran into issues because the API we wanted to use, the 211 API,  didn't approve our subscription in time. This is where the bulk of our data was supposed to come from, so we had to find alternative sources.
 ---
 
 ## User Stories
