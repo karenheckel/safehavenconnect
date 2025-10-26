@@ -3,45 +3,9 @@ import { useState, useEffect } from "react";
 import { Container, Row } from "react-bootstrap";
 import InfoCard from "../components/InfoCard";
 import axios from "axios";
+import backupData from "../backupData.json"
 
 const BACKEND_URL = "https://backend.safehavenconnect.me";
-
-const backupEvents = [
-  {
-    eventId: "default0",
-    name: "Volunteer Information Session",
-    location: "1515 Grove Blvd, Austin, TX 78741",
-    start_time: "6:00 pm - 7:30 pm",
-    date: "October 1, 2025",
-    event_type: "Informational",
-    relatedOrganizations: [{ title: "The SAFE Alliance" }],
-    image_url: "https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png",
-    event_url: "/event1",
-  },
-  {
-    eventId: "default1",
-    name: "Hope Alliance Survive. Thrive. Prevent 5K Run/Walk",
-    location: "445 E Morrow St, Georgetown, TX 78626 (San Gabriel Park)",
-    start_time: "9:00 am - 12:00 pm",
-    date: "October 11, 2025",
-    event_type: "Fundraising",
-    relatedOrganizations: [{ title: "Hope Alliance" }],
-    image_url:
-      "https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png",
-    event_url: "/event2",
-  },
-  {
-    eventId: "default2",
-    name: "TCFV’s 2025 Texas Town Hall",
-    location: "Texas Tribune Headquarters, Austin, TX",
-    start_time: "10:00 am - 12:00 pm",
-    date: "October 3, 2025",
-    event_type: "Panel",
-    relatedOrganizations: [{ title: "Texas Council on Family Violence" }],
-    image_url: "https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg",
-    event_url: "/event3",
-  },
-];
 
 const Events = () => {
   const [eventsInfo, setEventsInfo] = useState([]);
@@ -65,13 +29,13 @@ const Events = () => {
           pageLink: `/events/${event.id}`,
         }));
         if (formatEvents.length === 0) {
-          setEventsInfo(backupEvents);
+          setEventsInfo(backupData.events);
         } else {
           setEventsInfo(formatEvents);
         }
       } catch (error) {
         console.error("Error fetching events from API", error);
-        setEventsInfo(backupEvents);
+        setEventsInfo(backupData.events);
       } finally {
         setLoading(false);
       }
