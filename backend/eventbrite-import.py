@@ -42,7 +42,7 @@ def search_eventbrite(topic):
     try:
         response = requests.get(BASE_URL, headers=headers, params=params)
         if response.status_code == 404:
-            print(f"❌ 404: Endpoint not found for '{topic}' → {response.url}")
+            print(f"404: Endpoint not found for '{topic}' → {response.url}")
             return []
         response.raise_for_status()
 
@@ -50,10 +50,10 @@ def search_eventbrite(topic):
         events = data.get("events", [])
 
         if not events:
-            print(f"⚠️  No events found for '{topic}'.")
+            print(f"No events found for '{topic}'.")
             return []
 
-        print(f"\n✅ Found {len(events)} events for '{topic}':")
+        print(f"\nFound {len(events)} events for '{topic}':")
         for event in events:
             name = event["name"]["text"]
             url = event["url"]
@@ -63,7 +63,7 @@ def search_eventbrite(topic):
         return events
 
     except requests.exceptions.RequestException as e:
-        print(f"❌ Request error for '{topic}': {e}")
+        print(f"Request error for '{topic}': {e}")
         return []
 
 
@@ -71,7 +71,7 @@ def main():
     """Main function to search all topics and compile results."""
     all_events = []
 
-    print("🔍 Starting Eventbrite import for domestic abuse–related events...\n")
+    print("Starting Eventbrite import for domestic abuse–related events...\n")
 
     for topic in TOPICS:
         events = search_eventbrite(topic)
@@ -83,7 +83,7 @@ def main():
         json.dump(all_events, f, indent=2)
 
     print("\nDone importing domestic abuse–related events!")
-    print(f"💾 Saved {len(all_events)} total events to 'eventbrite_domestic_abuse_events.json'.")
+    print(f"Saved {len(all_events)} total events to 'eventbrite_domestic_abuse_events.json'.")
 
 
 if __name__ == "__main__":

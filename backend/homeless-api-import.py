@@ -19,25 +19,25 @@ def import_shelters():
     ]
 
     for city in cities:
-        print(f"📍 Fetching shelters in {city['city']}, {city['state']}...")
+        print(f"Fetching shelters in {city['city']}, {city['state']}...")
         url = f"https://homeless-shelter.p.rapidapi.com/state-city?state={city['state']}&city={city['city']}"
         response = requests.get(url, headers=headers)
 
         try:
             data = response.json()
         except Exception as e:
-            print("❌ Error parsing JSON:", e)
+            print("Error parsing JSON:", e)
             continue
 
         # DEBUG: show what the API actually returned
         if isinstance(data, dict):
-            print("🔍 Response keys:", list(data.keys()))
+            print("Response keys:", list(data.keys()))
             if "message" in data:
-                print("🧾 Message from API:", data["message"])
+                print("Message from API:", data["message"])
         elif isinstance(data, list):
-            print(f"🔍 Response contains a list with {len(data)} items.")
+            print(f"Response contains a list with {len(data)} items.")
         else:
-            print("⚠️ Unexpected response format:", type(data))
+            print("Unexpected response format:", type(data))
             continue
 
         # Normalize the structure
@@ -54,13 +54,13 @@ def import_shelters():
             continue
 
         if not shelters:
-            print(f"⚠️ No shelters found for {city['city']}, skipping.")
+            print(f"No shelters found for {city['city']}, skipping.")
             continue
 
         # Now process each shelter
         for item in shelters:
             if not isinstance(item, dict):
-                print(f"⚠️ Skipping unexpected item: {item}")
+                print(f"Skipping unexpected item: {item}")
                 continue
 
             name = item.get("name")
@@ -100,7 +100,7 @@ def import_shelters():
             db.session.add(resource)
 
         db.session.commit()
-        print(f"✅ Imported shelters for {city['city']}.")
+        print(f"Imported shelters for {city['city']}.")
 
     print("🎉 Done importing all shelters!")
 

@@ -49,7 +49,7 @@ def import_hrsa_data():
         first_linked = False
 
         for state_abbr, fips in STATE_FIPS_CODES.items():
-            print(f"📍 Fetching data for {state_abbr}...")
+            print(f"Fetching data for {state_abbr}...")
             payload = {
                 "StateFipsCode": fips,
                 "CountyFipsCode": "",
@@ -75,7 +75,7 @@ def import_hrsa_data():
                 print(f"Failed to parse response for {state_abbr}: {e}")
                 continue
 
-            print(f"✅ Found {len(centers)} centers for {state_abbr}")
+            print(f"Found {len(centers)} centers for {state_abbr}")
 
             for c in centers:
                 try:
@@ -143,7 +143,7 @@ def import_hrsa_data():
                     print(f"Skipping record in {state_abbr}: {e}")
                     db.session.rollback()
 
-        print("🎉 HRSA data import complete!")
+        print("HRSA data import complete!")
 
 if __name__ == "__main__":
     import_hrsa_data()
