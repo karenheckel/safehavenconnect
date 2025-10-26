@@ -48,13 +48,15 @@ c41cd3f3bb0dbd6ff0be8c739fd6da431484b446
 - Divided up work and made sure everyone stayed on track, asking for updates when needed.
 
 #### Phase 2 Git SHA
+We ran out of Gitlab compute minutes at the very end, so our pipeline started failing.
+
 
 
 #### Phase 2 Estimated and Actual Completion Time
 | Member | Estimated (hours) | Actual (hours) |
 | ------ | ------ | ------ |
 | **Brianna Flores** | 15 | 22 |
-| **Jonathan Ho** | 15 | 32 |
+| **Jonathan Ho** | 15 | 35 |
 | **Karen Heckel** | 15 | 30 |
 | **Parul Sadasivuni** | 15 | 20 |
 

@@ -3,7 +3,8 @@
 ## Summary of AI Interactions
 
 ### Tools Used
-Anthropic Claude Opus 4.1
+Copilot
+Claude Sonnet 4.5
 GPT-5 Pro
 
 ### Categories of AI Assistance
@@ -63,7 +64,7 @@ By verifying with another LLM that it was correct, using cross verification betw
 
 ### Did the AI ever produce an incorrect or misleading suggestion? How did you detect that?
 
-Not with my approach.
+Yes, it did. I detected it first reading over the code to see if the stuff it gave me was what I requested exactly. I then ran the code, and if there was something unintentional or off about the code it gave, I would try to debug it.
 
 ---
 
