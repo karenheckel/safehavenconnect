@@ -122,7 +122,7 @@ class Organization(db.Model):
 
 **What I learned:**
 
-I learned how SQLAlchemy relationships work and why timestamps are crucial to be able to track data changes.
+By implementing many-to-many relationships in SQLAlchemy, I learned how models connect through association tables to keep data linked consistently across the database. I realized how important timestamps are for tracking when records are created or updated. This change made the data model much more scalable.
 
 ---
 
