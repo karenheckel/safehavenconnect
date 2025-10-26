@@ -4,46 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import InfoCard from "../../components/InfoCard";
-
-const backupEvents = [
-  {
-    id: "default0",
-    name: "Volunteer Information Session",
-    location: "1515 Grove Blvd, Austin, TX 78741",
-    start_time: "6:00 pm - 7:30 pm",
-    date: "October 1, 2025",
-    event_type: "Informational",
-    organization_ids: [0],
-    resource_ids: [0],
-    image_url: "https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png",
-    event_url: "/event1",
-  },
-  {
-    id: "default1",
-    name: "Hope Alliance Survive. Thrive. Prevent 5K Run/Walk",
-    location: "445 E Morrow St, Georgetown, TX 78626 (San Gabriel Park)",
-    start_time: "9:00 am - 12:00 pm",
-    date: "October 11, 2025",
-    event_type: "Fundraising",
-    organization_ids: [0],
-    resource_ids: [0],
-    image_url:
-      "https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png",
-    event_url: "/event2",
-  },
-  {
-    id: "default2",
-    name: "TCFV’s 2025 Texas Town Hall",
-    location: "Texas Tribune Headquarters, Austin, TX",
-    start_time: "10:00 am - 12:00 pm",
-    date: "October 3, 2025",
-    event_type: "Panel",
-    organization_ids: [0],
-    resource_ids: [0],
-    image_url: "https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg",
-    event_url: "/event3",
-  },
-];
+import backupData from "../../backupData.json"
 
 const EventPage = () => {
   const { id } = useParams();
@@ -51,7 +12,7 @@ const EventPage = () => {
 
   useEffect(() => {
     if (id.startsWith("default")) {
-      const backupEvent = backupEvents.find((e) => e.id === id);
+      const backupEvent = backupData.events.find((e) => e.eventId === id);
       if (backupEvent) {
         setEventInfo({
           name: backupEvent.name,
