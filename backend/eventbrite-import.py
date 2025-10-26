@@ -5,12 +5,13 @@ Fetches events from Eventbrite related to helping victims of domestic abuse
 and similar causes (e.g., violence prevention, survivor support, etc.).
 """
 
+import os
 import requests
 import json
 import time
 
-# Replace with your real Eventbrite personal OAuth token
-API_TOKEN = "MZ2VSNTBO4BYFEP54CWT"
+# Eventbrite personal OAuth token can be overridden with EVENTBRITE_TOKEN env var
+API_TOKEN = os.getenv("EVENTBRITE_TOKEN", "MZ2VSNTBO4BYFEP54CWT")
 BASE_URL = "https://www.eventbriteapi.com/v3/events/search"
 
 # Topics to search for

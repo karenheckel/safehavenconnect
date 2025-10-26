@@ -117,80 +117,46 @@ backend_ecr_build_push:
     - main
     - develop
 
-# Deploy backend to EC2 via Docker
+# Deploy backend to EC2 via SSH
 backend_deploy_ec2:
   stage: deploy
   image: alpine:latest
-  variables:
-    IMAGE_TAG: ${CI_COMMIT_SHORT_SHA}
   before_script:
-    - apk add --no-cache openssh-client
+    - apk add --no-cache openssh-client rsync busybox-extras
     - mkdir -p ~/.ssh
     - echo "$EC2_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
-    - ssh-keyscan -H ${EC2_HOST_IP} >> ~/.ssh/known_hosts 2>/dev/null || true
+    - echo "$EC2_HOST_IP" > /tmp/ec2_host
   script:
     - |
-      echo "Deploying backend Docker container to EC2..."
+      EC2_HOST=$(cat /tmp/ec2_host)
       
-      # Define variables for readability
-      ECR_REPO_NAME="${ECR_REPO_NAME:-safehavenconnect-backend}"
-      ECR_IMAGE="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$IMAGE_TAG"
+      # Preflight check: verify EC2 is reachable on port 22
+      echo "Checking SSH connectivity to $EC2_HOST..."
+      if ! nc -z -w 10 "$EC2_HOST" 22; then
+        echo "ERROR: Cannot reach $EC2_HOST on port 22"
+        echo "Please check:"
+        echo "  1. EC2 instance is running"
+        echo "  2. Security Group allows inbound SSH from GitLab runner IPs"
+        echo "  3. EC2 has a public IP address"
+        echo "  4. EC2_HOST_IP variable is set correctly"
+        exit 1
+      fi
+      echo "SSH port is reachable, proceeding with deployment..."
       
-      # Deploy via SSH
-      ssh -o StrictHostKeyChecking=no ubuntu@${EC2_HOST_IP} << ENDSSH
-        set -e
-        echo "=== Backend Deployment Started ==="
-        
-        # Login to ECR
-        echo "Logging into ECR..."
-        aws ecr get-login-password --region $AWS_DEFAULT_REGION | sudo docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-        
-        # Pull latest image
-        echo "Pulling image: $ECR_IMAGE"
-        sudo docker pull $ECR_IMAGE
-        
-        # Stop and remove old container
-        echo "Stopping old container..."
-        sudo docker stop safehavenconnect 2>/dev/null || true
-        sudo docker rm safehavenconnect 2>/dev/null || true
-        
-        # Start new container
-        echo "Starting new container..."
-        sudo docker run -d \\
-          --name safehavenconnect \\
-          --env-file ~/cs373-fall-2025-55085_03/backend/.env \\
-          -p 80:5000 \\
-          --restart unless-stopped \\
-          $ECR_IMAGE
-        
-        # Wait for container to be healthy
-        echo "Waiting for container to start..."
-        sleep 5
-        
-        # Check container status
-        if sudo docker ps | grep safehavenconnect; then
-          echo "✓ Container started successfully"
-          sudo docker logs --tail 20 safehavenconnect
-        else
-          echo "✗ Container failed to start"
-          sudo docker logs safehavenconnect
-          exit 1
-        fi
-        
-        # Health check
-        echo "Testing API health..."
-        if curl -f http://localhost/api/health; then
-          echo "✓ API is healthy"
-        else
-          echo "✗ API health check failed"
-          exit 1
-        fi
-        
-        echo "=== Deployment Complete ==="
+      # Copy backend files to EC2
+      ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 ubuntu@$EC2_HOST "mkdir -p ~/app/backend"
+      rsync -avz --delete ./backend/ ubuntu@$EC2_HOST:~/app/backend/
+      
+      # Install dependencies and restart service
+      ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 ubuntu@$EC2_HOST << 'ENDSSH'
+        cd ~/app/backend
+        source venv/bin/activate || python3 -m venv venv && source venv/bin/activate
+        pip install -r requirements.txt
+        sudo systemctl restart safehavenconnect
       ENDSSH
   only:
     - main
   needs:
-    - backend_ecr_build_push
-  when: on_success  # change to manual if you want to approve deploys
+    - build
+  when: manual  # change to on_success for automatic deploy

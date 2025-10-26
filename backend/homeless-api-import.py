@@ -1,3 +1,4 @@
+import os
 import requests
 from app import create_app, db
 from models import Organization, Resource
@@ -5,9 +6,10 @@ from models import Organization, Resource
 app = create_app()
 
 def import_shelters():
+    api_key = os.getenv("RAPIDAPI_KEY", "9d80279d88msh249473dcbd9a85bp1312f0jsn9eab5d8b0fe6")
     headers = {
         "x-rapidapi-host": "homeless-shelter.p.rapidapi.com",
-        "x-rapidapi-key": "9d80279d88msh249473dcbd9a85bp1312f0jsn9eab5d8b0fe6"
+        "x-rapidapi-key": api_key
     }
 
     cities = [

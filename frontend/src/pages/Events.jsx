@@ -6,16 +6,53 @@ import axios from "axios";
 
 const BACKEND_URL = "https://backend.safehavenconnect.me";
 
+const backupEvents = [
+  {
+    eventId: "default0",
+    name: "Volunteer Information Session",
+    location: "1515 Grove Blvd, Austin, TX 78741",
+    start_time: "6:00 pm - 7:30 pm",
+    date: "October 1, 2025",
+    event_type: "Informational",
+    relatedOrganizations: [{ title: "The SAFE Alliance" }],
+    image_url: "https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png",
+    event_url: "/event1",
+  },
+  {
+    eventId: "default1",
+    name: "Hope Alliance Survive. Thrive. Prevent 5K Run/Walk",
+    location: "445 E Morrow St, Georgetown, TX 78626 (San Gabriel Park)",
+    start_time: "9:00 am - 12:00 pm",
+    date: "October 11, 2025",
+    event_type: "Fundraising",
+    relatedOrganizations: [{ title: "Hope Alliance" }],
+    image_url:
+      "https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png",
+    event_url: "/event2",
+  },
+  {
+    eventId: "default2",
+    name: "TCFV’s 2025 Texas Town Hall",
+    location: "Texas Tribune Headquarters, Austin, TX",
+    start_time: "10:00 am - 12:00 pm",
+    date: "October 3, 2025",
+    event_type: "Panel",
+    relatedOrganizations: [{ title: "Texas Council on Family Violence" }],
+    image_url: "https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg",
+    event_url: "/event3",
+  },
+];
+
 const Events = () => {
   const [eventsInfo, setEventsInfo] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currPage, setCurrPage] = useState(1)
-  const cardsOnPage = 10
+  const [currPage, setCurrPage] = useState(1);
+  const cardsOnPage = 10;
 
   useEffect(() => {
     const getEvents = async () => {
       try {
-        const res = await axios.get(BACKEND_URL, "/api/events");
+        const res = await axios.get(`${BACKEND_URL}/api/events`);
         const formatEvents = res.data.map((event) => ({
           eventId: event.id,
           title: event.name,
@@ -25,12 +62,17 @@ const Events = () => {
           eventType: event.event_type,
           organization: event.relatedOrganizations[0].title,
           imgUrl: event.image_url,
-          pageLink: event.event_url,
+          pageLink: `/events/${event.id}`,
         }));
-        setEventsInfo(formatEvents);
-        setLoading(false);
+        if (formatEvents.length === 0) {
+          setEventsInfo(backupEvents);
+        } else {
+          setEventsInfo(formatEvents);
+        }
       } catch (error) {
-        console.error("Error fetching events:", error);
+        console.error("Error fetching events from API", error);
+        setEventsInfo(backupEvents);
+      } finally {
         setLoading(false);
       }
     };
@@ -39,18 +81,20 @@ const Events = () => {
 
   if (loading) {
     return (
-      <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
+      <Container
+        className="d-flex flex-column justify-content-center align-items-center"
+        style={{ minHeight: "50vh" }}
+      >
         <div className="spinner-border mb-3" role="status"></div>
         <h4 className="mt-2">Loading Events...</h4>
       </Container>
     );
   }
-  
 
-  const lastEvent = currPage * cardsOnPage
-  const firstEvent = lastEvent - cardsOnPage
-  const presentedEvents = eventsInfo.slice(firstEvent, lastEvent)
-  const numPages = Math.ceil(eventsInfo.length / cardsOnPage)  
+  const lastEvent = currPage * cardsOnPage;
+  const firstEvent = lastEvent - cardsOnPage;
+  const presentedEvents = eventsInfo.slice(firstEvent, lastEvent);
+  const numPages = Math.ceil(eventsInfo.length / cardsOnPage);
 
   return (
     <>
@@ -84,9 +128,7 @@ const Events = () => {
           <button
             className="btn btn-secondary mx-2"
             onClick={() =>
-              setCurrPage((prev) =>
-                prev < numPages ? prev + 1 : prev
-              )
+              setCurrPage((prev) => (prev < numPages ? prev + 1 : prev))
             }
             disabled={currPage >= numPages}
           >

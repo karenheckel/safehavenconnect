@@ -25,17 +25,17 @@ services:
     container_name: safehavenconnect-backend
     environment:
       DATABASE_URL: postgresql://safehaven:safehaven123@db:5432/safehavenconnect
-      FLASK_ENV: development
+      FLASK_ENV: production
       SECRET_KEY: dev-secret-key-change-in-production
       PORT: 5000
     ports:
-      - "5000:5000"
+      - "80:5000"
     depends_on:
       db:
         condition: service_healthy
     volumes:
       - .:/app
-    command: python app.py
+    # Use default CMD from Dockerfile (gunicorn)
 
 volumes:
   postgres_data:
