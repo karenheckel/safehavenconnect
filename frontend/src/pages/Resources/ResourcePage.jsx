@@ -4,43 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import InfoCard from "../../components/InfoCard";
-
-const backupResources = [
-  {
-    id: "default0",
-    title: "Kelly White Family Shelter",
-    location: "4800 Manor Rd A, Austin, TX 78723",
-    resource_type: "Shelter/Housing",
-    hours: "24/7",
-    organization: "The SAFE Alliance",
-    online_availability: "No",
-    image_url: "https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png",
-    resource_url: "/resource1",
-  },
-  {
-    id: "default1",
-    title: "24 Hour HOPELine",
-    location: "1-800-460-7233",
-    resource_type: "Crisis Hotline",
-    hours: "24/7",
-    organization: "Hope Alliance",
-    online_availability: "Yes",
-    image_url:
-      "https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png",
-    resource_url: "/resource2",
-  },
-  {
-    id: "default2",
-    title: "Domestic Violence Awareness Month Resources",
-    location: "https://tcfv.org/awareness/",
-    resource_type: "Informational",
-    hours: "N/A",
-    organization: "Texas Council on Family Violence",
-    online_availability: "Yes",
-    image_url: "https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg",
-    resource_url: "/resource3",
-  },
-];
+import backupData from "../../backupData.json"
 
 const ResourcePage = () => {
   const { id } = useParams();
@@ -48,7 +12,7 @@ const ResourcePage = () => {
 
   useEffect(() => {
     if (id.startsWith("default")) {
-      const backup = backupResources.find((r) => r.id === id);
+      const backup = backupData.resources.find((r) => r.id === id);
       if (backup) {
         setResourceInfo(backup);
       }
