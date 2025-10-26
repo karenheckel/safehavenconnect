@@ -5,26 +5,74 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import InfoCard from "../../components/InfoCard";
 
+const backupResources = [
+  {
+    id: "default0",
+    title: "Kelly White Family Shelter",
+    location: "4800 Manor Rd A, Austin, TX 78723",
+    resource_type: "Shelter/Housing",
+    hours: "24/7",
+    organization: "The SAFE Alliance",
+    online_availability: "No",
+    image_url: "https://www.safeaustin.org/wp-content/uploads/2018/08/fb.png",
+    resource_url: "/resource1",
+  },
+  {
+    id: "default1",
+    title: "24 Hour HOPELine",
+    location: "1-800-460-7233",
+    resource_type: "Crisis Hotline",
+    hours: "24/7",
+    organization: "Hope Alliance",
+    online_availability: "Yes",
+    image_url:
+      "https://www.hopealliancetx.org/wp-content/uploads/HopeAlliance_Logo_color_tagline-1-300x300.png",
+    resource_url: "/resource2",
+  },
+  {
+    id: "default2",
+    title: "Domestic Violence Awareness Month Resources",
+    location: "https://tcfv.org/awareness/",
+    resource_type: "Informational",
+    hours: "N/A",
+    organization: "Texas Council on Family Violence",
+    online_availability: "Yes",
+    image_url: "https://tcfv.org/wp-content/themes/tcfv/assets/img/logo.svg",
+    resource_url: "/resource3",
+  },
+];
+
 const ResourcePage = () => {
   const { id } = useParams();
   const [resourceInfo, setResourceInfo] = useState(null);
 
   useEffect(() => {
-    const getResourceInfo = async () => {
-      try {
-        const res = await axios.get(`https://backend.safehavenconnect.me/api/resources/${id}`);
-        setResourceInfo(res.data);
-      } catch (err) {
-        console.error("Error fetching resource:", err);
+    if (id.startsWith("default")) {
+      const backup = backupResources.find((r) => r.id === id);
+      if (backup) {
+        setResourceInfo(backup);
       }
-    };
-
-    getResourceInfo();
+    } else {
+      const getResourceInfo = async () => {
+        try {
+          const res = await axios.get(
+            `https://backend.safehavenconnect.me/api/resources/${id}`
+          );
+          setResourceInfo(res.data);
+        } catch (err) {
+          console.error("Error fetching resource:", err);
+        }
+      };
+      getResourceInfo();
+    }
   }, [id]);
 
   if (!resourceInfo) {
     return (
-      <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
+      <Container
+        className="d-flex flex-column justify-content-center align-items-center"
+        style={{ minHeight: "50vh" }}
+      >
         <div className="spinner-border mb-3" role="status"></div>
         <h4 className="mt-2">Loading Resource Info...</h4>
       </Container>
@@ -61,7 +109,7 @@ const ResourcePage = () => {
             <h3>Related Organizations</h3>
             {
               // list of instances
-              resourceInfo.organization_ids.map((orgId) => (
+              resourceInfo.organization_ids?.map((orgId) => (
                 <InfoCard
                   key={orgId}
                   cardType="organization"
@@ -72,7 +120,7 @@ const ResourcePage = () => {
           </Col>
           <Col className="text-center" md={6}>
             <h3>Related Events</h3>
-            {resourceInfo.event_ids.map((eventId) => (
+            {resourceInfo.event_ids?.map((eventId) => (
               <InfoCard
                 key={eventId}
                 cardType="event"

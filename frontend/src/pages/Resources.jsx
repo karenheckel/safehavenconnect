@@ -52,7 +52,7 @@ const Resources = () => {
   useEffect(() => {
     const getResources = async () => {
       try {
-        const res = await axios.get(`${BACKEND_URL}/api/resources`);
+        const res = await axios.get(`${BACKEND_URL}/api/resource`);
         const formatResources = res.data.map((resource) => ({
           title: resource.title,
           location: resource.location,
@@ -100,7 +100,7 @@ const Resources = () => {
         <p>Number of resources: {resources.length}</p>
         <Row className="justify-content-center">
           {presentedResources.map((res, index) => (
-            <InfoCard key={index} cardType="resource" cardInfo={res} />
+            <InfoCard key={index} cardType="resource" cardInfo={res} id={res.id}/>
           ))}
         </Row>
 
