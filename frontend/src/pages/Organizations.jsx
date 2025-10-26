@@ -25,6 +25,7 @@ const Organizations = () => {
           orgType: org.organization_type,
           imgUrl: org.image_url,
           pageLink: org.website_url,
+          id: org.id,
         }));
         setOrganizations(formatOrgs);
       } catch (error) {
@@ -57,7 +58,7 @@ const Organizations = () => {
         <p>Number of Organizations: {organizations.length}</p>
         <Row className="justify-content-center">
           {presentedOrgs.map((org, index) => (
-            <InfoCard key={index} cardType="organization" cardInfo={org} />
+            <InfoCard key={index} cardType="organization" cardInfo={org} id={org.id}/>
           ))}
         </Row>
 

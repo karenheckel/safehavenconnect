@@ -63,6 +63,7 @@ const Resources = () => {
           organization: resource.organization_name,
           imgUrl: resource.image_url,
           pageLink: resource.website_url,
+          id: resource.id,
         }));
         if (formatResources.length === 0) {
           setResources(backupResources);
@@ -100,7 +101,7 @@ const Resources = () => {
         <p>Number of resources: {resources.length}</p>
         <Row className="justify-content-center">
           {presentedResources.map((res, index) => (
-            <InfoCard key={index} cardType="resource" cardInfo={res} />
+            <InfoCard key={index} cardType="resource" cardInfo={res} id={res.id}/>
           ))}
         </Row>
 
