@@ -2,13 +2,14 @@
 Imports HRSA Health Center data and tags shelters (e.g., women's or domestic violence support).
 """
 
+import os
 import requests
 from models import db, Resource, Organization, Event
 from app import create_app
 from datetime import datetime
 
 HRSA_API_URL = "https://data.hrsa.gov/HDWAPI3_External/api/v1/GetHealthCentersByArea"
-HRSA_TOKEN = "440ab3e7-e7dc-49cb-9fb2-6548d5f0d22b"
+HRSA_TOKEN = os.getenv("HRSA_TOKEN", "440ab3e7-e7dc-49cb-9fb2-6548d5f0d22b")
 
 STATE_FIPS_CODES = {
     "CA": "06", "TX": "48", "NY": "36", "FL": "12", "IL": "17"
