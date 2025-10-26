@@ -52,14 +52,14 @@ const Resources = () => {
   useEffect(() => {
     const getResources = async () => {
       try {
-        const res = await axios.get(`${BACKEND_URL}/api/resource`);
+        const res = await axios.get(`${BACKEND_URL}/api/resources`);
         const formatResources = res.data.map((resource) => ({
           title: resource.title,
           location: resource.location,
           type: resource.topic,
           // TODO: Need these attributes to be added to App.py
           // hours: resource.hours || "N/A",
-          // onlineAvailability: resource.online_availability ? "Yes" : "No",
+          online_availability: resource.online_availability ? "Yes" : "No",
           organization: resource.organization_name,
           imgUrl: resource.image_url,
           pageLink: resource.website_url,
