@@ -13,15 +13,16 @@ The frontend of our website was developed using React.js with Vite as the build 
 -  The color palette uses #cde5d7 (mint green) with black text and outlines
 - All components are designed to be responsive using Bootstrap’s grid system (Container, Row, Col).
 - Reusable React Bootstrap components (e.g., Card, Button)
-
 ---
 
 ## Backend
-
+The backend was built using Flask (Python) with SQLAlchemy as the ORM for database interactions and Gunicorn as the production WSGI server. The backend serves as the API layer, exposing RESTful endpoints that allow the frontend to retrieve structured data about organizations, resources, and events. It handles all database queries, manages many-to-many relationships between models, and ensures data consistency across the application. The backend is containerized using Docker and deployed on AWS EC2, with a PostgreSQL database running in a separate container managed via Docker Compose. Health check endpoints (/api/health) allow monitoring of the API status, and the system is designed to scale horizontally by adding more Gunicorn workers or container replicas as needed.
 ---
 
 ## Database
-For the database, we scraped data from the Health Resources and Services Administration's Data Warehouse API. We used the medical centers we found as resources and the organizations that they were part of as the organizations. We created a general event for the medical centers to be linked to. We also scraped an API on homeless shelters as another resource. We ran into issues because the API we wanted to use, the 211 API,  didn't approve our subscription in time. This is where the bulk of our data was supposed to come from, so we had to find alternative sources.
+The database uses PostgreSQL 15 (alpine) running in a Docker container, with SQLAlchemy as the ORM layer for Python-based interactions. The schema consists of three primary models—Organizations, Resources, and Events—with many-to-many relationships managed through three association tables: organization_resources, organization_events, and resource_events. Each model includes metadata fields such as created_at and updated_at timestamps, and all primary keys use auto-incrementing integers for unique identification.
+
+Data was primarily sourced from the Health Resources and Services Administration (HRSA) Data Warehouse API, which provided information about federally qualified health centers across multiple states (California, Texas, New York, Florida, and Illinois). Each health center was modeled as both an Organization and a Resource, with a shared "National Health Access Week" Event linking them together. We also integrated data from the RapidAPI Homeless Shelter API for shelter-specific resources in major Texas cities (Austin, Houston, and Dallas). Additionally, we explored the Eventbrite API for community events, though this required valid OAuth tokens and encountered quota limitations during testing.
 ---
 
 ## User Stories
@@ -50,7 +51,7 @@ For the database, we scraped data from the Health Resources and Services Adminis
 ---
 
 ## Data Scraping
-
+We made API calls to the Homeless Shelter API and the Health Resources and Services Administration API to collect data on shelters and medical centers that survivors could access to get the help they need. 
 ---
 
 ## API Documentation
@@ -182,3 +183,4 @@ Domain name generated from Namecheap
 
 ## Challenges 
 - The Google Translate widget initially rendered multiple times due to React's re-renders. However, once we added a script check and conditional initialization, it ensured that the widget only loaded once. 
+- We struggled with finding good APIs to source our data. We originally planned to use the 211 API as our primary data source, which would have provided comprehensive social services data. However, our subscription request was not approved in time, forcing us to pivot to alternative APIs. This required adapting our data import scripts to handle varying response formats, API rate limits, and quota restrictions. 

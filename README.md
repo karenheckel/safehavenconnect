@@ -10,7 +10,6 @@
 | **Jonathan Ho** | jh77773 | @jnthnho |
 | **Karen Heckel** | kh38298 | @karenheckel |
 | **Parul Sadasivuni** | pss2326 | @parul.sadasivuni |
-| **Ali Novruzov** | msn782 | @anovruzov |
 
 ## The Proposed Project
 Our project will be a platform that organizes and provides domestic violence resources to those struggling to find reliable, accessible, and local resources for safety, legal/medical/financial aid, and support events.
@@ -42,7 +41,6 @@ c41cd3f3bb0dbd6ff0be8c739fd6da431484b446
 | **Jonathan Ho** | 16 | 10 |
 | **Karen Heckel** | 15 | 17 |
 | **Parul Sadasivuni** | 20 | 12 |
-| **Ali Novruzov** | 10 | 8 |
 
 
 ## Phase 2 
@@ -56,10 +54,9 @@ c41cd3f3bb0dbd6ff0be8c739fd6da431484b446
 | Member | Estimated (hours) | Actual (hours) |
 | ------ | ------ | ------ |
 | **Brianna Flores** | 15 | TBD |
-| **Jonathan Ho** | 15 | 12 |
+| **Jonathan Ho** | 15 | 32 |
 | **Karen Heckel** | 15 | TBD |
-| **Parul Sadasivuni** | 15 | TBD |
-| **Ali Novruzov** | 12 | TBD |
+| **Parul Sadasivuni** | 15 | 20 |
 
 
 ## Phase 3
@@ -75,7 +72,6 @@ c41cd3f3bb0dbd6ff0be8c739fd6da431484b446
 | **Jonathan Ho** |  |  |
 | **Karen Heckel** |  |  |
 | **Parul Sadasivuni** |  |  |
-| **Ali Novruzov** |  |  |
 
 
 ## Data sources 
