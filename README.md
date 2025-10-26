@@ -53,7 +53,7 @@ c41cd3f3bb0dbd6ff0be8c739fd6da431484b446
 #### Phase 2 Estimated and Actual Completion Time
 | Member | Estimated (hours) | Actual (hours) |
 | ------ | ------ | ------ |
-| **Brianna Flores** | 15 | TBD |
+| **Brianna Flores** | 15 | 22 |
 | **Jonathan Ho** | 15 | 32 |
 | **Karen Heckel** | 15 | TBD |
 | **Parul Sadasivuni** | 15 | 20 |
