@@ -134,7 +134,8 @@ backend_deploy_ec2:
   before_script:
     - apk add --no-cache openssh-client rsync busybox-extras
     - mkdir -p ~/.ssh
-    - echo "$EC2_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - |
+      echo "$EC2_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - echo "$EC2_HOST_IP" > /tmp/ec2_host
   script:
