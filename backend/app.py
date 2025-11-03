@@ -5,6 +5,7 @@ from models import db, Organization, Resource, Event
 import os
 from sqlalchemy import inspect, text
 from datetime import datetime, date, timedelta
+from utils import get_image_for_topic
 
 
 def parse_datetime(value):
@@ -447,6 +448,27 @@ def create_app(config_name='default', testing=False):
         except Exception as e:
             return jsonify({'error': str(e)}), 404
     
+    @app.route('/api/admin/refresh-images', methods=['POST'])
+    def refresh_images():
+        from utils import get_image_for_topic
+
+        updated = 0
+        for org in Organization.query.all():
+            org.image_url = get_image_for_topic(org.organization_type or org.name, fallback="/static/default-org.jpg")
+            updated += 1
+
+        for res in Resource.query.all():
+            res.image_url = get_image_for_topic(res.topic or res.title, fallback="/static/default-resource.jpg")
+            updated += 1
+
+        for ev in Event.query.all():
+            ev.image_url = get_image_for_topic(ev.event_type or ev.name, fallback="/static/default-event.jpg")
+            updated += 1
+
+        db.session.commit()
+        return jsonify({"updated": updated}), 200
+
+
     @app.route('/api/health', methods=['GET'])
     def health_check():
         return jsonify({'status': 'healthy', 'message': 'SafeHavenConnect API is running'}), 200
