@@ -6,15 +6,6 @@ stages:
 variables:
   NODE_VERSION: "20"
 
-workflow:
-  rules:
-    - changes:
-        - README.md
-        - docs/**/*
-        - "**/*.md"
-      when: never
-    - when: always
-
 # Cache frontend dependencies
 cache:
   paths:
