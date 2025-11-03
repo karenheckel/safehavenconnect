@@ -127,6 +127,7 @@ backend_ecr_build_push:
     - main
     - develop
 
+
 # Deploy backend to EC2 via SSH
 backend_deploy_ec2:
   stage: deploy
