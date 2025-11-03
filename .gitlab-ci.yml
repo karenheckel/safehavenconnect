@@ -136,7 +136,24 @@ backend_deploy_ec2:
     - apk add --no-cache openssh-client rsync busybox-extras
     - mkdir -p ~/.ssh
     - |
-      echo "$EC2_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+      # Support three cases for the SSH key:
+      # 1) EC2_SSH_PRIVATE_KEY_B64 (masked, base64 text variable)
+      # 2) EC2_SSH_PRIVATE_KEY as a File variable (path)
+      # 3) EC2_SSH_PRIVATE_KEY as a normal multiline text variable
+      if [ -n "$EC2_SSH_PRIVATE_KEY_B64" ]; then
+        echo "Using base64 text variable for SSH key"
+        echo "$EC2_SSH_PRIVATE_KEY_B64" | base64 -d > ~/.ssh/id_rsa
+      elif [ -n "$EC2_SSH_PRIVATE_KEY" ] && [ -f "$EC2_SSH_PRIVATE_KEY" ]; then
+        echo "Using file variable for SSH key"
+        cp "$EC2_SSH_PRIVATE_KEY" ~/.ssh/id_rsa
+      elif [ -n "$EC2_SSH_PRIVATE_KEY" ]; then
+        echo "Using text variable for SSH key"
+        # Preserve newlines and strip any Windows CR characters
+        printf "%s" "$EC2_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+      else
+        echo "ERROR: No SSH key provided. Set EC2_SSH_PRIVATE_KEY (File or text) or EC2_SSH_PRIVATE_KEY_B64 (base64)."
+        exit 1
+      fi
     - chmod 600 ~/.ssh/id_rsa
     - echo "$EC2_HOST_IP" > /tmp/ec2_host
   script:
@@ -156,9 +173,18 @@ backend_deploy_ec2:
       fi
       echo "SSH port is reachable, proceeding with deployment..."
       
+      # Fail fast if authentication can't succeed (avoids confusing libcrypto/publickey errors later)
+      if ! ssh -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectTimeout=15 -i ~/.ssh/id_rsa ubuntu@"$EC2_HOST" "echo SSH OK"; then
+        echo "ERROR: SSH authentication failed. Common causes:"
+        echo "  - EC2_SSH_PRIVATE_KEY is a GitLab file variable but pipeline wrote its path string (use cp as above)"
+        echo "  - EC2_SSH_PRIVATE_KEY text lost newlines or has Windows CRLF (use printf | tr -d '\r')"
+        echo "  - Key doesn't match ~/.ssh/authorized_keys on the instance or is passphrase-protected"
+        exit 1
+      fi
+      
       # Copy backend files to EC2
       ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 ubuntu@$EC2_HOST "mkdir -p ~/app/backend"
-      rsync -avz --delete ./backend/ ubuntu@$EC2_HOST:~/app/backend/
+      rsync -avz -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" --delete ./backend/ ubuntu@$EC2_HOST:~/app/backend/
       
       # Install dependencies and restart service
       ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 ubuntu@$EC2_HOST << 'ENDSSH'
