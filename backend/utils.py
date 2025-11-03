@@ -20,6 +20,7 @@ def get_image_for_topic(query, fallback=None):
             photos = data.get("photos", [])
             if photos:
                 return random.choice(photos)["src"]["medium"]
+    
     except Exception as e:
         print("Pexels fetch error:", e)
 
