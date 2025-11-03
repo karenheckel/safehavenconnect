@@ -24,7 +24,7 @@ const Organizations = () => {
           hours: org.hours_of_operation || "N/A",
           online_availability: org.online_availability ? "Yes" : "No",
           org_type: org.organization_type,
-          imgUrl: org.image_url,
+          image_url: org.image_url,
           pageLink: org.website_url,
           id: org.id,
         }));

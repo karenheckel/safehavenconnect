@@ -110,16 +110,16 @@ const ResourcePage = () => {
               <p><strong>Type:</strong> {resourceInfo.type}</p>
               <p><strong>Hours:</strong> {resourceInfo.hours}</p>
               <p><strong>Online Availability:</strong> {resourceInfo.online_availability}</p>
-
-              {resourceInfo.resource_url && (
+              <p>
+                <strong>Website:</strong>{" "}
                 <a
                   href={resourceInfo.resource_url}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Learn more about {resourceInfo.name}
+                  {resourceInfo.resource_url}
                 </a>
-              )}
+              </p>
             </Card>
           </Col>
         </Row>

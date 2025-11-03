@@ -24,9 +24,10 @@ const Resources = () => {
           hours: resource.hours_of_operation || "N/A",
           online_availability: resource.online_availability ? "Yes" : "No",
           organization: resource.organization_name,
-          imgUrl: resource.image_url,
+          image_url: resource.image_url,
           pageLink: resource.website_url,
           id: resource.id,
+          services: resource.services,
         }));
         if (formatResources.length === 0) {
           setResources(backupData.resources);

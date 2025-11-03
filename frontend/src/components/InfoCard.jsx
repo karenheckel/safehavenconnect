@@ -17,6 +17,8 @@ const InfoCard = ({ cardType, cardInfo, id }) => {
     event_type,
     resource_type,
     org_type,
+    description,
+    registration,
   } = cardInfo;
 
   const infoToPresent = {
@@ -35,11 +37,13 @@ const InfoCard = ({ cardType, cardInfo, id }) => {
       { label: "Online Availability", value: online_availability },
     ],
     event: [
-      { label: "Location", value: location },
-      { label: "Time", value: time },
-      { label: "Date", value: date },
       { label: "Event Type", value: event_type },
-      { label: "Organization", value: organization },
+      { label: "Description", value: description },
+      { label: "Location", value: location },
+      { label: "Date", value: date },
+      { label: "Time", value: time },
+      { label: "Online", value: online_availability },
+      { label: "Registration", value: registration },
     ],
   };
 
@@ -54,7 +58,7 @@ const InfoCard = ({ cardType, cardInfo, id }) => {
         <Card.Title>{title}</Card.Title>
         {infoToPresent[cardType].map((info, index) => (
           <Card.Text key={index}>
-            {info.label}: {info.value}
+            <strong>{info.label}:</strong> {info.value}
           </Card.Text>
         ))}
         <Button

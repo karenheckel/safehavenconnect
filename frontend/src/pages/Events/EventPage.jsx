@@ -6,9 +6,13 @@ import axios from "axios";
 import InfoCard from "../../components/InfoCard";
 import backupData from "../../backupData.json"
 
+const BACKEND_URL = "https://backend.safehavenconnect.me";
+
 const EventPage = () => {
   const { id } = useParams();
   const [eventInfo, setEventInfo] = useState(null);
+  const [relatedOrgs, setRelatedOrgs] = useState([]);
+  const [relatedResources, setRelatedResources] = useState([]);
 
   useEffect(() => {
     if (id.startsWith("default")) {
@@ -29,10 +33,81 @@ const EventPage = () => {
     } else {
       const getEventInfo = async () => {
         try {
-          const res = await axios.get(
-            `https://backend.safehavenconnect.me/api/events/${id}`
-          );
-          setEventInfo(res.data);
+          const res = await axios.get(`${BACKEND_URL}/api/events/${id}`);
+
+          // Format times
+          const event = res.data;
+          const start = new Date(event.start_time);
+          const end = new Date(event.end_time);
+          const formattedTime = `${start.toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit",
+          })} - ${end.toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit",
+          })}`;
+
+          // Format date
+          const formattedDate = new Date(event.date).toLocaleDateString(undefined, {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+
+          setEventInfo({
+            name: event.name,
+            description: event.description,
+            event_type: event.event_type,
+            location: event.location,
+            date: formattedDate,
+            time: formattedTime,
+            is_online: event.is_online ? "Yes" : "No",
+            registration: event.registration_open ? "Open" : "Closed",
+            image_url: event.image_url,
+            event_url: event.event_url,
+            map_url: event.map_url,
+            organization_ids: event.organization_ids,
+            resource_ids: event.resource_ids,
+          });
+          // Fetch related organizations
+          if (event.organization_ids?.length) {
+            const orgResponses = await Promise.all(
+              event.organization_ids.map((oid) =>
+                axios.get(`${BACKEND_URL}/api/organizations/${oid}`)
+              )
+            );
+            const orgs = orgResponses.map((r) => ({
+              id: r.data.id,
+              title: r.data.name,
+              location: r.data.location,
+              org_type: r.data.organization_type,
+              services: r.data.services,
+              hours: r.data.hours_of_operation || "N/A",
+              online_availability: r.data.online_availability ? "Yes" : "No",
+              image_url: r.data.image_url,
+            }));
+            setRelatedOrgs(orgs);
+          }
+
+          // Fetch related resources
+          if (event.resource_ids?.length) {
+            const resResponses = await Promise.all(
+              event.resource_ids.map((rid) =>
+                axios.get(`${BACKEND_URL}/api/resources/${rid}`)
+              )
+            );
+            const resources = resResponses.map((r) => ({
+              id: r.data.id,
+              title: r.data.title,
+              location: r.data.location,
+              resource_type: r.data.topic,
+              hours: r.data.hours_of_operation || "N/A",
+              online_availability: r.data.online_availability ? "Yes" : "No",
+              organization: r.data.organization_name,
+              image_url: r.data.image_url,
+            }));
+            setRelatedResources(resources);
+          }
         } catch (err) {
           console.error("Error fetching event:", err);
         }
@@ -67,11 +142,19 @@ const EventPage = () => {
           </Col>
           <Col className="text-center" md={6}>
             <Card body className="shadow-sm">
-              <p>Location: {eventInfo.location}</p>
-              <p>Date: {eventInfo.date}</p>
-              <p>Time: {eventInfo.start_time}</p>
-              <p>Event Type: {eventInfo.event_type}</p>
-              <a href={eventInfo.event_url}>Event Link</a>
+              <p><strong>Event Type:</strong> {eventInfo.event_type}</p>
+              <p><strong>Description:</strong> {eventInfo.description}</p>
+              <p><strong>Location:</strong> {eventInfo.location}</p>
+              <p><strong>Date:</strong> {eventInfo.date}</p>
+              <p><strong>Time:</strong> {eventInfo.time}</p>
+              <p><strong>Online:</strong> {eventInfo.is_online}</p>
+              <p><strong>Registration:</strong> {eventInfo.registration}</p>
+              {eventInfo.event_url && (
+                <p> <strong>Website:</strong>{" "}
+                  <a href={eventInfo.event_url}
+                    target="_blank"
+                    rel="noopener noreferrer" >
+                    {eventInfo.event_url} </a></p>)}
             </Card>
           </Col>
         </Row>
@@ -92,26 +175,33 @@ const EventPage = () => {
         <Row className="my-3">
           <Col className="text-center" md={6}>
             <h3>Related Organizations</h3>
-            {
-              // list of instances
-              eventInfo.organization_ids?.map((orgId) => (
+            {relatedOrgs.length > 0 ? (
+              relatedOrgs.map((org) => (
                 <InfoCard
-                  key={orgId}
+                  key={org.id}
                   cardType="organization"
-                  cardInfo={{ id: orgId }}
+                  cardInfo={org}
+                  id={org.id}
                 />
               ))
-            }
+            ) : (
+              <p className="text-muted">No related organizations found.</p>
+            )}
           </Col>
           <Col className="text-center" md={6}>
             <h3>Related Resources</h3>
-            {eventInfo.resource_ids?.map((resourceId) => (
-              <InfoCard
-                key={resourceId}
-                cardType="resource"
-                cardInfo={{ id: resourceId }}
-              />
-            ))}
+            {relatedResources.length > 0 ? (
+              relatedResources.map((res) => (
+                <InfoCard
+                  key={res.id}
+                  cardType="resource"
+                  cardInfo={res}
+                  id={res.id}
+                />
+              ))
+            ) : (
+              <p className="text-muted">No related resources found.</p>
+            )}
           </Col>
         </Row>
       </Container>

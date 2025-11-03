@@ -6,6 +6,16 @@ stages:
 variables:
   NODE_VERSION: "20"
 
+# Automatically skip pipelines for documentation changes only
+workflow:
+  rules:
+    - changes:
+        - README.md
+        - docs/**/*
+        - "**/*.md"
+      when: never
+    - when: always
+
 # Cache frontend dependencies
 cache:
   paths:
@@ -25,6 +35,9 @@ frontend_tests:
     paths:
       - frontend/dist/
     expire_in: 1 hour
+  only:
+    - main
+    - develop
 
 backend_tests:
   stage: test
@@ -35,6 +48,9 @@ backend_tests:
     - pip install -r backend/requirements.txt
   script:
     - pytest -q backend/test_api.py
+  only:
+    - main
+    - develop
 
 build:
   stage: build
@@ -78,6 +94,10 @@ pages:
     - main
   dependencies:
     - build
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_COMMIT_MESSAGE =~ /#deploy/i'
+      when: always
+    - when: never
 
 
 # Build and push backend image to AWS ECR
@@ -165,8 +185,9 @@ backend_deploy_ec2:
         pip install -r requirements.txt
         sudo systemctl restart safehavenconnect
       ENDSSH
-  only:
-    - main
   needs:
     - build
-  when: manual  # change to on_success for automatic deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_COMMIT_MESSAGE =~ /#deploy/i'
+      when: manual
+    - when: never
