@@ -83,10 +83,14 @@ def _get_or_404(model, obj_id):
     return obj
 
 
-def create_app(config_name='default'):
+def create_app(config_name='default', testing=False):
     app = Flask(__name__)
     
-    app.config.from_object(config[config_name])
+    if testing:
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+        app.config['TESTING'] = True
+    else:
+        app.config.from_object(config[config_name])
     
     db.init_app(app)
     CORS(app)

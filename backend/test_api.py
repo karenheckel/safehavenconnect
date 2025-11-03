@@ -13,9 +13,7 @@ from models import db, Organization, Resource, Event
 @pytest.fixture
 def app():
     """Create and configure a test app instance"""
-    app = create_app()
-    app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    app = create_app(testing=True)
     
     with app.app_context():
         db.create_all()
