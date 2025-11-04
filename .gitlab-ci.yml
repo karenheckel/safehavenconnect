@@ -186,12 +186,11 @@ backend_deploy_ec2:
       ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 ubuntu@$EC2_HOST "mkdir -p ~/app/backend"
       rsync -avz -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" --delete ./backend/ ubuntu@$EC2_HOST:~/app/backend/
       
-      # Install dependencies and restart service
-      ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 ubuntu@$EC2_HOST << 'ENDSSH'
+      # Restart Docker Compose backend container to pick up new code
+      ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -i ~/.ssh/id_rsa ubuntu@$EC2_HOST << 'ENDSSH'
         cd ~/app/backend
-        source venv/bin/activate || python3 -m venv venv && source venv/bin/activate
-        pip install -r requirements.txt
-        sudo systemctl restart safehavenconnect
+        sudo docker compose restart backend
+        echo "Backend container restarted successfully"
       ENDSSH
   only:
     - main
