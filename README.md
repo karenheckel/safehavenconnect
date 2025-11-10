@@ -62,15 +62,30 @@ d9b3a8045622f3853ceb405b7002073ba38c79b9
 
 
 ## Phase 3
-- Project Leader:
-- 
+- Project Leader: Parul Sadasivuni
+- Led group meetings, made sure tasks were completed, and kept team on task.
 
 #### Phase 3 Git SHA
 
 #### Phase 3 Estimated and Actual Completion Time
 | Member | Estimated (hours) | Actual (hours) |
 | ------ | ------ | ------ |
-| **Brianna Flores** |  |  |
+| **Brianna Flores** | 8 |  |
+| **Jonathan Ho** | 10 |  |
+| **Karen Heckel** | 15 |  |
+| **Parul Sadasivuni** | 15 |  |
+
+
+## Phase 4
+- Project Leader:
+- 
+
+#### Phase 4 Git SHA
+
+#### Phase 4 Estimated and Actual Completion Time
+| Member | Estimated (hours) | Actual (hours) |
+| ------ | ------ | ------ |
+| **Brianna Flores** | |  |
 | **Jonathan Ho** |  |  |
 | **Karen Heckel** |  |  |
 | **Parul Sadasivuni** |  |  |
