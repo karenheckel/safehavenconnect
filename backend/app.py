@@ -3,7 +3,7 @@ from flask_cors import CORS
 from config import config
 from models import db, Organization, Resource, Event
 import os
-from sqlalchemy import inspect, text
+from sqlalchemy import inspect, text, or_
 from datetime import datetime, date, timedelta
 from utils import get_image_for_topic
 
@@ -468,6 +468,112 @@ def create_app(config_name='default', testing=False):
         db.session.commit()
         return jsonify({"updated": updated}), 200
 
+    @app.route("/api/search", methods=["GET"])
+    def search():
+        query = request.args.get("q", "").strip()
+        if not query:
+            return jsonify([])
+
+        terms = query.lower().split()
+
+        def highlight(text):
+            """Add <mark> tags around matched terms"""
+            if not text:
+                return ""
+            result = text
+            for t in terms:
+                result = result.replace(t, f"<mark>{t}</mark>")
+                result = result.replace(t.capitalize(), f"<mark>{t.capitalize()}</mark>")
+            return result
+
+        def relevance_score(text):
+            """Relevance scoring: phrase > multi-word > single"""
+            if not text:
+                return 0
+            text_lower = text.lower()
+            phrase = query.lower() in text_lower
+            matches = sum(t in text_lower for t in terms)
+            return (3 if phrase else 0) + matches
+
+        results = []
+
+        # Search Organizations
+        orgs = Organization.query.filter(
+            or_(
+                Organization.name.ilike(f"%{query}%"),
+                Organization.description.ilike(f"%{query}%"),
+                Organization.location.ilike(f"%{query}%"),
+                Organization.services.ilike(f"%{query}%"),
+                Organization.organization_type.ilike(f"%{query}%"),
+                Organization.website_url.ilike(f"%{query}%"),
+            )
+        ).all()
+
+        for o in orgs:
+            desc = o.description or o.services or ""
+            score = relevance_score(f"{o.name} {desc}")
+            results.append({
+                "type": "Organization",
+                "id": o.id,
+                "name": o.name,
+                "description": highlight(desc),
+                "image_url": getattr(o, "image_url", None),
+                "score": score,
+            })
+
+        # Search Resources
+        resources = Resource.query.filter(
+            or_(
+                Resource.title.ilike(f"%{query}%"),
+                Resource.description.ilike(f"%{query}%"),
+                Resource.location.ilike(f"%{query}%"),
+                Resource.services.ilike(f"%{query}%"),
+                Resource.topic.ilike(f"%{query}%"),
+                Resource.organization_name.ilike(f"%{query}%"),
+                Resource.languages_supported.ilike(f"%{query}%"),
+                Resource.eligibility.ilike(f"%{query}%"),
+            )
+        ).all()
+
+        for r in resources:
+            desc = r.description or r.services or ""
+            score = relevance_score(f"{r.title} {desc}")
+            results.append({
+                "type": "Resource",
+                "id": r.id,
+                "name": r.title,
+                "description": highlight(desc),
+                "image_url": getattr(r, "image_url", None),
+                "score": score,
+            })
+
+        # Search Events
+        events = Event.query.filter(
+            or_(
+                Event.name.ilike(f"%{query}%"),
+                Event.description.ilike(f"%{query}%"),
+                Event.location.ilike(f"%{query}%"),
+                Event.event_type.ilike(f"%{query}%"),
+                Event.event_url.ilike(f"%{query}%"),
+            )
+        ).all()
+
+        for e in events:
+            desc = e.description or e.event_type or ""
+            score = relevance_score(f"{e.name} {desc}")
+            results.append({
+                "type": "Event",
+                "id": e.id,
+                "name": e.name,
+                "description": highlight(desc),
+                "image_url": getattr(e, "image_url", None),
+                "score": score,
+            })
+
+        # Sort by relevance
+        results.sort(key=lambda x: x["score"], reverse=True)
+
+        return jsonify(results), 200
 
     @app.route('/api/health', methods=['GET'])
     def health_check():

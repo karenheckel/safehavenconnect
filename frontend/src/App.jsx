@@ -18,6 +18,8 @@ import OrganizationPage from "./pages/Organizations/OrganizationPage";
 import ResourcePage from "./pages/Resources/ResourcePage";
 import GoogleTranslate from "./components/GoogleTranslate";
 import NavigationBar from "./components/NavigationBar";
+import SearchPage from "./pages/SearchPage";
+
 
 function App() {
   return (
@@ -34,6 +36,7 @@ function App() {
         <Route path="/events/:id" element={<EventPage />} />
         <Route path="/organizations/:id" element={<OrganizationPage />} />
         <Route path="/resources/:id" element={<ResourcePage />} />
+        <Route path="/search" element={<SearchPage />} />
       </Routes>
     </BrowserRouter>
   );
