@@ -29,7 +29,8 @@ const Organizations = () => {
           params: { 
             page: currPage, 
             per_page: cardsOnPage,
-            type: filter.types, 
+            type: filter.types,
+            services: filter.services, 
             hours: filter.hours,
             online: (
               filter.online === "Yes"

@@ -26,7 +26,22 @@ const Resources = () => {
     const getResources = async () => {
       try {
         const res = await axios.get(`${BACKEND_URL}/api/resources`, {
-          params: { page: currPage, per_page: cardsOnPage },
+          params: { 
+            page: currPage, 
+            per_page: cardsOnPage, 
+            type: filter.types, 
+            hours: filter.hours, 
+            orgs: filter.orgs,
+            online: (
+              filter.online === "Yes"
+                ? "true"
+                : filter.online === "No"
+                ?"false"
+                : undefined
+            ), 
+            sort: sort 
+           },
+           paramsSerializer: { indexes: null }
         });
         const pagination = res.data.pagination;
         const formatResources = res.data.data.map((resource) => ({
@@ -56,7 +71,7 @@ const Resources = () => {
       }
     };
     getResources();
-  }, [currPage]);
+  }, [filter, sort, currPage]);
 
   const handleHoursChange = (hour) => {
     setFilter((prev) => {
@@ -76,13 +91,6 @@ const Resources = () => {
     });
   };
 
-  const checkOrgInRange = (org, range) => {
-    if (!org || org.length === 0) 
-      return false
-    const [start, end] = range.split("-")
-    return org[0].toUpperCase() >= start && org[0].toUpperCase() <= end
-  }
-
   const handleTypeChange = (type) => {
     setFilter((prev) => {
       const newTypes = prev.types.includes(type)
@@ -92,35 +100,7 @@ const Resources = () => {
     });
   };
 
-  const filteredResources = resources
-    .filter((resource) => {
-      const matchType =
-        filter.types.length === 0 ||
-        filter.types.some((t) =>
-          resource.resource_type?.toLowerCase().includes(t.toLowerCase())
-        );
-      const matchOnline =
-        !filter.online || resource.online_availability === filter.online;
-      const matchOrg =
-        filter.orgs.length === 0 ||
-        filter.orgs.some((range) =>
-          checkOrgInRange(resource.organization, range))
-      const matchHours =
-        filter.hours.length === 0 ||
-        resource.hours?.toLowerCase() === "n/a" ||
-        filter.hours.some((h) =>
-          resource.hours?.toLowerCase().includes(h.toLowerCase())
-        );
-
-      return matchType && matchOnline && matchOrg && matchHours;
-    })
-    .sort((a, b) => {
-      if (sort === "state") {
-        return a.location.localeCompare(b.location);
-      }
-      return 0;
-    });
-
+  
   if (loading) {
     return (
       <Container
@@ -204,7 +184,7 @@ const Resources = () => {
                 <Accordion.Item eventKey="3">
                   <Accordion.Header>Hours</Accordion.Header>
                   <Accordion.Body>
-                    {["24-hour", "Weekdays", "Weekends"].map((option) => (
+                    {["24/7", "Weekdays", "Weekends", "Night", "N/A"].map((option) => (
                       <Form.Check
                         key={option}
                         type="checkbox"
@@ -232,7 +212,7 @@ const Resources = () => {
             </Col>
             <Col xs={9}>
           <Row className="justify-content-center">
-            {filteredResources.map((res, index) => (
+            {resources.map((res, index) => (
               <InfoCard
               key={index}
               cardType="resource"
