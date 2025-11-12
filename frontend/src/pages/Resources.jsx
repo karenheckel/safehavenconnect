@@ -56,13 +56,9 @@ const Resources = () => {
           id: resource.id,
           services: resource.services,
         }));
-        if (formatResources.length === 0) {
-          setResources(backupData.resources);
-        } else {
           setResources(formatResources);
           setNumPages(pagination.pages || 1);
           setTotal(pagination.total);
-        }
       } catch (error) {
         console.error("Error fetching resources:", error);
         setResources(backupData.resources);
@@ -71,6 +67,7 @@ const Resources = () => {
       }
     };
     getResources();
+    console.log(filter, sort)
   }, [filter, sort, currPage]);
 
   const handleHoursChange = (hour) => {
