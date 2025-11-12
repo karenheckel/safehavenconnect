@@ -116,7 +116,7 @@ def create_app(config_name='default', testing=False):
             hours = request.args.getlist('hours')
             sort = request.args.get('sort', default='none')
             page = request.args.get('page', default=1, type=int)
-            per_page = request.args.get('per_page', default=10, type=int)
+            per_page = request.args.get('per_page', default=12, type=int)
             
             query = Organization.query
             
@@ -285,7 +285,7 @@ def create_app(config_name='default', testing=False):
             hours = request.args.getlist('hours')
             sort = request.args.get('sort', default='none')
             page = request.args.get('page', default=1, type=int)
-            per_page = request.args.get('per_page', default=10, type=int)
+            per_page = request.args.get('per_page', default=12, type=int)
 
             query = Resource.query
             

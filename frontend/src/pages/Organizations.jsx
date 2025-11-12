@@ -23,7 +23,7 @@ const Organizations = () => {
     hours: [],
   });
   const [sort, setSort] = useState("none");
-  const cardsOnPage = 10;
+  const cardsOnPage = 12;
 
   const getOrganizations = async () => {
     try {
@@ -227,9 +227,9 @@ const Organizations = () => {
 
 
 
-        <Container>
+        <Container fluid>
           <Row>
-            <Col xs={3}>
+            <Col xs={12} md={3} className="mb-3 mb-md-0" style={{ order: 1 }}>
               <Accordion defaultActiveKey="" alwaysOpen>
                 <Accordion.Item eventKey="0">
                   <Accordion.Header>Type</Accordion.Header>
@@ -320,7 +320,7 @@ const Organizations = () => {
                 </Accordion.Item>
               </Accordion>
             </Col>
-            <Col xs={9}>
+            <Col xs={12} md={9} style={{ order: 2 }}>
               <Row className="justify-content-center">
                 {organizations.map((org, index) => (
                   <InfoCard
