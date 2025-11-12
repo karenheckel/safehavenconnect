@@ -55,11 +55,14 @@ const InfoCard = ({ cardType, cardInfo, id }) => {
     <Card style={{ width: "18rem" }}>
       <Card.Img variant="top" src={image_url} />
       <Card.Body>
-        <Card.Title>{title}</Card.Title>
+        <Card.Title dangerouslySetInnerHTML={{ __html: title }} />
+
         {infoToPresent[cardType].map((info, index) => (
-          <Card.Text key={index}>
-            <strong>{info.label}:</strong> {info.value}
-          </Card.Text>
+          <Card.Text key={index}
+            dangerouslySetInnerHTML={{
+              __html: `<strong>${info.label}:</strong> ${info.value || "N/A"}`,
+            }}
+          />
         ))}
         <Button
           style={{

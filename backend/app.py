@@ -656,6 +656,7 @@ def create_app(config_name='default', testing=False):
 
     @app.route("/api/search", methods=["GET"])
     def search():
+        model_filter = request.args.get("model", "").strip().lower()
         query = request.args.get("q", "").strip()
         page = int(request.args.get("page", 1))
         per_page = int(request.args.get("per_page", 12))
@@ -702,6 +703,8 @@ def create_app(config_name='default', testing=False):
         total = 0
 
         for model_name, model, attributes in models:
+            if model_filter and model_name != model_filter:
+                continue
             filters = []
 
             # Match full phrase

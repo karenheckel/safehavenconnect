@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Container, Row, Col, Accordion, Form } from "react-bootstrap";
+import { Container, Row, Col, Accordion, Form, InputGroup, Button } from "react-bootstrap";
 import InfoCard from "../components/InfoCard";
 import axios from "axios";
 import backupData from "../backupData.json";
@@ -13,6 +13,9 @@ const Organizations = () => {
   const [currPage, setCurrPage] = useState(1);
   const [numPages, setNumPages] = useState(1);
   const [total, setTotal] = useState(3);
+
+  const [query, setQuery] = useState("");
+  const [searchActive, setSearchActive] = useState(false);
   const [filter, setFilter] = useState({
     types: [],
     online: "",
@@ -22,53 +25,107 @@ const Organizations = () => {
   const [sort, setSort] = useState("none");
   const cardsOnPage = 10;
 
-  useEffect(() => {
-    const getOrganizations = async () => {
-      try {
-        const res = await axios.get(`${BACKEND_URL}/api/organizations`, {
-          params: { 
-            page: currPage, 
-            per_page: cardsOnPage,
-            type: filter.types,
-            services: filter.services, 
-            hours: filter.hours,
-            online: (
-              filter.online === "Yes"
-                ? "true"
-                : filter.online === "No"
-                ?"false"
+  const getOrganizations = async () => {
+    try {
+      const res = await axios.get(`${BACKEND_URL}/api/organizations`, {
+        params: {
+          page: currPage,
+          per_page: cardsOnPage,
+          type: filter.types,
+          services: filter.services,
+          hours: filter.hours,
+          online: (
+            filter.online === "Yes"
+              ? "true"
+              : filter.online === "No"
+                ? "false"
                 : undefined
-            ), 
-            sort: sort 
-          },
-          paramsSerializer: { indexes: null }
+          ),
+          sort: sort
         },
+        paramsSerializer: { indexes: null }
+      },
       );
-        const pagination = res.data.pagination;
-        const formatOrgs = res.data.data.map((org) => ({
-          title: org.name,
-          location: org.location,
-          services: org.services,
-          hours: org.hours_of_operation || "N/A",
-          online_availability: org.online_availability ? "Yes" : "No",
-          org_type: org.organization_type,
-          image_url: org.image_url,
-          pageLink: org.website_url || "N/A",
-          id: org.id,
-        }));
-        setOrganizations(formatOrgs);
-        setNumPages(pagination.pages || 1);
-        setTotal(pagination.total);
-      } catch (error) {
-        setOrganizations(backupData.organizations);
-        console.error("Error fetching organizations:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      const pagination = res.data.pagination;
+      const formatOrgs = res.data.data.map((org) => ({
+        title: org.name,
+        location: org.location,
+        services: org.services,
+        hours: org.hours_of_operation || "N/A",
+        online_availability: org.online_availability ? "Yes" : "No",
+        org_type: org.organization_type,
+        image_url: org.image_url,
+        pageLink: org.website_url || "N/A",
+        id: org.id,
+      }));
+      setOrganizations(formatOrgs);
+      setNumPages(pagination.pages || 1);
+      setTotal(pagination.total);
+    } catch (error) {
+      setOrganizations(backupData.organizations);
+      console.error("Error fetching organizations:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     getOrganizations();
     console.log(filter, sort)
   }, [filter, currPage, sort]);
+
+  // Fetch search results
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!query.trim()) return;
+    try {
+      setLoading(true);
+      const res = await axios.get(`${BACKEND_URL}/api/search`, {
+        params: { q: query, model: "organization", page: currPage, per_page: cardsOnPage },
+      });      
+      const pagination = res.data.pagination;
+      const formatOrgs = res.data.results.map((org) => ({
+        title: org.name,
+        location: org.location,
+        services: org.services,
+        hours: org.hours || "N/A",
+        online_availability: org.online_availability,
+        org_type: org.type_label,
+        image_url: org.image_url,
+        pageLink: org.website_url,
+        id: org.id,
+      }));
+      setOrganizations(formatOrgs);
+      setNumPages(pagination.pages || 1);
+      setTotal(pagination.total);
+      setSearchActive(true);
+    } catch (err) {
+      console.error("Search failed:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Clear search and reset to normal view
+  const clearSearch = () => {
+    setQuery("");
+    setSearchActive(false);
+    setCurrPage(1);
+  };
+
+  // Run normal fetch if not searching
+  useEffect(() => {
+    if (!searchActive) {
+      getOrganizations(currPage);
+    }
+  }, [filter, currPage, sort, searchActive]);
+
+  // Re-run search when changing page during active search
+  useEffect(() => {
+    if (searchActive) {
+      handleSearch(new Event("submit"));
+    }
+  }, [currPage]);
 
   const handleHoursChange = (hour) => {
     setFilter((prev) => {
@@ -104,7 +161,9 @@ const Organizations = () => {
         style={{ minHeight: "50vh" }}
       >
         <div className="spinner-border mb-3" role="status"></div>
-        <h4 className="mt-2">Loading Organizations…</h4>
+        <h4 className="mt-2">
+          {searchActive ? "Searching…" : "Loading Organizations…"}
+        </h4>
       </Container>
     );
   }
@@ -114,6 +173,29 @@ const Organizations = () => {
       <Container className="text-center my-5">
         <h1>Organizations</h1>
         <p>Number of Organizations: {total}</p>
+
+
+        {/* Search Bar */}
+        <Form onSubmit={handleSearch} className="d-flex justify-content-center mb-4">
+          <InputGroup style={{ maxWidth: "500px" }}>
+            <Form.Control
+              type="text"
+              placeholder="Search organizations..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <Button variant="primary" type="submit">
+              Search
+            </Button>
+            {searchActive && (
+              <Button variant="outline-secondary" onClick={clearSearch}>
+                Clear
+              </Button>
+            )}
+          </InputGroup>
+        </Form>
+
+
         <Container>
           <Row>
             <Col xs={3}>

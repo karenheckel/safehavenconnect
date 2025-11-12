@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Container, Row, Col, Accordion, Form } from "react-bootstrap";
+import { Container, Row, Col, Accordion, Form, Button, InputGroup } from "react-bootstrap";
 import InfoCard from "../components/InfoCard";
 import axios from "axios";
 import backupData from "../backupData.json";
@@ -21,6 +21,9 @@ const Resources = () => {
   });
   const [sort, setSort] = useState("none");
   const cardsOnPage = 10;
+
+  const [query, setQuery] = useState("");
+  const [searchActive, setSearchActive] = useState(false);
 
   useEffect(() => {
     const getResources = async () => {
@@ -65,9 +68,53 @@ const Resources = () => {
         setLoading(false);
       }
     };
-    getResources();
+
+    if (!searchActive) getResources();
     console.log(filter, sort);
-  }, [filter, sort, currPage]);
+  }, [filter, sort, currPage, searchActive]);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!query.trim()) return;
+    try {
+      setLoading(true);
+      const res = await axios.get(`${BACKEND_URL}/api/search`, {
+        params: { q: query, model: "resource", page: currPage, per_page: cardsOnPage },
+      });
+      const pagination = res.data.pagination;
+      const formatResources = res.data.results.map((res) => ({
+        title: res.name,
+        location: res.location,
+        resource_type: res.type_label,
+        hours: res.hours || "N/A",
+        online_availability: res.online_availability,
+        organization: res.organization_name,
+        image_url: res.image_url,
+        id: res.id,
+        services: res.services,
+      }));
+      setResources(formatResources);
+      setNumPages(pagination.pages || 1);
+      setTotal(pagination.total);
+      setSearchActive(true);
+    } catch (err) {
+      console.error("Search failed:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clearSearch = () => {
+    setQuery("");
+    setSearchActive(false);
+    setCurrPage(1);
+  };
+
+  useEffect(() => {
+    if (searchActive) {
+      handleSearch({ preventDefault: () => {} });
+    }
+  }, [currPage]);
 
   const handleHoursChange = (hour) => {
     setFilter((prev) => {
@@ -113,6 +160,26 @@ const Resources = () => {
       <Container className="text-center my-5">
         <h1>Resources</h1>
         <p>Number of resources: {total}</p>
+        
+        <Form onSubmit={handleSearch} className="d-flex justify-content-center mb-4">
+          <InputGroup style={{ maxWidth: "500px" }}>
+            <Form.Control
+              type="text"
+              placeholder="Search resources..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <Button variant="primary" type="submit">
+              Search
+            </Button>
+            {searchActive && (
+              <Button variant="outline-secondary" onClick={clearSearch}>
+                Clear
+              </Button>
+            )}
+          </InputGroup>
+        </Form>
+        
         <Container>
           <Row>
             <Col xs={3}>

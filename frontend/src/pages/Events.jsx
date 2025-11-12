@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row } from "react-bootstrap";
+import { Container, Row, InputGroup, Form, Button } from "react-bootstrap";
 import InfoCard from "../components/InfoCard";
 import axios from "axios";
 import backupData from "../backupData.json";
@@ -13,6 +13,9 @@ const Events = () => {
   const [numPages, setNumPages] = useState(1);
   const [total, setTotal] = useState(3);
   const cardsOnPage = 10;
+
+  const [query, setQuery] = useState("");
+  const [searchActive, setSearchActive] = useState(false);
 
   useEffect(() => {
     const getEvents = async () => {
@@ -51,9 +54,11 @@ const Events = () => {
           };
         });
 
-        setEventsInfo(formatted.length > 0 ? formatted : backupData.events);
-        setNumPages(pagination.pages || 1);
-        setTotal(pagination.total);
+        if (!searchActive) {
+          setEventsInfo(formatted.length > 0 ? formatted : backupData.events);
+          setNumPages(pagination.pages || 1);
+          setTotal(pagination.total);
+        }
       } catch (err) {
         console.error("Error fetching events:", err);
         setEventsInfo(backupData.events);
@@ -62,6 +67,50 @@ const Events = () => {
       }
     };
     getEvents();
+  }, [currPage]);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!query.trim()) return;
+    try {
+      setLoading(true);
+      const res = await axios.get(`${BACKEND_URL}/api/search`, {
+        params: { q: query, model: "event", page: currPage, per_page: cardsOnPage },
+      });
+      const pagination = res.data.pagination;
+      const formatEvents = res.data.results.map((event) => ({
+        id: event.id,
+        title: event.name,
+        description: event.description,
+        event_type: event.type_label,
+        location: event.location,
+        date: event.date || "N/A",
+        time: event.time || "N/A",
+        online_availability: event.online_availability,
+        registration: event.registration_open ? "Open" : "Closed",
+        image_url: event.image_url,
+      }));
+      setEventsInfo(formatEvents);
+      setNumPages(pagination.pages || 1);
+      setTotal(pagination.total);
+      setSearchActive(true);
+    } catch (err) {
+      console.error("Search failed:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clearSearch = () => {
+    setQuery("");
+    setSearchActive(false);
+    setCurrPage(1);
+  };
+
+  useEffect(() => {
+    if (searchActive) {
+      handleSearch({ preventDefault: () => {} });
+    }
   }, [currPage]);
 
   if (loading) {
@@ -80,6 +129,26 @@ const Events = () => {
     <Container className="text-center my-5">
       <h1>Upcoming Events</h1>
       <p>Number of events: {total}</p>
+
+      <Form onSubmit={handleSearch} className="d-flex justify-content-center mb-4">
+        <InputGroup style={{ maxWidth: "500px" }}>
+          <Form.Control
+            type="text"
+            placeholder="Search events..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <Button variant="primary" type="submit">
+            Search
+          </Button>
+          {searchActive && (
+            <Button variant="outline-secondary" onClick={clearSearch}>
+              Clear
+            </Button>
+          )}
+        </InputGroup>
+      </Form>
+
       <Row className="justify-content-center">
         {eventsInfo.map((event, i) => (
           <InfoCard key={i} cardType="event" cardInfo={event} id={event.id} />
