@@ -19,7 +19,7 @@ const Organizations = () => {
     services: [],
     hours: [],
   });
-  const [sort, setSort] = useState("state");
+  const [sort, setSort] = useState("none");
   const cardsOnPage = 10;
 
   useEffect(() => {
