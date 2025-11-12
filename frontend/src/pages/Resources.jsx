@@ -11,12 +11,15 @@ const Resources = () => {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currPage, setCurrPage] = useState(1)
+  const [numPages, setNumPages] = useState(1);
   const cardsOnPage = 10
 
   useEffect(() => {
     const getResources = async () => {
       try {
-        const res = await axios.get(`${BACKEND_URL}/api/resources`);
+        const res = await axios.get(`${BACKEND_URL}/api/resources`, {
+          params: { page: currPage, per_page: cardsOnPage}})
+        const pagination = res.data.pagination
         const formatResources = res.data.map((resource) => ({
           title: resource.title,
           location: resource.location,
@@ -33,6 +36,7 @@ const Resources = () => {
           setResources(backupData.resources);
         } else {
           setResources(formatResources);
+          setNumPages(pagination.pages || 1)
         }
       } catch (error) {
         console.error("Error fetching resources:", error);
@@ -53,18 +57,13 @@ const Resources = () => {
     );
   }
 
-  const lastEvent = currPage * cardsOnPage
-  const firstEvent = lastEvent - cardsOnPage
-  const presentedResources = resources.slice(firstEvent, lastEvent)
-  const numPages = Math.ceil(resources.length / cardsOnPage)
-
   return (
     <>
       <Container className="text-center my-5">
         <h1>Resources</h1>
         <p>Number of resources: {resources.length}</p>
         <Row className="justify-content-center">
-          {presentedResources.map((res, index) => (
+          {resources.map((res, index) => (
             <InfoCard key={index} cardType="resource" cardInfo={res} id={res.id}/>
           ))}
         </Row>

@@ -20,7 +20,6 @@ const Organizations = () => {
         const res = await axios.get(`${BACKEND_URL}/api/organizations`, {
           params: { page: currPage, per_page: cardsOnPage}});
         const pagination = res.data.pagination
-        console.log(res)
         const formatOrgs = res.data.data.map((org) => ({
           title: org.name,
           location: org.location,

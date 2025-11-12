@@ -209,7 +209,9 @@ def create_app(config_name='default', testing=False):
             location = request.args.get('location')
             service = request.args.get('service')
             online = request.args.get('online')
-            
+            page = request.args.get('page', default=1, type=int)
+            per_page = request.args.get('per_page', default=10, type=int)
+
             query = Resource.query
             
             if topic:
@@ -221,8 +223,20 @@ def create_app(config_name='default', testing=False):
             if online is not None:
                 query = query.filter(Resource.online_availability == (online.lower() == 'true'))
             
-            resources = query.all()
-            return jsonify([resource.to_dict() for resource in resources]), 200
+            paginated = query.paginate(page=page, per_page=per_page, error_out=False)
+
+            resources = [resource.to_dict() for resource in paginated.items]
+            return jsonify({
+                "data": resources,
+                "pagination": {
+                    "total": paginated.total,
+                    "page": paginated.page,
+                    "per_page": paginated.per_page,
+                    "pages": paginated.pages,
+                    "has_next": paginated.has_next,
+                    "has_prev": paginated.has_prev
+                }
+            }), 200
         except Exception as e:
             return jsonify({'error': str(e)}), 500
     
