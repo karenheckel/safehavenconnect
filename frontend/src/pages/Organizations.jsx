@@ -31,7 +31,7 @@ const Organizations = () => {
             per_page: cardsOnPage,
             type: filter.types, 
             hours: filter.hours, 
-            online: filter.online === "Yes" ? true : "No", 
+            online: filter.online === "Yes" ? true : false, 
             sort: sort 
           },
           paramsSerializer: { indexes: null }
