@@ -200,6 +200,7 @@ const Resources = () => {
                     >
                       <option value="none">No Sort</option>
                       <option value="state">Location (State)</option>
+                      <option value="name">Name</option>
                     </Form.Select>
                   </Accordion.Body>
                 </Accordion.Item>
