@@ -17,57 +17,51 @@ const Events = () => {
   const [query, setQuery] = useState("");
   const [searchActive, setSearchActive] = useState(false);
 
-  useEffect(() => {
-    const getEvents = async () => {
-      try {
-        const res = await axios.get(`${BACKEND_URL}/api/events`, {
-          params: { page: currPage, per_page: cardsOnPage },
-        });
-        const pagination = res.data.pagination;
-        const formatted = res.data.data.map((event) => {
-          // Format readable times
-          const start = new Date(event.start_time);
-          const end = new Date(event.end_time);
-          const formattedTime = `${start.toLocaleTimeString([], {
-            hour: "numeric",
-            minute: "2-digit",
-          })} - ${end.toLocaleTimeString([], {
-            hour: "numeric",
-            minute: "2-digit",
-          })}`;
+  const getEvents = async () => {
+    try {
+      const res = await axios.get(`${BACKEND_URL}/api/events`, {
+        params: { page: currPage, per_page: cardsOnPage },
+      });
+      const pagination = res.data.pagination;
+      const formatted = res.data.data.map((event) => {
+        // Format readable times
+        const start = new Date(event.start_time);
+        const end = new Date(event.end_time);
+        const formattedTime = `${start.toLocaleTimeString([], {
+          hour: "numeric",
+          minute: "2-digit",
+        })} - ${end.toLocaleTimeString([], {
+          hour: "numeric",
+          minute: "2-digit",
+        })}`;
 
-          return {
-            id: event.id,
-            title: event.name,
-            description: event.description,
-            event_type: event.event_type,
-            location: event.location,
-            date: new Date(event.date).toLocaleDateString(undefined, {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            }),
-            time: formattedTime,
-            online_availability: event.is_online ? "Yes" : "No",
-            registration: event.registration_open ? "Open" : "Closed",
-            image_url: event.image_url,
-          };
-        });
-
-        if (!searchActive) {
-          setEventsInfo(formatted.length > 0 ? formatted : backupData.events);
-          setNumPages(pagination.pages || 1);
-          setTotal(pagination.total);
-        }
-      } catch (err) {
-        console.error("Error fetching events:", err);
-        setEventsInfo(backupData.events);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getEvents();
-  }, [currPage]);
+        return {
+          id: event.id,
+          title: event.name,
+          description: event.description,
+          event_type: event.event_type,
+          location: event.location,
+          date: new Date(event.date).toLocaleDateString(undefined, {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }),
+          time: formattedTime,
+          online_availability: event.is_online ? "Yes" : "No",
+          registration: event.registration_open ? "Open" : "Closed",
+          image_url: event.image_url,
+        };
+      });
+      setEventsInfo(formatted.length > 0 ? formatted : backupData.events);
+      setNumPages(pagination.pages || 1);
+      setTotal(pagination.total);
+    } catch (err) {
+      console.error("Error fetching events:", err);
+      setEventsInfo(backupData.events);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -105,13 +99,20 @@ const Events = () => {
     setQuery("");
     setSearchActive(false);
     setCurrPage(1);
+    getEvents(1);
   };
 
   useEffect(() => {
     if (searchActive) {
-      handleSearch({ preventDefault: () => { } });
+      handleSearch({ preventDefault: () => {} });
+    } else {
+      getEvents(currPage);
     }
-  }, [currPage]);
+  }, [currPage, searchActive]);
+
+  useEffect(() => {
+    getEvents();
+  }, []);
 
   if (loading) {
     return (

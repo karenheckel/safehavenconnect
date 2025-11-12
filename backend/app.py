@@ -773,6 +773,9 @@ def create_app(config_name='default', testing=False):
                     "online_availability": online,
                     "registration_open": getattr(item, "registration_open", None),
                     "website_url": highlight(website_url),
+                    "organization_name": highlight(item.organization_name or ""),
+                    "date": str(item.date) if getattr(item, "date", None) else None,
+                    "time": f"{getattr(item, 'start_time', '')} - {getattr(item, 'end_time', '')}",
                     "score": score,
                 })
 

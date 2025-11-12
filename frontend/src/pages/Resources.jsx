@@ -25,50 +25,50 @@ const Resources = () => {
   const [query, setQuery] = useState("");
   const [searchActive, setSearchActive] = useState(false);
 
-  useEffect(() => {
-    const getResources = async () => {
-      try {
-        const res = await axios.get(`${BACKEND_URL}/api/resources`, {
-          params: {
-            page: currPage,
-            per_page: cardsOnPage,
-            type: filter.types,
-            hours: filter.hours,
-            orgs: filter.orgs,
-            online:
-              filter.online === "Yes"
-                ? "true"
-                : filter.online === "No"
-                  ? "false"
-                  : undefined,
-            sort: sort,
-          },
-          paramsSerializer: { indexes: null },
-        });
-        const pagination = res.data.pagination;
-        const formatResources = res.data.data.map((resource) => ({
-          title: resource.title,
-          location: resource.location,
-          resource_type: resource.topic,
-          hours: resource.hours_of_operation || "N/A",
-          online_availability: resource.online_availability ? "Yes" : "No",
-          organization: resource.organization_name,
-          image_url: resource.image_url,
-          pageLink: resource.website_url,
-          id: resource.id,
-          services: resource.services,
-        }));
-        setResources(formatResources);
-        setNumPages(pagination.pages || 1);
-        setTotal(pagination.total);
-      } catch (error) {
-        console.error("Error fetching resources:", error);
-        setResources(backupData.resources);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const getResources = async () => {
+    try {
+      const res = await axios.get(`${BACKEND_URL}/api/resources`, {
+        params: {
+          page: currPage,
+          per_page: cardsOnPage,
+          type: filter.types,
+          hours: filter.hours,
+          orgs: filter.orgs,
+          online:
+            filter.online === "Yes"
+              ? "true"
+              : filter.online === "No"
+                ? "false"
+                : undefined,
+          sort: sort,
+        },
+        paramsSerializer: { indexes: null },
+      });
+      const pagination = res.data.pagination;
+      const formatResources = res.data.data.map((resource) => ({
+        title: resource.title,
+        location: resource.location,
+        resource_type: resource.topic,
+        hours: resource.hours_of_operation || "N/A",
+        online_availability: resource.online_availability ? "Yes" : "No",
+        organization: resource.organization_name,
+        image_url: resource.image_url,
+        pageLink: resource.website_url,
+        id: resource.id,
+        services: resource.services,
+      }));
+      setResources(formatResources);
+      setNumPages(pagination.pages || 1);
+      setTotal(pagination.total);
+    } catch (error) {
+      console.error("Error fetching resources:", error);
+      setResources(backupData.resources);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     if (!searchActive) getResources();
     console.log(filter, sort);
   }, [filter, sort, currPage, searchActive]);
