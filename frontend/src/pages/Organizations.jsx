@@ -11,13 +11,17 @@ const Organizations = () => {
   const [organizations, setOrganizations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currPage, setCurrPage] = useState(1);
+  const [numPages, setNumPages] = useState(1);
   const cardsOnPage = 10;
 
   useEffect(() => {
     const getOrganizations = async () => {
       try {
-        const res = await axios.get(`${BACKEND_URL}/api/organizations`);
-        const formatOrgs = res.data.map((org) => ({
+        const res = await axios.get(`${BACKEND_URL}/api/organizations`, {
+          params: { page: currPage, per_page: cardsOnPage}});
+        const pagination = res.data.pagination
+        console.log(res)
+        const formatOrgs = res.data.data.map((org) => ({
           title: org.name,
           location: org.location,
           services: org.services,
@@ -29,6 +33,7 @@ const Organizations = () => {
           id: org.id,
         }));
         setOrganizations(formatOrgs);
+        setNumPages(pagination.pages || 1)
       } catch (error) {
         setOrganizations(backupData.organizations);
         console.error("Error fetching organizations:", error);
@@ -51,18 +56,13 @@ const Organizations = () => {
     );
   }
 
-  const lastOrg = currPage * cardsOnPage;
-  const firstOrg = lastOrg - cardsOnPage;
-  const presentedOrgs = organizations.slice(firstOrg, lastOrg);
-  const numPages = Math.ceil(organizations.length / cardsOnPage);
-
   return (
     <>
       <Container className="text-center my-5">
         <h1>Organizations</h1>
         <p>Number of Organizations: {organizations.length}</p>
         <Row className="justify-content-center">
-          {presentedOrgs.map((org, index) => (
+          {organizations.map((org, index) => (
             <InfoCard
               key={index}
               cardType="organization"

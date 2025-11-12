@@ -112,6 +112,8 @@ def create_app(config_name='default', testing=False):
             location = request.args.get('location')
             org_type = request.args.get('type')
             online = request.args.get('online')
+            page = request.args.get('page', default=1, type=int)
+            per_page = request.args.get('per_page', default=10, type=int)
             
             query = Organization.query
             
@@ -122,8 +124,20 @@ def create_app(config_name='default', testing=False):
             if online is not None:
                 query = query.filter(Organization.online_availability == (online.lower() == 'true'))
             
-            organizations = query.all()
-            return jsonify([org.to_dict() for org in organizations]), 200
+            paginated = query.paginate(page=page, per_page=per_page, error_out=False)
+
+            organizations = [org.to_dict() for org in paginated.items]
+            return jsonify({
+                "data": organizations,
+                "pagination": {
+                    "total": paginated.total,
+                    "page": paginated.page,
+                    "per_page": paginated.per_page,
+                    "pages": paginated.pages,
+                    "has_next": paginated.has_next,
+                    "has_prev": paginated.has_prev
+                }
+            }), 200
         except Exception as e:
             return jsonify({'error': str(e)}), 500
     

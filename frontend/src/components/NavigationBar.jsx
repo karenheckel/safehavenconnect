@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Container, Nav, Navbar, Button, Form, FormControl } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
 import GoogleTranslate from "./GoogleTranslate";
-import "bootstrap-icons/font/bootstrap-icons.css";
+// import "bootstrap-icons/font/bootstrap-icons.css";
 
 const NavigationBar = () => {
   const navigate = useNavigate();
