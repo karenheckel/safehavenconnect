@@ -79,7 +79,7 @@ const Resources = () => {
     try {
       setLoading(true);
       const res = await axios.get(`${BACKEND_URL}/api/search`, {
-        params: { q: query, model: "resource", page: currPage, per_page: cardsOnPage },
+        params: { q: query, model: "Resource", page: currPage, per_page: cardsOnPage },
       });
       const pagination = res.data.pagination;
       const formatResources = res.data.results.map((res) => ({

@@ -88,54 +88,35 @@ const SearchPage = () => {
 
             if (r.type === "Organization") {
               cardInfo = {
-                title: <span dangerouslySetInnerHTML={{ __html: r.name }} />,
-                location: <span dangerouslySetInnerHTML={{ __html: r.location || "N/A" }} />,
-                services: <span dangerouslySetInnerHTML={{ __html: r.services || "N/A" }} />,
-                hours: <span dangerouslySetInnerHTML={{ __html: r.hours || "N/A" }} />,
+                title: r.name,
+                location: r.location || "N/A",
+                services: r.services || "N/A",
+                hours: r.hours || "N/A",
                 online_availability: r.online_availability,
-                org_type: <span dangerouslySetInnerHTML={{ __html: r.type_label || "N/A" }} />,
+                org_type: r.type_label || "N/A",
                 image_url: r.image_url,
-                pageLink:
-                  r.website_url && r.website_url !== "N/A" ? (
-                    <a
-                      href={r.website_url.replace(/<[^>]+>/g, "")}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      dangerouslySetInnerHTML={{ __html: r.website_url }}
-                    />
-                  ) : (
-                    "N/A"
-                  ),
+                pageLink: r.website_url || "N/A",
                 id: r.id,
               };
             } else if (r.type === "Resource") {
               cardInfo = {
-                title: <span dangerouslySetInnerHTML={{ __html: r.name }} />,
-                location: <span dangerouslySetInnerHTML={{ __html: r.location || "N/A" }} />,
-                resource_type: <span dangerouslySetInnerHTML={{ __html: r.type_label || "N/A" }} />,
-                hours: <span dangerouslySetInnerHTML={{ __html: r.hours || "N/A" }} />,
+                title: r.name,
+                location: r.location || "N/A",
+                resource_type: r.type_label || "N/A",
+                hours: r.hours || "N/A",
                 online_availability: r.online_availability,
-                organization: <span dangerouslySetInnerHTML={{ __html: r.organization_name || "N/A" }} />,
+                organization: r.organization_name || "N/A",
                 image_url: r.image_url,
-                pageLink:
-                  r.website_url && r.website_url !== "N/A" ? (
-                    <a
-                      href={r.website_url.replace(/<[^>]+>/g, "")}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      dangerouslySetInnerHTML={{ __html: r.website_url }}
-                    />
-                  ) : (
-                    "N/A"
-                  ),
+                pageLink: r.website_url || "N/A",
                 id: r.id,
+                services: r.services || "N/A",
               };
             } else if (r.type === "Event") {
               cardInfo = {
-                title: <span dangerouslySetInnerHTML={{ __html: r.name }} />,
-                event_type: <span dangerouslySetInnerHTML={{ __html: r.type_label || "N/A" }} />,
-                description: <span dangerouslySetInnerHTML={{ __html: r.description || "N/A" }} />,
-                location: <span dangerouslySetInnerHTML={{ __html: r.location || "N/A" }} />,
+                title: r.name,
+                event_type: r.type_label || "N/A",
+                description: r.description || "N/A",
+                location: r.location || "N/A",
                 online_availability: r.online_availability,
                 image_url: r.image_url,
                 id: r.id,
@@ -154,6 +135,7 @@ const SearchPage = () => {
         ) : (
           <h5>No results found.</h5>
         )}
+
       </Row>
 
       {numPages > 1 && (

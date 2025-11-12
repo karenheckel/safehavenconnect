@@ -75,7 +75,7 @@ const Events = () => {
     try {
       setLoading(true);
       const res = await axios.get(`${BACKEND_URL}/api/search`, {
-        params: { q: query, model: "event", page: currPage, per_page: cardsOnPage },
+        params: { q: query, model: "Event", page: currPage, per_page: cardsOnPage },
       });
       const pagination = res.data.pagination;
       const formatEvents = res.data.results.map((event) => ({
@@ -129,7 +129,7 @@ const Events = () => {
     <Container className="text-center my-5">
       <h1>Upcoming Events</h1>
       <p>Number of events: {total}</p>
-
+      
       <Form onSubmit={handleSearch} className="d-flex justify-content-center mb-4">
         <InputGroup style={{ maxWidth: "500px" }}>
           <Form.Control

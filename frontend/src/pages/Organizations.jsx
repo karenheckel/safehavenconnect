@@ -81,7 +81,7 @@ const Organizations = () => {
     try {
       setLoading(true);
       const res = await axios.get(`${BACKEND_URL}/api/search`, {
-        params: { q: query, model: "organization", page: currPage, per_page: cardsOnPage },
+        params: { q: query, model: "Organization", page: currPage, per_page: cardsOnPage },
       });      
       const pagination = res.data.pagination;
       const formatOrgs = res.data.results.map((org) => ({
