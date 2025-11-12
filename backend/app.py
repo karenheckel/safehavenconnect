@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 from config import config
 from models import db, Organization, Resource, Event
-import os
+import os, re
 from sqlalchemy import inspect, text, or_, func
 from datetime import datetime, date, timedelta
 from utils import get_image_for_topic
@@ -653,99 +653,130 @@ def create_app(config_name='default', testing=False):
     @app.route("/api/search", methods=["GET"])
     def search():
         query = request.args.get("q", "").strip()
+        page = int(request.args.get("page", 1))
+        per_page = int(request.args.get("per_page", 12))
         if not query:
-            return jsonify([])
+            return jsonify({"results": [], "total": 0})
 
         terms = query.lower().split()
 
+        def highlight(text):
+            if not text:
+                return ""
+            
+            result = text
+            for t in terms:
+                pattern = re.compile(re.escape(t), re.IGNORECASE)
+                result = pattern.sub(lambda m: f"<mark>{m.group(0)}</mark>", result)
+            return result
+
         def relevance_score(text):
-            """Relevance scoring: phrase > multi-word > single"""
             if not text:
                 return 0
+            
             text_lower = text.lower()
             phrase = query.lower() in text_lower
-            matches = sum(t in text_lower for t in terms)
-            return (3 if phrase else 0) + matches
+            
+            # Count how many terms from the query appear in the text
+            count = 0
+            for term in terms:
+                if term in text_lower:
+                    count += 1
+
+            # Score based on phrase > multi-word > single
+            score = 0
+            if phrase:
+                score += 3
+    
+            score += count
+            return score
+
+        # TODO: fix if event attributes change
+        results = []
+        models = [
+            ("Organization", Organization, ["name", "description", "location", "services", "organization_type", "website_url", "hours_of_operation"]),
+            ("Resource", Resource, ["title", "description", "location", "services", "topic", "organization_name", "languages_supported", "eligibility", "hours_of_operation"]),
+            ("Event", Event, ["name", "description", "location", "event_type", "event_url", "map_url"]),
+        ]
 
         results = []
+        total = 0
 
-        # Search Organizations
-        orgs = Organization.query.filter(
-            or_(
-                Organization.name.ilike(f"%{query}%"),
-                Organization.description.ilike(f"%{query}%"),
-                Organization.location.ilike(f"%{query}%"),
-                Organization.services.ilike(f"%{query}%"),
-                Organization.organization_type.ilike(f"%{query}%"),
-                Organization.website_url.ilike(f"%{query}%"),
+        for model_name, model, attributes in models:
+            # Build a list of filters for each attribute
+            filters = []
+            for attribute in attributes:
+                column = getattr(model, attribute)
+                filters.append(column.ilike(f"%{query}%"))
+
+            query_result = model.query.filter(or_(*filters)).all()
+
+            if any(word in query.lower() for word in ["online", "virtual"]):
+                if hasattr(model, "online_availability"):
+                    filters.append(model.online_availability.is_(True))
+                if hasattr(model, "is_online"):
+                    filters.append(model.is_online.is_(True))
+            if any(word in query.lower() for word in ["in-person", "offline"]):
+                if hasattr(model, "online_availability"):
+                    filters.append(model.online_availability.is_(False))
+                if hasattr(model, "is_online"):
+                    filters.append(model.is_online.is_(False))
+
+            # Execute the query
+            query_result = (
+                model.query.filter(or_(*filters))
+                .limit(per_page)
+                .offset((page - 1) * per_page)
+                .all()
             )
-        ).all()
 
-        for o in orgs:
-            desc = o.description or o.services or ""
-            score = relevance_score(f"{o.name} {desc}")
-            results.append({
-                "type": "Organization",
-                "id": o.id,
-                "name": o.name,
-                "description": desc,
-                "image_url": getattr(o, "image_url", None),
-                "score": score,
-            })
+            count = model.query.filter(or_(*filters)).count()
+            total += count
 
-        # Search Resources
-        resources = Resource.query.filter(
-            or_(
-                Resource.title.ilike(f"%{query}%"),
-                Resource.description.ilike(f"%{query}%"),
-                Resource.location.ilike(f"%{query}%"),
-                Resource.services.ilike(f"%{query}%"),
-                Resource.topic.ilike(f"%{query}%"),
-                Resource.organization_name.ilike(f"%{query}%"),
-                Resource.languages_supported.ilike(f"%{query}%"),
-                Resource.eligibility.ilike(f"%{query}%"),
-            )
-        ).all()
+            # Go through each item found in the search
+            for item in query_result:
+                if hasattr(item, "name"):
+                    name = item.name
+                elif hasattr(item, "title"):
+                    name = item.title
+                else:
+                    name = ""
 
-        for r in resources:
-            desc = r.description or r.services or ""
-            score = relevance_score(f"{r.title} {desc}")
-            results.append({
-                "type": "Resource",
-                "id": r.id,
-                "name": r.title,
-                "description": desc,
-                "image_url": getattr(r, "image_url", None),
-                "score": score,
-            })
+                # Combine name and description for scoring, then score and highlight
+                description = getattr(item, "description", "") or getattr(item, "services", "")
+                
+                # Boost title/name relevance
+                name_score = relevance_score(name) * 1.5
+                desc_score = relevance_score(description)
+                score = name_score + desc_score
 
-        # Search Events
-        events = Event.query.filter(
-            or_(
-                Event.name.ilike(f"%{query}%"),
-                Event.description.ilike(f"%{query}%"),
-                Event.location.ilike(f"%{query}%"),
-                Event.event_type.ilike(f"%{query}%"),
-                Event.event_url.ilike(f"%{query}%"),
-            )
-        ).all()
+                # Add the item to the list of results
+                result_entry = {
+                    "type": model_name,
+                    "id": item.id,
+                    "name": highlight(name),
+                    "description": highlight(description),
+                    "image_url": getattr(item, "image_url", None),
+                    "score": score,
+                }
 
-        for e in events:
-            desc = e.description or e.event_type or ""
-            score = relevance_score(f"{e.name} {desc}")
-            results.append({
-                "type": "Event",
-                "id": e.id,
-                "name": e.name,
-                "description": desc,
-                "image_url": getattr(e, "image_url", None),
-                "score": score,
-            })
+                results.append(result_entry)
 
-        # Sort by relevance
         results.sort(key=lambda x: x["score"], reverse=True)
+        pages = (total + per_page - 1) // per_page
 
-        return jsonify(results), 200
+        return jsonify({
+            "results": results,
+            "pagination": {
+                "total": total,
+                "page": page,
+                "per_page": per_page,
+                "pages": pages,
+                "has_next": page < pages,
+                "has_prev": page > 1
+            }
+        }), 200
+
 
     @app.route('/api/health', methods=['GET'])
     def health_check():
