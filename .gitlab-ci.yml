@@ -136,24 +136,15 @@ backend_deploy_ec2:
     - apk add --no-cache openssh-client rsync busybox-extras
     - mkdir -p ~/.ssh
     - |
-      # Support three cases for the SSH key:
-      # 1) EC2_SSH_PRIVATE_KEY_B64 (masked, base64 text variable)
-      # 2) EC2_SSH_PRIVATE_KEY as a File variable (path)
-      # 3) EC2_SSH_PRIVATE_KEY as a normal multiline text variable
-      if [ -n "$EC2_SSH_PRIVATE_KEY_B64" ]; then
-        echo "Using base64 text variable for SSH key"
-        echo "$EC2_SSH_PRIVATE_KEY_B64" | base64 -d > ~/.ssh/id_rsa
-      elif [ -n "$EC2_SSH_PRIVATE_KEY" ] && [ -f "$EC2_SSH_PRIVATE_KEY" ]; then
-        echo "Using file variable for SSH key"
-        cp "$EC2_SSH_PRIVATE_KEY" ~/.ssh/id_rsa
-      elif [ -n "$EC2_SSH_PRIVATE_KEY" ]; then
-        echo "Using text variable for SSH key"
-        # Preserve newlines and strip any Windows CR characters
-        printf "%s" "$EC2_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-      else
-        echo "ERROR: No SSH key provided. Set EC2_SSH_PRIVATE_KEY (File or text) or EC2_SSH_PRIVATE_KEY_B64 (base64)."
+      # Use the GitLab deployment key (shared across all team members)
+      if [ -z "$GITLAB_DEPLOY_KEY" ]; then
+        echo "ERROR: GITLAB_DEPLOY_KEY variable is not set."
+        echo "Please add it to GitLab CI/CD variables with the private key content."
         exit 1
       fi
+      echo "Using deployment key for SSH access"
+      # Preserve newlines and strip any Windows CR characters
+      printf "%s" "$GITLAB_DEPLOY_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - echo "$EC2_HOST_IP" > /tmp/ec2_host
   script:
