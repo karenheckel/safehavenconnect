@@ -751,6 +751,7 @@ def create_app(config_name='default', testing=False):
                     services = item.services or "N/A"
                     hours = item.hours_of_operation or "N/A"
                     online = "Yes" if getattr(item, "online_availability", False) else "No"
+                    org_name = item.organization_name or "N/A"
                 else:
                     name = item.name or "N/A"
                     desc = item.description or item.event_type or "N/A"
@@ -774,7 +775,7 @@ def create_app(config_name='default', testing=False):
                     "hours": highlight(hours),
                     "online_availability": online,
                     "registration_open": getattr(item, "registration_open", None),
-                    "organization_name": highlight(item.organization_name or ""),
+                    "organization_name": highlight(org_name),                
                     "date": str(item.date) if getattr(item, "date", None) else None,
                     "time": f"{getattr(item, 'start_time', '')} - {getattr(item, 'end_time', '')}",
                     "score": score,
