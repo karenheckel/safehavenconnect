@@ -709,9 +709,19 @@ def create_app(config_name='default', testing=False):
             valid_attrs = [a for a in attributes if hasattr(model, a)]
 
             filters = []
-            phrase_filters = [getattr(model, a).ilike(f"%{query}%") for a in valid_attrs]
-            and_filters = [and_(*[getattr(model, a).ilike(f"%{t}%") for t in terms]) for a in valid_attrs]
-            filters.extend(phrase_filters + and_filters)
+
+            # Find items with the exact phrase
+            if query:
+                phrase_filters = [getattr(model, a).ilike(f"%{query}%") for a in valid_attrs]
+                filters.extend(phrase_filters)
+
+            # Find items with ALL terms
+            if terms:
+                all_terms_filter = and_(*[
+                    or_(*[getattr(model, a).ilike(f"%{t}%") for a in valid_attrs]) 
+                    for t in terms
+                ])
+                filters.append(all_terms_filter)
 
             if not filters:
                 continue
@@ -743,6 +753,7 @@ def create_app(config_name='default', testing=False):
                     services = item.services or "N/A"
                     hours = item.hours_of_operation or "N/A"
                     online = "Yes" if getattr(item, "online_availability", False) else "No"
+                    org_name = ""
                 elif model_name == "Resource":
                     name = item.title or "N/A"
                     desc = item.description or item.services or item.topic or "N/A"
@@ -760,6 +771,7 @@ def create_app(config_name='default', testing=False):
                     services = "N/A"
                     hours = "N/A"
                     online = "Yes" if getattr(item, "is_online", False) else "No"
+                    org_name = ""
 
                 score = relevance_score(name, desc)
 
