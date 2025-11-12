@@ -82,6 +82,33 @@ const SearchPage = () => {
               ? r.description.slice(0, 200) + (r.description.length > 200 ? "..." : "")
               : "";
 
+            let details = [];
+
+            if (r.type === "Organization") {
+              details = [
+                { label: "Location", value: r.location },
+                { label: "Type", value: r.type_label },
+                { label: "Services", value: r.services },
+                { label: "Hours", value: r.hours },
+                { label: "Online Availability", value: r.online_availability },
+              ];
+            } else if (r.type === "Event") {
+              details = [
+                { label: "Event Type", value: r.type_label },
+                { label: "Description", value: truncatedDesc },
+                { label: "Location", value: r.location },
+                { label: "Online", value: r.online_availability },
+              ];
+            } else if (r.type === "Resource") {
+              details = [
+                { label: "Location", value: r.location },
+                { label: "Type", value: r.type_label },
+                { label: "Hours", value: r.hours },
+                { label: "Online Availability", value: r.online_availability },
+                { label: "Organization", value: r.organization_name || "" },
+              ];
+            }
+
             return (
               <InfoCard
                 key={`${r.type}-${r.id}-${i}`}
@@ -89,21 +116,13 @@ const SearchPage = () => {
                 id={r.id}
                 cardInfo={{
                   title: <span dangerouslySetInnerHTML={{ __html: r.name }} />,
-                  description: (
-                    <span dangerouslySetInnerHTML={{ __html: truncatedDesc }} />
-                  ),
                   image_url: r.image_url,
-                  location: r.location || "",
-                  type: r.type_label || r.type,
-                  services: r.services || "",
-                  hours: r.hours_of_operation || "",
-                  online_availability:
-                    typeof r.online_availability === "boolean"
-                      ? (r.online_availability ? "Yes" : "No")
-                      : "",
-                  date: r.date,
-                  start_time: r.start_time,
-                  end_time: r.end_time,
+                  details: details.map((d, idx) => (
+                    <p key={idx}>
+                      <strong>{d.label}:</strong>{" "}
+                      <span dangerouslySetInnerHTML={{ __html: d.value || "N/A" }} />
+                    </p>
+                  )),
                 }}
               />
             );
@@ -112,6 +131,7 @@ const SearchPage = () => {
           <h5>No results found.</h5>
         )}
       </Row>
+
 
 
       {numPages > 1 && (

@@ -725,12 +725,7 @@ def create_app(config_name='default', testing=False):
                 if hasattr(model, "is_online"):
                     filters.append(model.is_online.is_(False))
 
-            query_result = (
-                model.query.filter(or_(*filters))
-                .limit(per_page)
-                .offset((page - 1) * per_page)
-                .all()
-            )
+            query_result = (model.query.filter(or_(*filters)).all())
 
             count = model.query.filter(or_(*filters)).count()
             total += count
@@ -769,20 +764,19 @@ def create_app(config_name='default', testing=False):
                     "name": highlight(name),
                     "description": highlight(desc),
                     "image_url": getattr(item, "image_url", None),
-                    "location": location,
-                    "type_label": type_label,
-                    "services": services,
-                    "hours": hours,
+                    "location": highlight(location),
+                    "type_label": highlight(type_label),
+                    "services": highlight(services),
+                    "hours": highlight(hours),
                     "online_availability": online,
                     "score": score,
                 })
 
         results.sort(key=lambda x: x["score"], reverse=True)
         total = len(results)
-        pages = max((total + per_page - 1) // per_page, 1)
-        page = max(1, min(page, pages))
         start = (page - 1) * per_page
         end = start + per_page
+        pages = max((total + per_page - 1) // per_page, 1)
 
         return jsonify({
             "results": results[start:end],
