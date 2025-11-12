@@ -3,24 +3,26 @@ import { useState, useEffect } from "react";
 import { Container, Row, Card, Button } from "react-bootstrap";
 import InfoCard from "../components/InfoCard";
 import axios from "axios";
-import backupData from "../backupData.json"
+import backupData from "../backupData.json";
 
 const BACKEND_URL = "https://backend.safehavenconnect.me";
 
 const Resources = () => {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currPage, setCurrPage] = useState(1)
+  const [currPage, setCurrPage] = useState(1);
   const [numPages, setNumPages] = useState(1);
-  const cardsOnPage = 10
+  const [total, setTotal] = useState(3);
+  const cardsOnPage = 10;
 
   useEffect(() => {
     const getResources = async () => {
       try {
         const res = await axios.get(`${BACKEND_URL}/api/resources`, {
-          params: { page: currPage, per_page: cardsOnPage}})
-        const pagination = res.data.pagination
-        const formatResources = res.data.map((resource) => ({
+          params: { page: currPage, per_page: cardsOnPage },
+        });
+        const pagination = res.data.pagination;
+        const formatResources = res.data.data.map((resource) => ({
           title: resource.title,
           location: resource.location,
           resource_type: resource.topic,
@@ -36,7 +38,8 @@ const Resources = () => {
           setResources(backupData.resources);
         } else {
           setResources(formatResources);
-          setNumPages(pagination.pages || 1)
+          setNumPages(pagination.pages || 1);
+          setTotal(pagination.total);
         }
       } catch (error) {
         console.error("Error fetching resources:", error);
@@ -46,11 +49,14 @@ const Resources = () => {
       }
     };
     getResources();
-  }, []);
+  }, [currPage]);
 
   if (loading) {
     return (
-      <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
+      <Container
+        className="d-flex flex-column justify-content-center align-items-center"
+        style={{ minHeight: "50vh" }}
+      >
         <div className="spinner-border mb-3" role="status"></div>
         <h4 className="mt-2">Loading Resources...</h4>
       </Container>
@@ -61,10 +67,15 @@ const Resources = () => {
     <>
       <Container className="text-center my-5">
         <h1>Resources</h1>
-        <p>Number of resources: {resources.length}</p>
+        <p>Number of resources: {total}</p>
         <Row className="justify-content-center">
           {resources.map((res, index) => (
-            <InfoCard key={index} cardType="resource" cardInfo={res} id={res.id}/>
+            <InfoCard
+              key={index}
+              cardType="resource"
+              cardInfo={res}
+              id={res.id}
+            />
           ))}
         </Row>
 
@@ -84,9 +95,7 @@ const Resources = () => {
           <button
             className="btn btn-secondary mx-2"
             onClick={() =>
-              setCurrPage((prev) =>
-                prev < numPages ? prev + 1 : prev
-              )
+              setCurrPage((prev) => (prev < numPages ? prev + 1 : prev))
             }
             disabled={currPage >= numPages}
           >

@@ -11,16 +11,17 @@ const Events = () => {
   const [loading, setLoading] = useState(true);
   const [currPage, setCurrPage] = useState(1);
   const [numPages, setNumPages] = useState(1);
+  const [total, setTotal] = useState(3);
   const cardsOnPage = 10;
 
   useEffect(() => {
     const getEvents = async () => {
       try {
         const res = await axios.get(`${BACKEND_URL}/api/events`, {
-          params: { page: currPage, per_page: cardsOnPage}
+          params: { page: currPage, per_page: cardsOnPage },
         });
-        const pagination = res.data.pagination
-        const formatted = res.data.map((event) => {
+        const pagination = res.data.pagination;
+        const formatted = res.data.data.map((event) => {
           // Format readable times
           const start = new Date(event.start_time);
           const end = new Date(event.end_time);
@@ -51,7 +52,8 @@ const Events = () => {
         });
 
         setEventsInfo(formatted.length > 0 ? formatted : backupData.events);
-        setNumPages(pagination.pages || 1)
+        setNumPages(pagination.pages || 1);
+        setTotal(pagination.total);
       } catch (err) {
         console.error("Error fetching events:", err);
         setEventsInfo(backupData.events);
@@ -60,11 +62,14 @@ const Events = () => {
       }
     };
     getEvents();
-  }, []);
+  }, [currPage]);
 
   if (loading) {
     return (
-      <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
+      <Container
+        className="d-flex flex-column justify-content-center align-items-center"
+        style={{ minHeight: "50vh" }}
+      >
         <div className="spinner-border mb-3" role="status"></div>
         <h4 className="mt-2">Loading Events...</h4>
       </Container>
@@ -74,7 +79,7 @@ const Events = () => {
   return (
     <Container className="text-center my-5">
       <h1>Upcoming Events</h1>
-      <p>Number of events: {eventsInfo.length}</p>
+      <p>Number of events: {total}</p>
       <Row className="justify-content-center">
         {eventsInfo.map((event, i) => (
           <InfoCard key={i} cardType="event" cardInfo={event} id={event.id} />
