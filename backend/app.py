@@ -112,6 +112,9 @@ def create_app(config_name='default', testing=False):
             location = request.args.get('location')
             org_type = request.args.get('type')
             online = request.args.get('online')
+            services = request.args.getlist('services')
+            hours = request.args.getlist('hours')
+            sort = request.args.get('sort', default='none')
             page = request.args.get('page', default=1, type=int)
             per_page = request.args.get('per_page', default=10, type=int)
             
@@ -120,9 +123,29 @@ def create_app(config_name='default', testing=False):
             if location:
                 query = query.filter(Organization.location.ilike(f'%{location}%'))
             if org_type:
-                query = query.filter(Organization.organization_type == org_type)
+                query = query.filter(
+                    or_(*[Organization.organization_type.ilike(f"%{t}%") for t in org_type])
+                )
             if online is not None:
                 query = query.filter(Organization.online_availability == (online.lower() == 'true'))
+            if services:
+                query = query.filter(
+                    or_(*[Organization.services.ilike(f"%{s}%") for s in services])
+                )
+            if hours:
+                query = query.filter(
+                    or_(
+                        *[
+                            Organization.hours_of_operation.ilike(f"%{h}%")
+                            for h in hours
+                        ]
+                    )
+                )
+
+            if sort == "state":
+                query = query.order_by(Organization.location.asc())
+            elif sort == "name":
+                query = query.order_by(Organization.name.asc())
             
             paginated = query.paginate(page=page, per_page=per_page, error_out=False)
 

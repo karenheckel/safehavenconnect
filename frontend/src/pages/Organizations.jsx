@@ -26,8 +26,17 @@ const Organizations = () => {
     const getOrganizations = async () => {
       try {
         const res = await axios.get(`${BACKEND_URL}/api/organizations`, {
-          params: { page: currPage, per_page: cardsOnPage },
-        });
+          params: { 
+            page: currPage, 
+            per_page: cardsOnPage,
+            type: filter.types, 
+            hours: filter.hours, 
+            online: filter.online === "Yes" ? true : "No", 
+            sort: sort 
+          },
+          paramsSerializer: { indexes: null }
+        },
+      );
         const pagination = res.data.pagination;
         const formatOrgs = res.data.data.map((org) => ({
           title: org.name,
@@ -51,7 +60,7 @@ const Organizations = () => {
       }
     };
     getOrganizations();
-  }, [currPage]);
+  }, [filter, currPage, sort]);
 
   const handleHoursChange = (hour) => {
     setFilter((prev) => {
@@ -106,6 +115,8 @@ const Organizations = () => {
     .sort((a, b) => {
       if (sort === "state") {
         return a.location.localeCompare(b.location);
+      } else if (sort === "name") {
+        return a.title.localeCompare(b.title);
       }
       return 0;
     });
@@ -214,6 +225,7 @@ const Organizations = () => {
                     >
                       <option value="none">No Sort</option>
                       <option value="state">Location (State)</option>
+                      <option value="name">Name</option>
                     </Form.Select>
                   </Accordion.Body>
                 </Accordion.Item>
