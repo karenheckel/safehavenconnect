@@ -310,6 +310,8 @@ def create_app(config_name='default', testing=False):
             location = request.args.get('location')
             online = request.args.get('online')
             registration_open = request.args.get('registration_open')
+            page = request.args.get('page', default=1, type=int)
+            per_page = request.args.get('per_page', default=10, type=int)
             
             query = Event.query
             
@@ -322,8 +324,20 @@ def create_app(config_name='default', testing=False):
             if registration_open is not None:
                 query = query.filter(Event.registration_open == (registration_open.lower() == 'true'))
             
-            events = query.all()
-            return jsonify([event.to_dict() for event in events]), 200
+            paginated = query.paginate(page=page, per_page=per_page, error_out=False)
+
+            events = [event.to_dict() for event in paginated.items]
+            return jsonify({
+                "data": events,
+                "pagination": {
+                    "total": paginated.total,
+                    "page": paginated.page,
+                    "per_page": paginated.per_page,
+                    "pages": paginated.pages,
+                    "has_next": paginated.has_next,
+                    "has_prev": paginated.has_prev
+                }
+            }), 200
         except Exception as e:
             return jsonify({'error': str(e)}), 500
     

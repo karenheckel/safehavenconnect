@@ -10,12 +10,16 @@ const Events = () => {
   const [eventsInfo, setEventsInfo] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currPage, setCurrPage] = useState(1);
+  const [numPages, setNumPages] = useState(1);
   const cardsOnPage = 10;
 
   useEffect(() => {
     const getEvents = async () => {
       try {
-        const res = await axios.get(`${BACKEND_URL}/api/events`);
+        const res = await axios.get(`${BACKEND_URL}/api/events`, {
+          params: { page: currPage, per_page: cardsOnPage}
+        });
+        const pagination = res.data.pagination
         const formatted = res.data.map((event) => {
           // Format readable times
           const start = new Date(event.start_time);
@@ -47,6 +51,7 @@ const Events = () => {
         });
 
         setEventsInfo(formatted.length > 0 ? formatted : backupData.events);
+        setNumPages(pagination.pages || 1)
       } catch (err) {
         console.error("Error fetching events:", err);
         setEventsInfo(backupData.events);
@@ -66,17 +71,12 @@ const Events = () => {
     );
   }
 
-  const last = currPage * cardsOnPage;
-  const first = last - cardsOnPage;
-  const presentedEvents = eventsInfo.slice(first, last);
-  const numPages = Math.ceil(eventsInfo.length / cardsOnPage);
-
   return (
     <Container className="text-center my-5">
       <h1>Upcoming Events</h1>
       <p>Number of events: {eventsInfo.length}</p>
       <Row className="justify-content-center">
-        {presentedEvents.map((event, i) => (
+        {eventsInfo.map((event, i) => (
           <InfoCard key={i} cardType="event" cardInfo={event} id={event.id} />
         ))}
       </Row>
