@@ -12,7 +12,7 @@ const Events = () => {
   const [currPage, setCurrPage] = useState(1);
   const [numPages, setNumPages] = useState(1);
   const [total, setTotal] = useState(3);
-  const cardsOnPage = 10;
+  const cardsOnPage = 12;
 
   const [query, setQuery] = useState("");
   const [searchActive, setSearchActive] = useState(false);
