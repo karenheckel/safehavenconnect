@@ -660,7 +660,7 @@ def create_app(config_name='default', testing=False):
         if not query:
             return jsonify({"results": [], "total": 0})
 
-        terms = [t for t in q.lower().split() if t]
+        terms = [t for t in query.lower().split() if t]
 
         def highlight(text):
             if not text:
