@@ -110,7 +110,7 @@ def create_app(config_name='default', testing=False):
     def get_organizations():
         try:
             location = request.args.get('location')
-            org_type = request.args.get('type')
+            org_type = request.args.getlist('type')
             online = request.args.get('online')
             services = request.args.getlist('services')
             hours = request.args.getlist('hours')
@@ -122,17 +122,17 @@ def create_app(config_name='default', testing=False):
             
             if location:
                 query = query.filter(Organization.location.ilike(f'%{location}%'))
-            if org_type:
+            if org_type and len(org_type) > 0:
                 query = query.filter(
                     or_(*[Organization.organization_type.ilike(f"%{t}%") for t in org_type])
                 )
-            if online is not None:
+            if online is not None and online != "":
                 query = query.filter(Organization.online_availability == (online.lower() == 'true'))
-            if services:
+            if services and len(services) > 0:
                 query = query.filter(
                     or_(*[Organization.services.ilike(f"%{s}%") for s in services])
                 )
-            if hours:
+            if hours and len(hours) > 0:
                 query = query.filter(
                     or_(
                         *[
@@ -228,24 +228,44 @@ def create_app(config_name='default', testing=False):
     @app.route('/api/resources', methods=['GET'])
     def get_resources():
         try:
-            topic = request.args.get('topic')
             location = request.args.get('location')
-            service = request.args.get('service')
+            type = request.args.getlist('type')
+            organization = request.args.get('organization')
             online = request.args.get('online')
+            hours = request.args.getlist('hours')
+            sort = request.args.get('sort', default='none')
             page = request.args.get('page', default=1, type=int)
             per_page = request.args.get('per_page', default=10, type=int)
 
             query = Resource.query
             
-            if topic:
-                query = query.filter(Resource.topic.ilike(f'%{topic}%'))
             if location:
                 query = query.filter(Resource.location.ilike(f'%{location}%'))
-            if service:
-                query = query.filter(Resource.services.ilike(f'%{service}%'))
+            if type and len(type) > 0:
+                query = query.filter(
+                    or_(*[Resource.topic.ilike(f'%{t}%') for t in type])
+                )
+            if organization:
+                query = query.filter(Resource.organization_name.ilike(f'%{organization}%'))
             if online is not None:
                 query = query.filter(Resource.online_availability == (online.lower() == 'true'))
             
+            if hours and len(hours) > 0:
+                query = query.filter(
+                    or_(
+                        *[
+                            Resource.hours_of_operation.ilike(f"%{h}%")
+                            for h in hours
+                        ]
+                    )
+                )
+
+            if sort == "state":
+                query = query.order_by(Resource.location.asc())
+            elif sort == "name":
+                query = query.order_by(Resource.name.asc())
+            
+
             paginated = query.paginate(page=page, per_page=per_page, error_out=False)
 
             resources = [resource.to_dict() for resource in paginated.items]

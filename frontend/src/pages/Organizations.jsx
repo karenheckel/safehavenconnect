@@ -30,8 +30,14 @@ const Organizations = () => {
             page: currPage, 
             per_page: cardsOnPage,
             type: filter.types, 
-            hours: filter.hours, 
-            online: filter.online === "Yes" ? true : false, 
+            hours: filter.hours,
+            online: (
+              filter.online === "Yes"
+                ? { online: "true" }
+                : filter.online === "No"
+                ? { online: "false" }
+                : {}
+            ), 
             sort: sort 
           },
           paramsSerializer: { indexes: null }
@@ -60,6 +66,7 @@ const Organizations = () => {
       }
     };
     getOrganizations();
+    console.log(filter, sort)
   }, [filter, currPage, sort]);
 
   const handleHoursChange = (hour) => {
