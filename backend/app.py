@@ -703,8 +703,9 @@ def create_app(config_name='default', testing=False):
         total = 0
 
         for model_name, model, attributes in models:
-            if model_filter and model_name != model_filter:
+            if model_filter and model_name.lower() != model_filter.lower():
                 continue
+            
             filters = []
 
             # Match full phrase
