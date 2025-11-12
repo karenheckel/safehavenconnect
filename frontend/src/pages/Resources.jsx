@@ -39,8 +39,8 @@ const Resources = () => {
               filter.online === "Yes"
                 ? "true"
                 : filter.online === "No"
-                ? "false"
-                : undefined,
+                  ? "false"
+                  : undefined,
             sort: sort,
           },
           paramsSerializer: { indexes: null },
@@ -112,7 +112,7 @@ const Resources = () => {
 
   useEffect(() => {
     if (searchActive) {
-      handleSearch({ preventDefault: () => {} });
+      handleSearch({ preventDefault: () => { } });
     }
   }, [currPage]);
 
@@ -160,26 +160,57 @@ const Resources = () => {
       <Container className="text-center my-5">
         <h1>Resources</h1>
         <p>Number of resources: {total}</p>
-        
-        <Form onSubmit={handleSearch} className="d-flex justify-content-center mb-4">
-          <InputGroup style={{ maxWidth: "500px" }}>
+
+        <Form onSubmit={handleSearch} className="d-flex justify-content-center mb-5">
+          <InputGroup style={{ maxWidth: "550px" }} className="shadow-sm rounded-pill">
+            <InputGroup.Text
+              id="search-icon"
+              style={{
+                backgroundColor: "white",
+                borderTopLeftRadius: "50rem",
+                borderBottomLeftRadius: "50rem",
+              }}
+            >
+              <i className="bi bi-search text-muted"></i>
+            </InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Search resources..."
+              aria-label="Search resources"
+              aria-describedby="search-icon"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              style={{
+                borderLeft: "none",
+                borderTopRightRadius: "50rem",
+                borderBottomRightRadius: "50rem",
+                paddingLeft: "0.5rem",
+              }}
             />
-            <Button variant="primary" type="submit">
+            <Button
+              variant="success"
+              type="submit"
+              className="px-4 rounded-pill ms-2"
+              style={{
+                backgroundColor: "#2e856e",
+                borderColor: "#2e856e",
+              }}
+            >
               Search
             </Button>
             {searchActive && (
-              <Button variant="outline-secondary" onClick={clearSearch}>
-                Clear
+              <Button
+                variant="outline-secondary"
+                onClick={clearSearch}
+                className="px-3 rounded-pill ms-2"
+              >
+                <i className="bi bi-x-circle me-1"></i> Clear
               </Button>
             )}
           </InputGroup>
         </Form>
-        
+
+
         <Container>
           <Row>
             <Col xs={3}>

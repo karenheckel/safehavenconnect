@@ -705,15 +705,12 @@ def create_app(config_name='default', testing=False):
         for model_name, model, attributes in models:
             if model_filter and model_name.lower() != model_filter.lower():
                 continue
-            
-            filters = []
 
-            # Match full phrase
-            phrase_filters = [getattr(model, a).ilike(f"%{query}%") for a in attributes]
-            
-            # Require all words in same field
-            and_filters = [and_(*[getattr(model, a).ilike(f"%{t}%") for t in terms]) for a in attributes]
-            
+            valid_attrs = [a for a in attributes if hasattr(model, a)]
+
+            filters = []
+            phrase_filters = [getattr(model, a).ilike(f"%{query}%") for a in valid_attrs]
+            and_filters = [and_(*[getattr(model, a).ilike(f"%{t}%") for t in terms]) for a in valid_attrs]
             filters.extend(phrase_filters + and_filters)
 
             # Online/offline keywords

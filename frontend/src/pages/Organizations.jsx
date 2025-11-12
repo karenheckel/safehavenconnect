@@ -82,7 +82,7 @@ const Organizations = () => {
       setLoading(true);
       const res = await axios.get(`${BACKEND_URL}/api/search`, {
         params: { q: query, model: "Organization", page: currPage, per_page: cardsOnPage },
-      });      
+      });
       const pagination = res.data.pagination;
       const formatOrgs = res.data.results.map((org) => ({
         title: org.name,
@@ -176,24 +176,55 @@ const Organizations = () => {
 
 
         {/* Search Bar */}
-        <Form onSubmit={handleSearch} className="d-flex justify-content-center mb-4">
-          <InputGroup style={{ maxWidth: "500px" }}>
+        <Form onSubmit={handleSearch} className="d-flex justify-content-center mb-5">
+          <InputGroup style={{ maxWidth: "550px" }} className="shadow-sm rounded-pill">
+            <InputGroup.Text
+              id="search-icon"
+              style={{
+                backgroundColor: "white",
+                borderTopLeftRadius: "50rem",
+                borderBottomLeftRadius: "50rem",
+              }}
+            >
+              <i className="bi bi-search text-muted"></i>
+            </InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Search organizations..."
+              aria-label="Search organizations"
+              aria-describedby="search-icon"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              style={{
+                borderLeft: "none",
+                borderTopRightRadius: "50rem",
+                borderBottomRightRadius: "50rem",
+                paddingLeft: "0.5rem",
+              }}
             />
-            <Button variant="primary" type="submit">
+            <Button
+              variant="success"
+              type="submit"
+              className="px-4 rounded-pill ms-2"
+              style={{
+                backgroundColor: "#2e856e",
+                borderColor: "#2e856e",
+              }}
+            >
               Search
             </Button>
             {searchActive && (
-              <Button variant="outline-secondary" onClick={clearSearch}>
-                Clear
+              <Button
+                variant="outline-secondary"
+                onClick={clearSearch}
+                className="px-3 rounded-pill ms-2"
+              >
+                <i className="bi bi-x-circle me-1"></i> Clear
               </Button>
             )}
           </InputGroup>
         </Form>
+
 
 
         <Container>
