@@ -694,9 +694,9 @@ def create_app(config_name='default', testing=False):
         # TODO: fix if event attributes change
         results = []
         models = [
-            ("Organization", Organization, ["name", "description", "location", "services", "organization_type", "website_url", "hours_of_operation"]),
+            ("Organization", Organization, ["name", "description", "location", "services", "organization_type", "hours_of_operation"]),
             ("Resource", Resource, ["title", "description", "location", "services", "topic", "organization_name", "languages_supported", "eligibility", "hours_of_operation"]),
-            ("Event", Event, ["name", "description", "location", "event_type", "event_url", "map_url"]),
+            ("Event", Event, ["name", "description", "location", "event_type"]),
         ]
 
         results = []
@@ -712,6 +712,9 @@ def create_app(config_name='default', testing=False):
             phrase_filters = [getattr(model, a).ilike(f"%{query}%") for a in valid_attrs]
             and_filters = [and_(*[getattr(model, a).ilike(f"%{t}%") for t in terms]) for a in valid_attrs]
             filters.extend(phrase_filters + and_filters)
+
+            if not filters:
+                continue
 
             # Online/offline keywords
             ql = query.lower()
@@ -740,7 +743,6 @@ def create_app(config_name='default', testing=False):
                     services = item.services or "N/A"
                     hours = item.hours_of_operation or "N/A"
                     online = "Yes" if getattr(item, "online_availability", False) else "No"
-                    website_url = item.website_url or "N/A"
                 elif model_name == "Resource":
                     name = item.title or "N/A"
                     desc = item.description or item.services or item.topic or "N/A"
@@ -751,7 +753,7 @@ def create_app(config_name='default', testing=False):
                     online = "Yes" if getattr(item, "online_availability", False) else "No"
                 else:
                     name = item.name or "N/A"
-                    desc = item.description or item.event_type or ""
+                    desc = item.description or item.event_type or "N/A"
                     location = item.location or "N/A"
                     type_label = item.event_type or "N/A"
                     services = "N/A"
@@ -772,7 +774,6 @@ def create_app(config_name='default', testing=False):
                     "hours": highlight(hours),
                     "online_availability": online,
                     "registration_open": getattr(item, "registration_open", None),
-                    "website_url": highlight(website_url),
                     "organization_name": highlight(item.organization_name or ""),
                     "date": str(item.date) if getattr(item, "date", None) else None,
                     "time": f"{getattr(item, 'start_time', '')} - {getattr(item, 'end_time', '')}",
