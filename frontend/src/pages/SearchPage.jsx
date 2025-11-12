@@ -72,73 +72,82 @@ const SearchPage = () => {
   return (
     <Container className="text-center my-5">
       <h1>Search Results</h1>
-      {query && <p>Results for: <strong>{query}</strong></p>}
+      {query && (
+        <p>
+          Results for: <strong>{query}</strong>
+        </p>
+      )}
       <p>Number of results: {total}</p>
 
       <Row className="justify-content-center">
         {results.length > 0 ? (
           results.map((r, i) => {
-            const truncatedDesc = r.description
-              ? r.description.slice(0, 200) + (r.description.length > 200 ? "..." : "")
-              : "";
+            const cardType = r.type.toLowerCase();
 
-            let details = [];
+            let cardInfo = {};
 
             if (r.type === "Organization") {
-              details = [
-                { label: "Location", value: r.location },
-                { label: "Services", value: r.services },
-                { label: "Hours", value: r.hours },
-                { label: "Online Availability", value: r.online },
-                { label: "Website",
-                  value: r.website_url && r.website_url !== "N/A" ? (
+              cardInfo = {
+                title: <span dangerouslySetInnerHTML={{ __html: r.name }} />,
+                location: <span dangerouslySetInnerHTML={{ __html: r.location || "N/A" }} />,
+                services: <span dangerouslySetInnerHTML={{ __html: r.services || "N/A" }} />,
+                hours: <span dangerouslySetInnerHTML={{ __html: r.hours || "N/A" }} />,
+                online_availability: r.online_availability,
+                org_type: <span dangerouslySetInnerHTML={{ __html: r.type_label || "N/A" }} />,
+                image_url: r.image_url,
+                pageLink:
+                  r.website_url && r.website_url !== "N/A" ? (
                     <a
                       href={r.website_url.replace(/<[^>]+>/g, "")}
                       target="_blank"
                       rel="noopener noreferrer"
-                      dangerouslySetInnerHTML={{ __html: r.website_url }} />) : ("N/A"),
-                },
-              ];
-            } else if (r.type === "Event") {
-              details = [
-                { label: "Event Type", value: r.type_label },
-                { label: "Description", value: truncatedDesc },
-                { label: "Location", value: r.location },
-                { label: "Online", value: r.online },
-              ];
+                      dangerouslySetInnerHTML={{ __html: r.website_url }}
+                    />
+                  ) : (
+                    "N/A"
+                  ),
+                id: r.id,
+              };
             } else if (r.type === "Resource") {
-              details = [
-                { label: "Location", value: r.location },
-                { label: "Type", value: r.type_label },
-                { label: "Hours", value: r.hours },
-                { label: "Online Availability", value: r.online },
-                { label: "Website",
-                  value: r.website_url && r.website_url !== "N/A" ? (
+              cardInfo = {
+                title: <span dangerouslySetInnerHTML={{ __html: r.name }} />,
+                location: <span dangerouslySetInnerHTML={{ __html: r.location || "N/A" }} />,
+                resource_type: <span dangerouslySetInnerHTML={{ __html: r.type_label || "N/A" }} />,
+                hours: <span dangerouslySetInnerHTML={{ __html: r.hours || "N/A" }} />,
+                online_availability: r.online_availability,
+                organization: <span dangerouslySetInnerHTML={{ __html: r.organization_name || "N/A" }} />,
+                image_url: r.image_url,
+                pageLink:
+                  r.website_url && r.website_url !== "N/A" ? (
                     <a
                       href={r.website_url.replace(/<[^>]+>/g, "")}
                       target="_blank"
                       rel="noopener noreferrer"
-                      dangerouslySetInnerHTML={{ __html: r.website_url }} />) : ("N/A"),
-                },
-              ];
+                      dangerouslySetInnerHTML={{ __html: r.website_url }}
+                    />
+                  ) : (
+                    "N/A"
+                  ),
+                id: r.id,
+              };
+            } else if (r.type === "Event") {
+              cardInfo = {
+                title: <span dangerouslySetInnerHTML={{ __html: r.name }} />,
+                event_type: <span dangerouslySetInnerHTML={{ __html: r.type_label || "N/A" }} />,
+                description: <span dangerouslySetInnerHTML={{ __html: r.description || "N/A" }} />,
+                location: <span dangerouslySetInnerHTML={{ __html: r.location || "N/A" }} />,
+                online_availability: r.online_availability,
+                image_url: r.image_url,
+                id: r.id,
+              };
             }
 
             return (
               <InfoCard
                 key={`${r.type}-${r.id}-${i}`}
-                cardType={r.type.toLowerCase()}
+                cardType={cardType}
                 id={r.id}
-                cardInfo={{
-                  title: <span dangerouslySetInnerHTML={{ __html: r.name }} />,
-                  image_url: r.image_url,
-                  details: details.map((d, idx) => (
-                    <p key={idx}>
-                      <strong>{d.label}:</strong>{" "}
-                      {typeof d.value === "string" ? (
-                        <span dangerouslySetInnerHTML={{ __html: d.value }} />) : (d.value)}
-                    </p>
-                  )),
-                }}
+                cardInfo={cardInfo}
               />
             );
           })
@@ -146,8 +155,6 @@ const SearchPage = () => {
           <h5>No results found.</h5>
         )}
       </Row>
-
-
 
       {numPages > 1 && (
         <Container className="d-flex justify-content-center mt-4">
