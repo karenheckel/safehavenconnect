@@ -139,12 +139,12 @@ backend_deploy_ec2:
       # Use the GitLab deployment key (shared across all team members)
       if [ -z "$GITLAB_DEPLOY_KEY" ]; then
         echo "ERROR: GITLAB_DEPLOY_KEY variable is not set."
-        echo "Please add it to GitLab CI/CD variables with the private key content."
+        echo "Please add it to GitLab CI/CD variables with the base64-encoded private key."
         exit 1
       fi
-      echo "Using deployment key for SSH access"
-      # Preserve newlines and strip any Windows CR characters
-      printf "%s" "$GITLAB_DEPLOY_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+      echo "Using deployment key for SSH access (decoding from base64)"
+      # Decode from base64 to avoid newline corruption during copy/paste
+      echo "$GITLAB_DEPLOY_KEY" | base64 -d > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - echo "$EC2_HOST_IP" > /tmp/ec2_host
   script:
