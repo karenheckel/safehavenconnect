@@ -476,16 +476,6 @@ def create_app(config_name='default', testing=False):
 
         terms = query.lower().split()
 
-        def highlight(text):
-            """Add <mark> tags around matched terms"""
-            if not text:
-                return ""
-            result = text
-            for t in terms:
-                result = result.replace(t, f"<mark>{t}</mark>")
-                result = result.replace(t.capitalize(), f"<mark>{t.capitalize()}</mark>")
-            return result
-
         def relevance_score(text):
             """Relevance scoring: phrase > multi-word > single"""
             if not text:
@@ -516,7 +506,7 @@ def create_app(config_name='default', testing=False):
                 "type": "Organization",
                 "id": o.id,
                 "name": o.name,
-                "description": highlight(desc),
+                "description": desc,
                 "image_url": getattr(o, "image_url", None),
                 "score": score,
             })
@@ -542,7 +532,7 @@ def create_app(config_name='default', testing=False):
                 "type": "Resource",
                 "id": r.id,
                 "name": r.title,
-                "description": highlight(desc),
+                "description": desc,
                 "image_url": getattr(r, "image_url", None),
                 "score": score,
             })
@@ -565,7 +555,7 @@ def create_app(config_name='default', testing=False):
                 "type": "Event",
                 "id": e.id,
                 "name": e.name,
-                "description": highlight(desc),
+                "description": desc,
                 "image_url": getattr(e, "image_url", None),
                 "score": score,
             })
