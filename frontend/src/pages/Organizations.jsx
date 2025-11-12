@@ -33,10 +33,10 @@ const Organizations = () => {
             hours: filter.hours,
             online: (
               filter.online === "Yes"
-                ? { online: "true" }
+                ? "true"
                 : filter.online === "No"
-                ? { online: "false" }
-                : {}
+                ?"false"
+                : undefined
             ), 
             sort: sort 
           },
@@ -95,38 +95,6 @@ const Organizations = () => {
       return { ...prev, types: newTypes };
     });
   };
-
-  const filteredOrganizations = organizations
-    .filter((org) => {
-      const matchType =
-        filter.types.length === 0 ||
-        filter.types.some((t) =>
-          org.org_type?.toLowerCase().includes(t.toLowerCase())
-        );
-      const matchOnline =
-        !filter.online || org.online_availability === filter.online;
-      const matchService =
-        filter.services.length === 0 ||
-        filter.services.some((s) =>
-          org.services?.toLowerCase().includes(s.toLowerCase())
-        );
-      const matchHours =
-        filter.hours.length === 0 ||
-        org.hours?.toLowerCase() === "n/a" ||
-        filter.hours.some((h) =>
-          org.hours?.toLowerCase().includes(h.toLowerCase())
-        );
-
-      return matchType && matchOnline && matchService && matchHours;
-    })
-    .sort((a, b) => {
-      if (sort === "state") {
-        return a.location.localeCompare(b.location);
-      } else if (sort === "name") {
-        return a.title.localeCompare(b.title);
-      }
-      return 0;
-    });
 
   if (loading) {
     return (
@@ -194,7 +162,7 @@ const Organizations = () => {
                 <Accordion.Item eventKey="2">
                   <Accordion.Header>Services</Accordion.Header>
                   <Accordion.Body>
-                    {["Medical", "Food", "Counseling", "Emergency Shelter"].map(
+                    {["Healthcare", "Outreach", "Preventive"].map(
                       (service) => (
                         <Form.Check
                           key={service}
@@ -211,7 +179,7 @@ const Organizations = () => {
                 <Accordion.Item eventKey="3">
                   <Accordion.Header>Hours</Accordion.Header>
                   <Accordion.Body>
-                    {["24-hour", "Weekdays", "Weekends"].map((option) => (
+                    {["24/7", "Weekdays", "Weekends", "Night", "N/A"].map((option) => (
                       <Form.Check
                         key={option}
                         type="checkbox"
@@ -240,7 +208,7 @@ const Organizations = () => {
             </Col>
             <Col xs={9}>
               <Row className="justify-content-center">
-                {filteredOrganizations.map((org, index) => (
+                {organizations.map((org, index) => (
                   <InfoCard
                     key={index}
                     cardType="organization"

@@ -133,15 +133,57 @@ def create_app(config_name='default', testing=False):
                     or_(*[Organization.services.ilike(f"%{s}%") for s in services])
                 )
             if hours and len(hours) > 0:
-                query = query.filter(
-                    or_(
-                        *[
-                            Organization.hours_of_operation.ilike(f"%{h}%")
-                            for h in hours
-                        ]
-                    )
-                )
+                hour_filters = []
+                for h in hours:
+                    h_lower = h.lower()
 
+                    if h_lower == "24/7":
+                        hour_filters.append(
+                            or_(
+                                Organization.hours_of_operation.ilike("%24/7%"),
+                                Organization.hours_of_operation.ilike("%24 hours%"),
+                                Organization.hours_of_operation.ilike("%24 hr%")
+                            )
+                        )
+                    elif h_lower == "weekdays":
+                        hour_filters.append(
+                            or_(
+                                Organization.hours_of_operation.ilike("%mon%"),
+                                Organization.hours_of_operation.ilike("%tue%"),
+                                Organization.hours_of_operation.ilike("%wed%"),
+                                Organization.hours_of_operation.ilike("%thu%"),
+                                Organization.hours_of_operation.ilike("%fri%")
+                            )
+                        )
+                    elif h_lower == "weekends":
+                        hour_filters.append(
+                            or_(
+                                Organization.hours_of_operation.ilike("%sat%"),
+                                Organization.hours_of_operation.ilike("%sun%")
+                            )
+                        )
+                    elif h_lower == "night":
+                        hour_filters.append(
+                            or_(
+                                Organization.hours_of_operation.ilike("%8pm%"),
+                                Organization.hours_of_operation.ilike("%9pm%"),
+                                Organization.hours_of_operation.ilike("%10pm%"),
+                                Organization.hours_of_operation.ilike("%11pm%"),
+                                Organization.hours_of_operation.ilike("%12am%"),
+                                Organization.hours_of_operation.ilike("%1am%"),
+                                Organization.hours_of_operation.ilike("%2am%"),
+                                Organization.hours_of_operation.ilike("%3am%"),
+                                Organization.hours_of_operation.ilike("%4am%"),
+                                Organization.hours_of_operation.ilike("%5am%")
+                            )
+                        )
+                    elif h_lower == "n/a":
+                        hour_filters.append(
+                            Organization.hours_of_operation.ilike("%n/a%")
+                        )
+
+                if hour_filters:
+                    query = query.filter(or_(*hour_filters))
             if sort == "state":
                 query = query.order_by(Organization.location.asc())
             elif sort == "name":
