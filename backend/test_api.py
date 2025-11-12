@@ -88,9 +88,12 @@ def test_get_organizations(client, sample_organization):
     response = client.get('/api/organizations')
     assert response.status_code == 200
     data = json.loads(response.data)
-    assert isinstance(data, list)
-    assert len(data) > 0
-    assert data[0]['name'] == "Safe Haven Shelter"
+    assert isinstance(data, dict)
+    assert 'data' in data
+    assert 'pagination' in data
+    assert isinstance(data['data'], list)
+    assert len(data['data']) > 0
+    assert data['data'][0]['name'] == "Safe Haven Shelter"
 
 
 def test_get_organization_by_id(client, sample_organization):
@@ -141,9 +144,12 @@ def test_get_resources(client, sample_resource):
     response = client.get('/api/resources')
     assert response.status_code == 200
     data = json.loads(response.data)
-    assert isinstance(data, list)
-    assert len(data) > 0
-    assert data[0]['title'] == "Legal Aid Hotline"
+    assert isinstance(data, dict)
+    assert 'data' in data
+    assert 'pagination' in data
+    assert isinstance(data['data'], list)
+    assert len(data['data']) > 0
+    assert data['data'][0]['title'] == "Legal Aid Hotline"
 
 
 def test_get_resource_by_id(client, sample_resource):
@@ -195,9 +201,12 @@ def test_get_events(client, sample_event):
     response = client.get('/api/events')
     assert response.status_code == 200
     data = json.loads(response.data)
-    assert isinstance(data, list)
-    assert len(data) > 0
-    assert data[0]['name'] == "Support Group Meeting"
+    assert isinstance(data, dict)
+    assert 'data' in data
+    assert 'pagination' in data
+    assert isinstance(data['data'], list)
+    assert len(data['data']) > 0
+    assert data['data'][0]['name'] == "Support Group Meeting"
 
 
 def test_get_event_by_id(client, sample_event):
