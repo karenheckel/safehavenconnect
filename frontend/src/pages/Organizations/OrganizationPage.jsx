@@ -106,7 +106,19 @@ const OrganizationPage = () => {
               <p><strong>Services:</strong> {orgInfo.services}</p>
               <p><strong>Hours:</strong> {orgInfo.hours_of_operation}</p>
               <p><strong>Online Availability:</strong> {orgInfo.online_availability ? "Yes" : "No"}</p>
-              <p><strong>Website:</strong> {" "}<a href={orgInfo.website_url}>{orgInfo.website_url}</a> </p>
+              <p><strong>Website:</strong>{" "}
+                {orgInfo.website_url ? (
+                  <a
+                    href={orgInfo.website_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {orgInfo.website_url}
+                  </a>
+                ) : (
+                  "N/A"
+                )}
+              </p>
             </Card>
           </Col>
         </Row>

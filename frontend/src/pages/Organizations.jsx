@@ -53,7 +53,7 @@ const Organizations = () => {
           online_availability: org.online_availability ? "Yes" : "No",
           org_type: org.organization_type,
           image_url: org.image_url,
-          pageLink: org.website_url,
+          pageLink: org.website_url || "N/A",
           id: org.id,
         }));
         setOrganizations(formatOrgs);

@@ -87,25 +87,39 @@ const SearchPage = () => {
             if (r.type === "Organization") {
               details = [
                 { label: "Location", value: r.location },
-                { label: "Type", value: r.type_label },
                 { label: "Services", value: r.services },
                 { label: "Hours", value: r.hours },
-                { label: "Online Availability", value: r.online_availability },
+                { label: "Online Availability", value: r.online },
+                { label: "Website",
+                  value: r.website_url && r.website_url !== "N/A" ? (
+                    <a
+                      href={r.website_url.replace(/<[^>]+>/g, "")}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      dangerouslySetInnerHTML={{ __html: r.website_url }} />) : ("N/A"),
+                },
               ];
             } else if (r.type === "Event") {
               details = [
                 { label: "Event Type", value: r.type_label },
                 { label: "Description", value: truncatedDesc },
                 { label: "Location", value: r.location },
-                { label: "Online", value: r.online_availability },
+                { label: "Online", value: r.online },
               ];
             } else if (r.type === "Resource") {
               details = [
                 { label: "Location", value: r.location },
                 { label: "Type", value: r.type_label },
                 { label: "Hours", value: r.hours },
-                { label: "Online Availability", value: r.online_availability },
-                { label: "Organization", value: r.organization_name || "" },
+                { label: "Online Availability", value: r.online },
+                { label: "Website",
+                  value: r.website_url && r.website_url !== "N/A" ? (
+                    <a
+                      href={r.website_url.replace(/<[^>]+>/g, "")}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      dangerouslySetInnerHTML={{ __html: r.website_url }} />) : ("N/A"),
+                },
               ];
             }
 
@@ -120,7 +134,8 @@ const SearchPage = () => {
                   details: details.map((d, idx) => (
                     <p key={idx}>
                       <strong>{d.label}:</strong>{" "}
-                      <span dangerouslySetInnerHTML={{ __html: d.value || "N/A" }} />
+                      {typeof d.value === "string" ? (
+                        <span dangerouslySetInnerHTML={{ __html: d.value }} />) : (d.value)}
                     </p>
                   )),
                 }}

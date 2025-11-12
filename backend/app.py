@@ -732,28 +732,29 @@ def create_app(config_name='default', testing=False):
 
             for item in query_result:
                 if model_name == "Organization":
-                    name = item.name or ""
-                    desc = item.description or item.services or ""
-                    location = item.location or ""
-                    type_label = item.organization_type or ""
-                    services = item.services or ""
-                    hours = item.hours_of_operation or ""
+                    name = item.name or "N/A"
+                    desc = item.description or item.services or "N/A"
+                    location = item.location or "N/A"
+                    type_label = item.organization_type or "N/A"
+                    services = item.services or "N/A"
+                    hours = item.hours_of_operation or "N/A"
                     online = "Yes" if getattr(item, "online_availability", False) else "No"
+                    website_url = item.website_url or "N/A"
                 elif model_name == "Resource":
-                    name = item.title or ""
-                    desc = item.description or item.services or item.topic or ""
-                    location = item.location or ""
-                    type_label = item.topic or item.organization_name or ""
-                    services = item.services or ""
-                    hours = item.hours_of_operation or ""
+                    name = item.title or "N/A"
+                    desc = item.description or item.services or item.topic or "N/A"
+                    location = item.location or "N/A"
+                    type_label = item.topic or item.organization_name or "N/A"
+                    services = item.services or "N/A"
+                    hours = item.hours_of_operation or "N/A"
                     online = "Yes" if getattr(item, "online_availability", False) else "No"
                 else:
-                    name = item.name or ""
+                    name = item.name or "N/A"
                     desc = item.description or item.event_type or ""
-                    location = item.location or ""
-                    type_label = item.event_type or ""
-                    services = ""
-                    hours = ""
+                    location = item.location or "N/A"
+                    type_label = item.event_type or "N/A"
+                    services = "N/A"
+                    hours = "N/A"
                     online = "Yes" if getattr(item, "is_online", False) else "No"
 
                 score = relevance_score(name, desc)
@@ -769,6 +770,8 @@ def create_app(config_name='default', testing=False):
                     "services": highlight(services),
                     "hours": highlight(hours),
                     "online_availability": online,
+                    "registration_open": getattr(item, "registration_open", None),
+                    "website_url": highlight(website_url),
                     "score": score,
                 })
 
@@ -777,9 +780,10 @@ def create_app(config_name='default', testing=False):
         start = (page - 1) * per_page
         end = start + per_page
         pages = max((total + per_page - 1) // per_page, 1)
+        page_results = results[start:end]
 
         return jsonify({
-            "results": results[start:end],
+            "results": page_results,
             "pagination": {
                 "total": total,
                 "page": page,

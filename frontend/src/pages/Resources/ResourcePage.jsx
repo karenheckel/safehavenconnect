@@ -110,16 +110,20 @@ const ResourcePage = () => {
               <p><strong>Type:</strong> {resourceInfo.type}</p>
               <p><strong>Hours:</strong> {resourceInfo.hours}</p>
               <p><strong>Online Availability:</strong> {resourceInfo.online_availability}</p>
-              <p>
-                <strong>Website:</strong>{" "}
-                <a
-                  href={resourceInfo.resource_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {resourceInfo.resource_url}
-                </a>
+              <p><strong>Website:</strong>{" "}
+                {resourceInfo.resource_url ? (
+                  <a
+                    href={resourceInfo.resource_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {resourceInfo.resource_url}
+                  </a>
+                ) : (
+                  "N/A"
+                )}
               </p>
+
             </Card>
           </Col>
         </Row>
