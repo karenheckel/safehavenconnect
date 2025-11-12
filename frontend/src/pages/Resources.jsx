@@ -26,22 +26,21 @@ const Resources = () => {
     const getResources = async () => {
       try {
         const res = await axios.get(`${BACKEND_URL}/api/resources`, {
-          params: { 
-            page: currPage, 
-            per_page: cardsOnPage, 
-            type: filter.types, 
-            hours: filter.hours, 
+          params: {
+            page: currPage,
+            per_page: cardsOnPage,
+            type: filter.types,
+            hours: filter.hours,
             orgs: filter.orgs,
-            online: (
+            online:
               filter.online === "Yes"
                 ? "true"
                 : filter.online === "No"
-                ?"false"
-                : undefined
-            ), 
-            sort: sort 
-           },
-           paramsSerializer: { indexes: null }
+                ? "false"
+                : undefined,
+            sort: sort,
+          },
+          paramsSerializer: { indexes: null },
         });
         const pagination = res.data.pagination;
         const formatResources = res.data.data.map((resource) => ({
@@ -56,9 +55,9 @@ const Resources = () => {
           id: resource.id,
           services: resource.services,
         }));
-          setResources(formatResources);
-          setNumPages(pagination.pages || 1);
-          setTotal(pagination.total);
+        setResources(formatResources);
+        setNumPages(pagination.pages || 1);
+        setTotal(pagination.total);
       } catch (error) {
         console.error("Error fetching resources:", error);
         setResources(backupData.resources);
@@ -67,7 +66,7 @@ const Resources = () => {
       }
     };
     getResources();
-    console.log(filter, sort)
+    console.log(filter, sort);
   }, [filter, sort, currPage]);
 
   const handleHoursChange = (hour) => {
@@ -97,7 +96,6 @@ const Resources = () => {
     });
   };
 
-  
   if (loading) {
     return (
       <Container
@@ -162,34 +160,34 @@ const Resources = () => {
                 </Accordion.Item>
 
                 <Accordion.Item eventKey="2">
-                  <Accordion.Header>Organization</Accordion.Header>
+                  <Accordion.Header>Organization Name</Accordion.Header>
                   <Accordion.Body>
-                    {["A-F", "G-K", "L-P", "Q-U", "V-Z"].map(
-                      (org) => (
-                        <Form.Check
-                          key={org}
-                          type="checkbox"
-                          label={org}
-                          checked={filter.orgs.includes(org)}
-                          onChange={() => handleOrgChange(org)}
-                        />
-                      )
-                    )}
+                    {["A-F", "G-K", "L-P", "Q-U", "V-Z"].map((org) => (
+                      <Form.Check
+                        key={org}
+                        type="checkbox"
+                        label={org}
+                        checked={filter.orgs.includes(org)}
+                        onChange={() => handleOrgChange(org)}
+                      />
+                    ))}
                   </Accordion.Body>
                 </Accordion.Item>
 
                 <Accordion.Item eventKey="3">
                   <Accordion.Header>Hours</Accordion.Header>
                   <Accordion.Body>
-                    {["24/7", "Weekdays", "Weekends", "Night", "N/A"].map((option) => (
-                      <Form.Check
-                        key={option}
-                        type="checkbox"
-                        label={option}
-                        checked={filter.hours.includes(option)}
-                        onChange={() => handleHoursChange(option)}
-                      />
-                    ))}
+                    {["24/7", "Weekdays", "Weekends", "Night", "N/A"].map(
+                      (option) => (
+                        <Form.Check
+                          key={option}
+                          type="checkbox"
+                          label={option}
+                          checked={filter.hours.includes(option)}
+                          onChange={() => handleHoursChange(option)}
+                        />
+                      )
+                    )}
                   </Accordion.Body>
                 </Accordion.Item>
 
@@ -208,17 +206,17 @@ const Resources = () => {
               </Accordion>
             </Col>
             <Col xs={9}>
-          <Row className="justify-content-center">
-            {resources.map((res, index) => (
-              <InfoCard
-              key={index}
-              cardType="resource"
-              cardInfo={res}
-              id={res.id}
-              />
-            ))}
-          </Row>
-          </Col>
+              <Row className="justify-content-center">
+                {resources.map((res, index) => (
+                  <InfoCard
+                    key={index}
+                    cardType="resource"
+                    cardInfo={res}
+                    id={res.id}
+                  />
+                ))}
+              </Row>
+            </Col>
           </Row>
         </Container>
 

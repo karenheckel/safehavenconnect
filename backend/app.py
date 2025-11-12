@@ -360,9 +360,11 @@ def create_app(config_name='default', testing=False):
                     query = query.filter(or_(*hour_filters))
 
             if sort == "state":
-                query = query.order_by(func.split_part(Resource.location, ', ', 2))
+                query = query.order_by(func.trim(func.split_part(Resource.location, ',', -1)))
             elif sort == "name":
-                query = query.order_by(Resource.name.asc())
+                query = query.order_by(Resource.title.asc())
+            
+
             
 
             paginated = query.paginate(page=page, per_page=per_page, error_out=False)
