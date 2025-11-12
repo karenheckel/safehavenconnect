@@ -3,7 +3,7 @@ from flask_cors import CORS
 from config import config
 from models import db, Organization, Resource, Event
 import os, re
-from sqlalchemy import inspect, text, or_, func
+from sqlalchemy import inspect, text, or_, func, and_
 from datetime import datetime, date, timedelta
 from utils import get_image_for_topic
 
@@ -660,7 +660,7 @@ def create_app(config_name='default', testing=False):
         if not query:
             return jsonify({"results": [], "total": 0})
 
-        terms = query.lower().split()
+        terms = [t for t in q.lower().split() if t]
 
         def highlight(text):
             if not text:
@@ -670,27 +670,22 @@ def create_app(config_name='default', testing=False):
             for t in terms:
                 pattern = re.compile(re.escape(t), re.IGNORECASE)
                 result = pattern.sub(lambda m: f"<mark>{m.group(0)}</mark>", result)
+
+            phrase_pat = re.compile(re.escape(query), re.IGNORECASE)
+            result = phrase_pat.sub(lambda m: f"<mark>{m.group(0)}</mark>", result)
             return result
 
-        def relevance_score(text):
-            if not text:
-                return 0
-            
-            text_lower = text.lower()
-            phrase = query.lower() in text_lower
-            
-            # Count how many terms from the query appear in the text
-            count = 0
-            for term in terms:
-                if term in text_lower:
-                    count += 1
+        def relevance_score(name, desc):
+            score = 0.0
+            nl = (name or "").lower()
+            dl = (desc or "").lower()
 
-            # Score based on phrase > multi-word > single
-            score = 0
-            if phrase:
-                score += 3
-    
-            score += count
+            if query.lower() in nl: score += 3
+            if query.lower() in dl: score += 2
+
+            for t in set(terms):
+                if t in nl: score += 1.0
+                if t in dl: score += 0.5
             return score
 
         # TODO: fix if event attributes change
@@ -705,26 +700,29 @@ def create_app(config_name='default', testing=False):
         total = 0
 
         for model_name, model, attributes in models:
-            # Build a list of filters for each attribute
             filters = []
-            for attribute in attributes:
-                column = getattr(model, attribute)
-                filters.append(column.ilike(f"%{query}%"))
 
-            query_result = model.query.filter(or_(*filters)).all()
+            # Match full phrase
+            phrase_filters = [getattr(model, a).ilike(f"%{query}%") for a in attributes]
+            
+            # Require all words in same field
+            and_filters = [and_(*[getattr(model, a).ilike(f"%{t}%") for t in terms]) for a in attributes]
+            
+            filters.extend(phrase_filters + and_filters)
 
-            if any(word in query.lower() for word in ["online", "virtual"]):
+            # Online/offline keywords
+            ql = query.lower()
+            if any(word in ql for word in ["online", "virtual"]):
                 if hasattr(model, "online_availability"):
                     filters.append(model.online_availability.is_(True))
                 if hasattr(model, "is_online"):
                     filters.append(model.is_online.is_(True))
-            if any(word in query.lower() for word in ["in-person", "offline"]):
+            if any(word in ql for word in ["in-person", "offline"]):
                 if hasattr(model, "online_availability"):
                     filters.append(model.online_availability.is_(False))
                 if hasattr(model, "is_online"):
                     filters.append(model.is_online.is_(False))
 
-            # Execute the query
             query_result = (
                 model.query.filter(or_(*filters))
                 .limit(per_page)
@@ -735,40 +733,57 @@ def create_app(config_name='default', testing=False):
             count = model.query.filter(or_(*filters)).count()
             total += count
 
-            # Go through each item found in the search
             for item in query_result:
-                if hasattr(item, "name"):
-                    name = item.name
-                elif hasattr(item, "title"):
-                    name = item.title
+                if model_name == "Organization":
+                    name = item.name or ""
+                    desc = item.description or item.services or ""
+                    location = item.location or ""
+                    type_label = item.organization_type or ""
+                    services = item.services or ""
+                    hours = item.hours_of_operation or ""
+                    online = "Yes" if getattr(item, "online_availability", False) else "No"
+                elif model_name == "Resource":
+                    name = item.title or ""
+                    desc = item.description or item.services or item.topic or ""
+                    location = item.location or ""
+                    type_label = item.topic or item.organization_name or ""
+                    services = item.services or ""
+                    hours = item.hours_of_operation or ""
+                    online = "Yes" if getattr(item, "online_availability", False) else "No"
                 else:
-                    name = ""
+                    name = item.name or ""
+                    desc = item.description or item.event_type or ""
+                    location = item.location or ""
+                    type_label = item.event_type or ""
+                    services = ""
+                    hours = ""
+                    online = "Yes" if getattr(item, "is_online", False) else "No"
 
-                # Combine name and description for scoring, then score and highlight
-                description = getattr(item, "description", "") or getattr(item, "services", "")
-                
-                # Boost title/name relevance
-                name_score = relevance_score(name) * 1.5
-                desc_score = relevance_score(description)
-                score = name_score + desc_score
+                score = relevance_score(name, desc)
 
-                # Add the item to the list of results
-                result_entry = {
+                results.append({
                     "type": model_name,
                     "id": item.id,
                     "name": highlight(name),
-                    "description": highlight(description),
+                    "description": highlight(desc),
                     "image_url": getattr(item, "image_url", None),
+                    "location": location,
+                    "type_label": type_label,
+                    "services": services,
+                    "hours": hours,
+                    "online_availability": online,
                     "score": score,
-                }
-
-                results.append(result_entry)
+                })
 
         results.sort(key=lambda x: x["score"], reverse=True)
-        pages = (total + per_page - 1) // per_page
+        total = len(results)
+        pages = max((total + per_page - 1) // per_page, 1)
+        page = max(1, min(page, pages))
+        start = (page - 1) * per_page
+        end = start + per_page
 
         return jsonify({
-            "results": results,
+            "results": results[start:end],
             "pagination": {
                 "total": total,
                 "page": page,
@@ -778,7 +793,6 @@ def create_app(config_name='default', testing=False):
                 "has_prev": page > 1
             }
         }), 200
-
 
     @app.route('/api/health', methods=['GET'])
     def health_check():

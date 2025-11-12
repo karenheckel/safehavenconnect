@@ -78,19 +78,32 @@ const SearchPage = () => {
       <Row className="justify-content-center">
         {results.length > 0 ? (
           results.map((r, i) => {
-            const highlightedDescription = {__html: r.description?.length > 200 ? r.description.slice(0, 200) + "..."
-                : r.description,
-            };
+            const truncatedDesc = r.description
+              ? r.description.slice(0, 200) + (r.description.length > 200 ? "..." : "")
+              : "";
+
             return (
               <InfoCard
-                key={i}
-                id={r.id}
+                key={`${r.type}-${r.id}-${i}`}
                 cardType={r.type.toLowerCase()}
+                id={r.id}
                 cardInfo={{
-                  title: (<span dangerouslySetInnerHTML={{ __html: r.name }}/>),
-                  description: (<span dangerouslySetInnerHTML={highlightedDescription}/>),
+                  title: <span dangerouslySetInnerHTML={{ __html: r.name }} />,
+                  description: (
+                    <span dangerouslySetInnerHTML={{ __html: truncatedDesc }} />
+                  ),
                   image_url: r.image_url,
-                  type: r.type,
+                  location: r.location || "",
+                  type: r.type_label || r.type,
+                  services: r.services || "",
+                  hours: r.hours_of_operation || "",
+                  online_availability:
+                    typeof r.online_availability === "boolean"
+                      ? (r.online_availability ? "Yes" : "No")
+                      : "",
+                  date: r.date,
+                  start_time: r.start_time,
+                  end_time: r.end_time,
                 }}
               />
             );
@@ -99,6 +112,7 @@ const SearchPage = () => {
           <h5>No results found.</h5>
         )}
       </Row>
+
 
       {numPages > 1 && (
         <Container className="d-flex justify-content-center mt-4">
