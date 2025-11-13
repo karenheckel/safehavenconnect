@@ -1,0 +1,31 @@
+id|name|location|start_time|end_time|date|duration|event_type|is_online|registration_open|event_url|image_url|description|map_url
+1|Ambassador Leadership Workshop|Austin, TX|2025-03-01T10:00|2025-03-01T12:00|2025-03-01|120|Training|0|1|https://bestbuddies.org/events|NULL|Workshop for public speaking and advocacy.|NULL
+2|Community Meal Event|Laredo, TX|2025-03-02T12:00|2025-03-02T13:00|2025-03-02|60|Meal Service|0|1|https://bethanyhouseoflaredo.org|NULL|Free community lunch.|NULL
+3|Youth Mentoring Orientation|Austin, TX|2025-03-03T16:00|2025-03-03T17:30|2025-03-03|90|Orientation|0|1|https://bigmentoring.org|NULL|Intro session for new mentors.|NULL
+4|Veterans Wellness Day - Gonzales|Gonzales, TX|2025-03-04T09:00|2025-03-04T12:00|2025-03-04|180|Wellness|0|1|https://bbtrails.org|NULL|Veteran mental health & wellness services.|NULL
+5|Veterans Outreach Session - Bastrop|Bastrop, TX|2025-03-05T10:00|2025-03-05T13:00|2025-03-05|180|Outreach|0|1|https://bbtrails.org|NULL|Veteran outreach & peer sessions.|NULL
+6|Health Screening Fair|Houston, TX|2025-03-06T11:00|2025-03-06T15:00|2025-03-06|240|Health Fair|0|1|https://bpsos.org|NULL|Screenings & wellness education.|NULL
+7|BookSpring Family Reading Day|Austin, TX|2025-03-07T10:00|2025-03-07T13:00|2025-03-07|180|Family Event|0|1|https://bookspring.org|NULL|Reading activities & free books.|NULL
+8|Senior Social Gathering|Austin, TX|2025-03-08T14:00|2025-03-08T16:00|2025-03-08|120|Social|0|1|https://capcityvillage.org|NULL|Monthly community social.|NULL
+9|Crime Prevention Workshop|Linden, TX|2025-03-09T18:00|2025-03-09T19:00|2025-03-09|60|Safety|0|1|NULL|NULL|Community safety & awareness.|NULL
+10|Parenting Class - Austin|Austin, TX|2025-03-10T17:00|2025-03-10T18:30|2025-03-10|90|Class|0|1|https://ccctx.org|NULL|Pregnancy & parenting education.|NULL
+11|Parenting Class - Bryan|Bryan, TX|2025-03-11T17:00|2025-03-11T18:30|2025-03-11|90|Class|0|1|https://ccctx.org|NULL|Weekly parenting support.|NULL
+12|Parenting Class - Killeen|Killeen, TX|2025-03-12T17:00|2025-03-12T18:30|2025-03-12|90|Class|0|1|https://ccctx.org|NULL|Parenting & support services.|NULL
+13|Veteran Peer Support Meetup|San Antonio, TX|2025-03-13T13:00|2025-03-13T14:30|2025-03-13|90|Support Group|0|1|https://chcs.org|NULL|Veteran peer support group.|NULL
+14|Parent Coaching Group|San Antonio, TX|2025-03-14T11:00|2025-03-14T12:30|2025-03-14|90|Workshop|0|1|https://chcs.org|NULL|Parenting education session.|NULL
+15|Equine Therapy Open House|Jasper, TX|2025-03-15T10:00|2025-03-15T12:00|2025-03-15|120|Therapy|0|1|NULL|NULL|Meet therapists & tour ranch.|NULL
+16|Family Advocacy Meeting|San Angelo, TX|2025-03-16T12:00|2025-03-16T13:00|2025-03-16|60|Meeting|0|1|https://cacwesttexas.org|NULL|Monthly advocacy meeting.|NULL
+17|CAMP Parent Night Out|San Antonio, TX|2025-03-17T17:00|2025-03-17T21:00|2025-03-17|240|Respite|0|1|https://campcamp.org|NULL|Respite event for parents.|NULL
+18|Transplant Family Support Meeting|Bloomington, IN|2025-03-18T09:00|2025-03-18T11:00|2025-03-18|120|Support Group|0|1|https://cota.org|NULL|Support meeting for transplant families.|NULL
+19|iParent SA Family Event|San Antonio, TX|2025-03-19T15:00|2025-03-19T17:00|2025-03-19|120|Family Event|0|1|https://childrensshelter.org|NULL|Family fun & education.|NULL
+20|Special Needs Family Day|Belton, TX|2025-03-20T10:00|2025-03-20T14:00|2025-03-20|240|Family Event|0|1|https://special-children.org|NULL|Event for families with special needs children.|NULL
+21|Financial Coaching Workshop|Houston, TX|2025-03-21T10:00|2025-03-21T11:30|2025-03-21|90|Workshop|0|1|https://ccchouston.org|NULL|Financial literacy workshop.|NULL
+22|Free Legal Clinic Day|Houston, TX|2025-03-22T13:30|2025-03-22T15:30|2025-03-22|120|Legal Clinic|0|1|https://ccchouston.org|NULL|Brief legal consultations.|NULL
+23|Cancer Support Gathering|Tyler, TX|2025-03-23T12:00|2025-03-23T13:30|2025-03-23|90|Support Group|0|1|https://christushealth.org|NULL|Group therapy & support.|NULL
+24|Disaster Preparedness Pop-Up|Austin, TX|2025-03-24T11:00|2025-03-24T13:00|2025-03-24|120|Preparedness|0|1|https://austintexas.gov|NULL|Emergency readiness training.|NULL
+25|Bike Safety Rodeo|Austin, TX|2025-03-25T09:00|2025-03-25T11:00|2025-03-25|120|Safety|0|1|https://austintexas.gov|NULL|Bike helmet & safety event.|NULL
+26|College Readiness Workshop|Houston, TX|2025-03-26T15:00|2025-03-26T16:30|2025-03-26|90|Education|0|1|https://houstontx.gov|NULL|Youth enrichment workshop.|NULL
+27|Community Fitness Day|San Antonio, TX|2025-03-27T10:00|2025-03-27T13:00|2025-03-27|180|Health|0|1|https://sanantonio.gov|NULL|Fitness & wellness activities.|NULL
+28|Victim Support Session - Frio|San Antonio, TX|2025-03-28T14:00|2025-03-28T15:00|2025-03-28|60|Support|0|1|https://sanantonio.gov|NULL|Victim services information.|NULL
+29|Victim Support Session - Houston St|San Antonio, TX|2025-03-29T14:00|2025-03-29T15:00|2025-03-29|60|Support|0|1|https://sanantonio.gov|NULL|Support session.|NULL
+30|Library Community Day|San Antonio, TX|2025-03-30T10:00|2025-03-30T14:00|2025-03-30|240|Community|0|1|https://mysapl.org|NULL|Books, resources, activities.|NULL
