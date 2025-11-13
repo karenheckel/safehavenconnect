@@ -7,7 +7,6 @@ import Resources from "./pages/Resources";
 import EventPage from "./pages/Events/EventPage";
 import OrganizationPage from "./pages/Organizations/OrganizationPage";
 import ResourcePage from "./pages/Resources/ResourcePage";
-import GoogleTranslate from "./components/GoogleTranslate";
 import NavigationBar from "./components/NavigationBar";
 import SearchPage from "./pages/SearchPage";
 
@@ -16,7 +15,6 @@ function App() {
   return (
     <BrowserRouter>
       <NavigationBar />
-      <GoogleTranslate />
 
       <Routes>
         <Route path="/" element={<Landing />} />

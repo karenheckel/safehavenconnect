@@ -158,18 +158,26 @@ const EventPage = () => {
             </Card>
           </Col>
         </Row>
-        {eventInfo.map_url && (
-          <Row>
-            <iframe
-              title="Map to Event"
-              src={eventInfo.map_url}
-              width="600"
-              height="450"
-              style={{ border: 0 }}
-              allowfullscreen=""
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
+        {(eventInfo.map_url && eventInfo.map_url !== "NULL") ? (
+          <Row className="my-4">
+            <Col>
+              <iframe
+                title="Map to Event"
+                src={eventInfo.map_url}
+                width="100%"
+                height="450"
+                style={{ border: 0, borderRadius: '8px' }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </Col>
+          </Row>
+        ) : (
+          <Row className="my-4 justify-content-center">
+            <Col md={10} className="text-center">
+              <p className="text-muted">Map Currently Unavailable.</p>
+            </Col>
           </Row>
         )}
         <Row className="my-3">

@@ -1,5 +1,4 @@
 import React from "react";
-import NavigationBar from "../components/NavigationBar";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Information from "../components/Information";
 
