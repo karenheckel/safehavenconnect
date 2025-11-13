@@ -24,7 +24,8 @@ I had no previous experience working with the backend database within the app.py
 - [ ] Clarification with understanding how GitLab deploying functions and allowing all members to deploy
 
 **Example:**
-ChatGPT explained how permissions worked within GitLab and enabled any team member to deploy the backend of the website ensuring that the frontend and backend code were updated.\\
+ChatGPT explained how permissions worked within GitLab and enabled any team member to deploy the backend of the website ensuring that the frontend and backend code were updated.
+
 As well, we previously had an issue with running out of credits which caused our pipeline to fail, so reguarding that we wre suggested to use the [skip ci] phrase within the commit messages to avoid automaticaly running the pipeline and limit our usage of credits
 
 ---
