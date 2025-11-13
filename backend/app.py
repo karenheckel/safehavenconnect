@@ -454,19 +454,81 @@ def create_app(config_name='default', testing=False):
             location = request.args.get('location')
             online = request.args.get('online')
             registration_open = request.args.get('registration_open')
+            hours = request.args.get('hours')
+            sort = request.args.get('sort', default='none')
             page = request.args.get('page', default=1, type=int)
             per_page = request.args.get('per_page', default=10, type=int)
             
             query = Event.query
             
-            if event_type:
-                query = query.filter(Event.event_type == event_type)
             if location:
                 query = query.filter(Event.location.ilike(f'%{location}%'))
-            if online is not None:
+            if event_type and len(event_type) > 0:
+                query = query.filter(
+                    or_(*[Event.event_type.ilike(f"%{t}%") for t in event_type])
+                )
+            if online is not None and online != "":
                 query = query.filter(Event.is_online == (online.lower() == 'true'))
-            if registration_open is not None:
+            
+            if registration_open is not None and registration_open != "":
                 query = query.filter(Event.registration_open == (registration_open.lower() == 'true'))
+
+            if hours and len(hours) > 0:
+                hour_filters = []
+                for h in hours:
+                    h_lower = h.lower()
+
+                    if h_lower == "morning":
+                        hour_filters.append(
+                            or_(
+                                Event.start_time.ilike("%12am%"),
+                                Event.start_time.ilike("%1am%"),
+                                Event.start_time.ilike("%2am%"),
+                                Event.start_time.ilike("%3am%"),
+                                Event.start_time.ilike("%4am%"),
+                                Event.start_time.ilike("%5am%"),
+                                Event.start_time.ilike("%6am%"),
+                                Event.start_time.ilike("%7am%"),
+                                Event.start_time.ilike("%8am%"),
+                                Event.start_time.ilike("%9am%"),
+                                Event.start_time.ilike("%10am%"),
+                                Event.start_time.ilike("%11am%"),
+                            )
+                        )
+                    elif h_lower == "afternoon":
+                        hour_filters.append(
+                            or_(
+                                Event.start_time.ilike("%12pm%"),
+                                Event.start_time.ilike("%1pm%"),
+                                Event.start_time.ilike("%2pm%"),
+                                Event.start_time.ilike("%3pm%"),
+                                Event.start_time.ilike("%4pm%"),
+                            )
+                        )
+                    elif h_lower == "evening":
+                        hour_filters.append(
+                            or_(
+                                Event.start_time.ilike("%5pm%"),
+                                Event.start_time.ilike("%6pm%"),
+                                Event.start_time.ilike("%7pm%"),
+                                Event.start_time.ilike("%8pm%"),
+                                Event.start_time.ilike("%9pm%"),
+                                Event.start_time.ilike("%10pm%"),
+                                Event.start_time.ilike("%11pm%"),
+                            )
+                        )
+                    elif h_lower == "n/a":
+                        hour_filters.append(
+                            Event.start_time.ilike("%n/a%")
+                        )
+
+                if hour_filters:
+                    query = query.filter(or_(*hour_filters))
+            if sort == "state":
+                query = query.order_by(func.split_part(Event.location, ', ', 2).asc())
+            elif sort == "name":
+                query = query.order_by(Event.name.asc())
+            
             
             paginated = query.paginate(page=page, per_page=per_page, error_out=False)
 
