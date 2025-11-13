@@ -101,6 +101,7 @@ def import_hrsa_data():
                         website_url=website,
                         description=description,
                         hours_of_operation="N/A",
+                        map_url=f"{city}, {state}"
                     )
 
                     # Create resource
@@ -118,6 +119,7 @@ def import_hrsa_data():
                         image_url=None,
                         description=description,
                         category="medical services",
+                        map_url=f"{address}, {city}, {state}" if address else None
                     )
 
                     # Attach tags if supported
