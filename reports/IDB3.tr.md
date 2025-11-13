@@ -10,91 +10,97 @@ SafeHavenConnect is a platform designed to help individuals struggling to find t
 
 ## Frontend
 The frontend of our website was developed using React.js with Vite as the build tool and React Bootstrap for responsive UI design. The goal of the frontend is to provide users with an intuitive and accessible interface for navigating events, organizations, and resources related to domestic violence support. It serves as the primary interaction layer between the user and our backend API.
+
 -  The color palette uses #cde5d7 (mint green) with black text and outlines
 - All components are designed to be responsive using Bootstrap’s grid system (Container, Row, Col).
 - Reusable React Bootstrap components (e.g., Card, Button)
+
 ---
 
 ## Backend
 The backend was built using Flask (Python) with SQLAlchemy as the ORM for database interactions and Gunicorn as the production WSGI server. The backend serves as the API layer, exposing RESTful endpoints that allow the frontend to retrieve structured data about organizations, resources, and events. It handles all database queries, manages many-to-many relationships between models, and ensures data consistency across the application. The backend is containerized using Docker and deployed on AWS EC2, with a PostgreSQL database running in a separate container managed via Docker Compose. Health check endpoints (/api/health) allow monitoring of the API status, and the system is designed to scale horizontally by adding more Gunicorn workers or container replicas as needed.
+
 ---
 
 ## Database
 The database uses PostgreSQL 15 (alpine) running in a Docker container, with SQLAlchemy as the ORM layer for Python-based interactions. The schema consists of three primary models—Organizations, Resources, and Events—with many-to-many relationships managed through three association tables: organization_resources, organization_events, and resource_events. Each model includes metadata fields such as created_at and updated_at timestamps, and all primary keys use auto-incrementing integers for unique identification.
 
 Data was primarily sourced from the Health Resources and Services Administration (HRSA) Data Warehouse API, which provided information about federally qualified health centers across multiple states (California, Texas, New York, Florida, and Illinois). Each health center was modeled as both an Organization and a Resource, with a shared "National Health Access Week" Event linking them together. We also integrated data from the RapidAPI Homeless Shelter API for shelter-specific resources in major Texas cities (Austin, Houston, and Dallas). Additionally, we explored the Eventbrite API for community events, though this required valid OAuth tokens and encountered quota limitations during testing.
+
 ---
 
 ## User Stories
 
 1. Non-English speaker: toggle website language
-  - Implemented using a Google Translate widget
-  - Estimated time: 1 hour → Actual: ~2 hours
+    - Implemented using a Google Translate widget
+    - Estimated time: 1 hour → Actual: ~2 hours
 
 2. User clicking on a card to view its detail page
-  - Implemented clickable cards for all models that lead to detailed instance pages
-  - Estimated: 1 hour per page → Actual: ~1 hour per page
+    - Implemented clickable cards for all models that lead to detailed instance pages
+    - Estimated: 1 hour per page → Actual: ~1 hour per page
 
 3. Pagination for browsing large datasets
-  - Pagination added to Events, Resources, and Organizations pages so users can see the number of cards presented
-  - Estimated: 1 hour → Actual: slightly over 1 hour due to initial logic complexity
+    - Pagination added to Events, Resources, and Organizations pages so users can see the number of cards presented
+    - Estimated: 1 hour → Actual: slightly over 1 hour due to initial logic complexity
 
 4. Assistive technology that is inclusive, fast, and mobile-friendly. (like Lighthouse score ≥ 90 for performance and accessibility or Meets WCAG AA standards)
-  - Added alt-text to all images.
-  - Improved color contrast for WCAG AA compliance
-  - Troubleshot Lighthouse performance ≥ 90
-  - Estimated: 0.5 hours → Actual: ~1 hour due to debugging unused JS and load latency
+    - Added alt-text to all images.
+    - Improved color contrast for WCAG AA compliance
+    - Troubleshot Lighthouse performance ≥ 90
+    - Estimated: 0.5 hours → Actual: ~1 hour due to debugging unused JS and load latency
 
 5. Site maintainer testing endpoints via Postman 
-  - Implemented Postman collections tied to backend routes
-  - Run before each deployment for regression testing
-  - Estimated time: 1 hour → Actual: 1 hour
+    - Implemented Postman collections tied to backend routes
+    - Run before each deployment for regression testing
+    - Estimated time: 1 hour → Actual: 1 hour
 
 6. Developer ensuring correct data relationships on the frontend
-  - Many-to-many tables properly defined
-  - Ensures consistent and accurate frontend display
-  - Estimated time: 1 hour → Actual: 1 hour
+    - Many-to-many tables properly defined
+    - Ensures consistent and accurate frontend display
+    - Estimated time: 1 hour → Actual: 1 hour
 
 7. Survivor seeking relevant help, filtering resources by multiple criteria
-  - Implemented filtering by type, online availability, organization name, and hours
-  - Estimated time: 1 hour → Actual: 1 hour
+    - Implemented filtering by type, online availability, organization name, and hours
+    - Estimated time: 1 hour → Actual: 1 hour
   
 8. New site visitor looking for search bar integration to search keywords
-  - Implemented a search page with a search bar in the navigation bar
-  - Able to search across all models and instances
-  - Estimated time: 2 hours → Actual: 3 hours
+    - Implemented a search page with a search bar in the navigation bar
+    - Able to search across all models and instances
+    - Estimated time: 2 hours → Actual: 3 hours
 
 9. User browsing for legal aid resources
-  - Implemented searching on resource page that shows relevant instances when looking up "legal aid"
-  - Estimated time: 1 hour → Actual: 1 hour
+    - Implemented searching on resource page that shows relevant instances when looking up "legal aid"
+    - Estimated time: 1 hour → Actual: 1 hour
 
 10. Searching within each model separately
-  - Added search bar to each model page, ensuring most relevant cards within that model show up first
-  - Estimated time: 3 hours → Actual: 4 hours
+    - Added search bar to each model page, ensuring most relevant cards within that model show up first
+    - Estimated time: 3 hours → Actual: 4 hours
 
 11. User looking to filter organizations based on location
-  - Added sort for locations based on state
-  - Estimated time: 1 hour → Actual: 1 hour
+    - Added sort for locations based on state
+    - Estimated time: 1 hour → Actual: 1 hour
 
 12. User looking to filter resources that are available online
-  - Added filter for online availability
-  - Estimated time: 1 hour → Actual: 1 hour
+    - Added filter for online availability
+    - Estimated time: 1 hour → Actual: 1 hour
 
 13. User looking to sort resources
-  - Implemented sorting by location (state) or by name
-  - Estimated time: 1 hour → Actual: 1 hour
+    - Implemented sorting by location (state) or by name
+    - Estimated time: 1 hour → Actual: 1 hour
 
 14. User looking to sort organizations
-  - Implemented sorting by location (state) or by name
-  - Estimated time: 1 hour → Actual: 1 hour
-  
+    - Implemented sorting by location (state) or by name
+    - Estimated time: 1 hour → Actual: 1 hour
+
 15. User wants searches to highlight words on page that match prompt
-  - Implemented highlighting for word/phrase matches in the data
-  - Estimated time: 1 hour → Actual: 2 hours
+    - Implemented highlighting for word/phrase matches in the data
+    - Estimated time: 1 hour → Actual: 2 hours
+
 ---
 
 ## Data Scraping
 We made API calls to the Homeless Shelter API and the Health Resources and Services Administration API to collect data on shelters and medical centers that survivors could access to get the help they need. 
+
 ---
 
 ## API Documentation
