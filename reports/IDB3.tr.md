@@ -27,27 +27,70 @@ Data was primarily sourced from the Health Resources and Services Administration
 
 ## User Stories
 
-1. As a non-English speaker, I want to toggle the website language, so that I can understand the interface labels and descriptions.
-  - We expected this feature to take an hour to implement. By using a Google Translate script, we were able to add a "select language" button that translates our site. It took about 2 hours to incorporate.
-2. As a survivor looking for the most relevant help, I want to filter resources by multiple criteria (e.g., location, type of service, and language), so that I can quickly find tailored resources that match my needs.
-  - This is a feature that will be implemented in phase 3 when filtering is supported.
-3. As a survivor researching a specific organization or event, I want to click on a card to view its detailed instance page, so that I can learn more, view media, and follow related links. 
-  - We have implemented clickable cards for each model that lead to detailed instance pages. On the instance pages there is information and related external links. We estimated this taking an hour and it took about an hour per page.
-4. As a user browsing hundreds of resources, I want to see data displayed in smaller, paginated sections, so that I can easily navigate without long loading times.
-  - We have implemented pagination within each of the model pages for events, resources, and organizations so that users can see the number of cards presented (total number of pages). We estimated this to take an hour, and it took a bit over an hour to figure out how to implement pagination for the first model (events page). Challenges arose in ensuring the math was correct, however once implemented we were able to easily implement it in the resources and organization model pages.
-5. As a user relying on assistive technology, I want to navigate the site easily, so that it’s inclusive, fast, and mobile-friendly. (like Lighthouse score ≥ 90 for performance and accessibility or Meets WCAG AA standards)
-  - We ensured that the webpage is accessable by adding alt text to any images on the website, as well as improving the color contrast to be within WCAG AA standards. We estimated that this would take about half an hour, however took about an hour to complete in order to create a completely covered accessible site. Challenges arose to meet lighthouse performance and accessability scores of ≥ 90. We used the google chrome developer tools to find specific points of danger such as the presence of unused javascript or latency from how we fetch data.
-6. As a user looking for legal aid, I want to browse free or low-cost legal resources so that I can understand my rights and options. I want to filter resources based on my specific situation and eligibility. This will help me navigate the legal process with confidence and safety. 
-- This is a feature that will be implemented in phase 3 when filtering is supported.
-7. As a non-English speaker, I want to filter resources and organizations by languages supported so that I can find help in a language I understand. I want to see which services are available in my preferred language. This will ensure I can access critical information without communication barriers. 
-- This is a feature that will be implemented in phase 3 when filtering is supported.
-8. As a survivor seeking local help, I want to see all organizations and shelters on a map, so that I can visually find the closest resource to me. 
-- Once the database is fully updated, we will have an interactive map component to display resource locations.
-9. As a site maintainer, I want to test each API endpoint through Postman collections, so that I can verify correctness and performance before deployment. 
-- We created Postman collections tied directly to our backend routes. Running these before every update allows us to maintain a stable production pipeline and catch issues early.
-10. As a developer, I want to ensure that organizations, resources, and events maintain correct relationships, so that the data displayed on the frontend is consistent and accurate. (many-to-many relationships are defined properly) 
-- We defined explicit association tables and ensure users always see up to date and correctly linked information. 
+1. Non-English speaker: toggle website language
+  - Implemented using a Google Translate widget
+  - Estimated time: 1 hour → Actual: ~2 hours
 
+2. User clicking on a card to view its detail page
+  - Implemented clickable cards for all models that lead to detailed instance pages
+  - Estimated: 1 hour per page → Actual: ~1 hour per page
+
+3. Pagination for browsing large datasets
+  - Pagination added to Events, Resources, and Organizations pages so users can see the number of cards presented
+  - Estimated: 1 hour → Actual: slightly over 1 hour due to initial logic complexity
+
+4. Assistive technology that is inclusive, fast, and mobile-friendly. (like Lighthouse score ≥ 90 for performance and accessibility or Meets WCAG AA standards)
+  - Added alt-text to all images.
+  - Improved color contrast for WCAG AA compliance
+  - Troubleshot Lighthouse performance ≥ 90
+  - Estimated: 0.5 hours → Actual: ~1 hour due to debugging unused JS and load latency
+
+5. Site maintainer testing endpoints via Postman 
+  - Implemented Postman collections tied to backend routes
+  - Run before each deployment for regression testing
+  - Estimated time: 1 hour → Actual: 1 hour
+
+6. Developer ensuring correct data relationships on the frontend
+  - Many-to-many tables properly defined
+  - Ensures consistent and accurate frontend display
+  - Estimated time: 1 hour → Actual: 1 hour
+
+7. Survivor seeking relevant help, filtering resources by multiple criteria
+  - Implemented filtering by type, online availability, organization name, and hours
+  - Estimated time: 1 hour → Actual: 1 hour
+  
+8. New site visitor looking for search bar integration to search keywords
+  - Implemented a search page with a search bar in the navigation bar
+  - Able to search across all models and instances
+  - Estimated time: 2 hours → Actual: 3 hours
+
+9. User browsing for legal aid resources
+  - Implemented searching on resource page that shows relevant instances when looking up "legal aid"
+  - Estimated time: 1 hour → Actual: 1 hour
+
+10. Searching within each model separately
+  - Added search bar to each model page, ensuring most relevant cards within that model show up first
+  - Estimated time: 3 hours → Actual: 4 hours
+
+11. User looking to filter organizations based on location
+  - Added sort for locations based on state
+  - Estimated time: 1 hour → Actual: 1 hour
+
+12. User looking to filter resources that are available online
+  - Added filter for online availability
+  - Estimated time: 1 hour → Actual: 1 hour
+
+13. User looking to sort resources
+  - Implemented sorting by location (state) or by name
+  - Estimated time: 1 hour → Actual: 1 hour
+
+14. User looking to sort organizations
+  - Implemented sorting by location (state) or by name
+  - Estimated time: 1 hour → Actual: 1 hour
+  
+15. User wants searches to highlight words on page that match prompt
+  - Implemented highlighting for word/phrase matches in the data
+  - Estimated time: 1 hour → Actual: 2 hours
 ---
 
 ## Data Scraping
