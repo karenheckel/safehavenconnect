@@ -1,0 +1,198 @@
+# SafeHavenConnect Technical Report
+
+---
+
+
+## Purpose/Motivation
+SafeHavenConnect is a platform designed to help individuals struggling to find trustworthy, accessible, and local resources for safety, legal, medical, financial, and community support. Our goal is to connect users with verified organizations and events while providing a platform that empowers them to take the next steps toward safety and recovery.
+
+---
+
+## Frontend
+The frontend of our website was developed using React.js with Vite as the build tool and React Bootstrap for responsive UI design. The goal of the frontend is to provide users with an intuitive and accessible interface for navigating events, organizations, and resources related to domestic violence support. It serves as the primary interaction layer between the user and our backend API.
+-  The color palette uses #cde5d7 (mint green) with black text and outlines
+- All components are designed to be responsive using Bootstrap’s grid system (Container, Row, Col).
+- Reusable React Bootstrap components (e.g., Card, Button)
+---
+
+## Backend
+The backend was built using Flask (Python) with SQLAlchemy as the ORM for database interactions and Gunicorn as the production WSGI server. The backend serves as the API layer, exposing RESTful endpoints that allow the frontend to retrieve structured data about organizations, resources, and events. It handles all database queries, manages many-to-many relationships between models, and ensures data consistency across the application. The backend is containerized using Docker and deployed on AWS EC2, with a PostgreSQL database running in a separate container managed via Docker Compose. Health check endpoints (/api/health) allow monitoring of the API status, and the system is designed to scale horizontally by adding more Gunicorn workers or container replicas as needed.
+---
+
+## Database
+The database uses PostgreSQL 15 (alpine) running in a Docker container, with SQLAlchemy as the ORM layer for Python-based interactions. The schema consists of three primary models—Organizations, Resources, and Events—with many-to-many relationships managed through three association tables: organization_resources, organization_events, and resource_events. Each model includes metadata fields such as created_at and updated_at timestamps, and all primary keys use auto-incrementing integers for unique identification.
+
+Data was primarily sourced from the Health Resources and Services Administration (HRSA) Data Warehouse API, which provided information about federally qualified health centers across multiple states (California, Texas, New York, Florida, and Illinois). Each health center was modeled as both an Organization and a Resource, with a shared "National Health Access Week" Event linking them together. We also integrated data from the RapidAPI Homeless Shelter API for shelter-specific resources in major Texas cities (Austin, Houston, and Dallas). Additionally, we explored the Eventbrite API for community events, though this required valid OAuth tokens and encountered quota limitations during testing.
+---
+
+## User Stories
+
+1. As a non-English speaker, I want to toggle the website language, so that I can understand the interface labels and descriptions.
+  - We expected this feature to take an hour to implement. By using a Google Translate script, we were able to add a "select language" button that translates our site. It took about 2 hours to incorporate.
+2. As a survivor looking for the most relevant help, I want to filter resources by multiple criteria (e.g., location, type of service, and language), so that I can quickly find tailored resources that match my needs.
+  - This is a feature that will be implemented in phase 3 when filtering is supported.
+3. As a survivor researching a specific organization or event, I want to click on a card to view its detailed instance page, so that I can learn more, view media, and follow related links. 
+  - We have implemented clickable cards for each model that lead to detailed instance pages. On the instance pages there is information and related external links. We estimated this taking an hour and it took about an hour per page.
+4. As a user browsing hundreds of resources, I want to see data displayed in smaller, paginated sections, so that I can easily navigate without long loading times.
+  - We have implemented pagination within each of the model pages for events, resources, and organizations so that users can see the number of cards presented (total number of pages). We estimated this to take an hour, and it took a bit over an hour to figure out how to implement pagination for the first model (events page). Challenges arose in ensuring the math was correct, however once implemented we were able to easily implement it in the resources and organization model pages.
+5. As a user relying on assistive technology, I want to navigate the site easily, so that it’s inclusive, fast, and mobile-friendly. (like Lighthouse score ≥ 90 for performance and accessibility or Meets WCAG AA standards)
+  - We ensured that the webpage is accessable by adding alt text to any images on the website, as well as improving the color contrast to be within WCAG AA standards. We estimated that this would take about half an hour, however took about an hour to complete in order to create a completely covered accessible site. Challenges arose to meet lighthouse performance and accessability scores of ≥ 90. We used the google chrome developer tools to find specific points of danger such as the presence of unused javascript or latency from how we fetch data.
+6. As a user looking for legal aid, I want to browse free or low-cost legal resources so that I can understand my rights and options. I want to filter resources based on my specific situation and eligibility. This will help me navigate the legal process with confidence and safety. 
+- This is a feature that will be implemented in phase 3 when filtering is supported.
+7. As a non-English speaker, I want to filter resources and organizations by languages supported so that I can find help in a language I understand. I want to see which services are available in my preferred language. This will ensure I can access critical information without communication barriers. 
+- This is a feature that will be implemented in phase 3 when filtering is supported.
+8. As a survivor seeking local help, I want to see all organizations and shelters on a map, so that I can visually find the closest resource to me. 
+- Once the database is fully updated, we will have an interactive map component to display resource locations.
+9. As a site maintainer, I want to test each API endpoint through Postman collections, so that I can verify correctness and performance before deployment. 
+- We created Postman collections tied directly to our backend routes. Running these before every update allows us to maintain a stable production pipeline and catch issues early.
+10. As a developer, I want to ensure that organizations, resources, and events maintain correct relationships, so that the data displayed on the frontend is consistent and accurate. (many-to-many relationships are defined properly) 
+- We defined explicit association tables and ensure users always see up to date and correctly linked information. 
+
+---
+
+## Data Scraping
+We made API calls to the Homeless Shelter API and the Health Resources and Services Administration API to collect data on shelters and medical centers that survivors could access to get the help they need. 
+---
+
+## API Documentation
+The SafeHavenConnect API provides structured access to data about organizations, resources, and events that support survivors of domestic violence. It allows clients to retrieve all instances or specific entries for each model.
+### Model and Endpoints
+
+#### Organizations
+- /organizations → GET all
+    - Goal: Retrieve a list of all organizations offering domestic violence support services.
+    - Input Parameters: None
+- /organizations/:id → GET one
+    - Goal: Fetch detailed information for a single organization.
+    - Input Parameters:
+        - `id` (integer) – Unique identifier for the organization.
+#### Resources
+- **GET /resources**
+  - **Goal:** Retrieve a list of all resources available to survivors, such as legal aid, medical services, and educational materials.
+  - **Input Parameters:** None
+- **GET /resources/:id**
+  - **Goal:** Fetch detailed information for a specific resource.
+  - **Input Parameters:**
+    - `id` (integer) – Unique identifier for the resource.
+
+#### Events
+- **GET /events**
+  - **Goal:** Retrieve a list of all upcoming events related to domestic violence support.
+  - **Input Parameters:** None
+- **GET /events/:id**
+  - **Goal:** Fetch detailed information for a single event by its ID.
+  - **Input Parameters:**
+    - `id` (integer) – Unique identifier for the event.
+
+---
+
+### Events
+- **Description:** Any relevant events to the mission (fundraising, informational sessions, community building, etc)
+- **Attributes:** Title, location, date, time, event type, organization, image
+
+### Organizations
+- **Description:** Any organization that provides resources or support for victims of domestic violence
+- **Attributes:** Title, location, services, hours, online availability, target demographic, logo
+
+### Resources
+- **Description:** Any resource provided to victims of domestic violence (shelters, hotlines, guides, etc)
+- **Attributes:** Title, location, type, hours, online availability, organization, logo
+
+---
+
+
+## Instances
+### Events
+- **Attributes:** Event title, location, date, time, event type  
+- **Media:** Image, link to event website, map  
+- **Related cards:** Related organizations and resources
+
+### Organizations
+- **Attributes:** Organization name, location, type, services, hours, online availability
+- **Media:** Related image, link
+- **Related cards:** Related resources and events
+
+### Resources
+- **Attributes:** Resource name, location, type, hours, online availability, related organization name  
+- **Media:** Related image/logo, link  
+- **Related cards:** Related organizations and events
+
+---
+
+## Toolchains
+- React: Frontend development, create reusable components
+- Vite: Build too used to create an app
+- React Bootstrap: Basis of UI components such as cards, buttons, and navigation bar to avoid having to hardcode CSS files
+- Node.js: Used for managing API endpoints in the backend
+- Postman: Used to develop API documentation
+- GitLab: Used to maintain shared projects, version control, continuous integration pipelines, and issue management
+- Google Maps: Used to render a map to display the event location
+- AWS: Used for webpage hosting
+- Namecheap: Used to find a domain
+
+---
+
+## Hosting
+Webpage hosted on AWS using AWS Amplify
+Domain name generated from Namecheap
+
+## Architectural Overview
+
+### Landing page for website
+- Tools: React, React-Bootstrap, React Router, JavaScript
+- The main page where the user can see a summary of the site's mission
+- Navigation bar at the top, universal throughout the site, contains links to the Homepage, Events, organizations, and resources model pages, and the about page
+- Presents cards to detail the functionality and information found on “Events”, “Resources”, and “Organizations” model pages
+- Cards contain a link to each respective model page
+
+### Model Pages for Events, Organizations, and Resources
+- Tools: React, React-Bootstrap, React Router, JavaScript
+- Contains count of instances of model
+- Each model page contains card information stored in an object array
+    - Map is called on the object array to render cards
+- Card contains a link to the instance page of each object to learn more
+
+### Instance Pages for Events, Organizations, and Resources
+- Tools: React, React-Bootstrap, JavaScript, React Router
+
+#### Events: 
+- Attributes: event title, location, date, time, event type
+- Media: image associated with the event, link to the event page (website online), Google Maps integration to see the location
+    - Map view added via Google Maps iframe integration
+- Card display of related organizations and resources, linking to their instance pages
+
+#### Organizations
+- Attributes: organization name, location, type, services, hours, online availability
+- Media: Organization logo, links to organization page
+- Card display of related organizations and resources, linking to their instance pages
+
+#### Resources
+- Attributes: resource name, location, type, hours, online availability, associated organization name
+- Media: Related image, link to resource webpage
+- Card display of related organizations and resources, linking to their instance pages
+
+### Pagination
+Pagination is accomplished when calling the backend API. The API takes in parameters **per_page** and **page** which indicates the number of items that will be fetched from the database at a time and the page we are beginnning from. By using pagination and keeping the **per_page** value to a minimum, we are able to reduce loading time.
+
+### Sorting and Filtering
+Sorting and filtering is accomplished by using query parameters when calling from the backend API. State variables are maintained to keep track of what filters and sorts the user has selected which are then passed into the backend call. The backend then sends data corresponding to the filters and sorts.
+- Organizations filter by: type (Health Center, Shelter), Online Availability (All, Yes, No), Services (Healthcare, Outreach, Preventive), Hours (Weekdays, Weekends, Night, 24/7, N/A)
+- Organizations sort by: None, Location (State), and Name
+
+- Resources filter by: Type (Medical Assistance, Legal), Online Availability (All, Yes, No), Organization Name (A-F, G-K, L-P, Q-U, V-Z), Hours (Weekdays, Weekends, Night, 24/7, N/A)
+- Resources sort by: None, Location (State), and Name
+
+### About Page
+- Tools:  React-Bootstrap, JavaScript, GitLab REST API
+- Contains the site's mission and target audience
+- Contains the significance of the tools used
+- Contains links to the repository, Postman, and related websites
+- Contains cards for each team member
+- Attributes: member name, role, photo, short biography, commits, issues created, issues closed, and unit tests
+    - GitLab API Integration to retrieve commits, issues created, issues closed, and unit tests
+
+## Challenges 
+- The Google Translate widget initially rendered multiple times due to React's re-renders. However, once we added a script check and conditional initialization, it ensured that the widget only loaded once. 
+- We struggled with finding good APIs to source our data. We originally planned to use the 211 API as our primary data source, which would have provided comprehensive social services data. However, our subscription request was not approved in time, forcing us to pivot to alternative APIs. This required adapting our data import scripts to handle varying response formats, API rate limits, and quota restrictions. 
+- We struggled with figuring out a way to query from our backend when sorting the location since we grouped by state, however the format of the address varied in formats, for example (city, state), (address, city, state), (address, city, state, zip code), however this was accomplished in the backend by adding a helper method to parse and extract the state from the location
+- We also struggled with filtering data in the backend when the filter contained a range, specifically hours of operation, which we used filters of "Weekdays", "Weekends", "Nights", "24/7" for. However, since the hours were formatted in various ways (Mon-Fri 8am-5pm), (Monday: 8 AM-5 PM, Tuesday: 8 AM-5 PM, Wednesday: 8 AM-5 PM, Thursday: 8 AM-5 PM, Friday: 8 AM-5 PM) and various other formats, being able to determine that this operats on "Weekdays" required a helper function in the backend.
