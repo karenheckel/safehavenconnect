@@ -1,0 +1,31 @@
+id|name|location|capacity|services|online_availability|organization_type|image_url|website_url|description|hours_of_operation
+1|Best Buddies International - Central Texas|Austin, TX|NULL|Ambassadors Program|0|Nonprofit|NULL|https://bestbuddies.org|Leadership and advocacy training for individuals with IDD.|Mon-Fri 9-5
+2|Bethany House of Laredo|Laredo, TX|NULL|Community Kitchen|0|Nonprofit|NULL|https://bethanyhouseoflaredo.org|Soup kitchen serving breakfast, lunch, and dinner daily.|Breakfast 9-9:45; Lunch 12-12:45; Dinner 4-4:45
+3|Big Brothers Big Sisters of Central Texas|Austin, TX|NULL|Youth Mentoring|0|Nonprofit|NULL|https://bigmentoring.org|One-to-one youth mentoring program.|Mon-Fri 9-5
+4|Bluebonnet Trails Community Services - Gonzales|Gonzales, TX|NULL|Veterans Services|0|Government|NULL|https://bbtrails.org|Counseling, peer support, equine therapy, emergency funds.|Intake 7:30-5:30; Crisis 24/7
+5|Bluebonnet Trails Community Services - Bastrop|Bastrop, TX|NULL|Veterans Services|0|Government|NULL|https://bbtrails.org|Veteran support services.|Intake 7:30-5:30; Crisis 24/7
+6|Boat People SOS|Houston, TX|NULL|Health Promotion|0|Nonprofit|NULL|https://bpsos.org|Disease prevention and health screenings.|Mon-Fri 9-5:30
+7|BookSpring|Austin, TX|NULL|Literacy Programs|0|Nonprofit|NULL|https://bookspring.org|Children's literacy and book distribution programs.|Mon-Fri 10-4
+8|Capital City Village|Austin, TX|NULL|Aging in Place|0|Nonprofit|NULL|https://capcityvillage.org|Senior social support, events, and volunteer help.|Mon-Fri 9-3
+9|Cass County Sheriff's Department|Linden, TX|NULL|Law Enforcement|0|Government|NULL|NULL|Crime prevention and emergency response.|24/7
+10|Catholic Charities of Central Texas - Austin|Austin, TX|NULL|Pregnancy & Parenting|0|Nonprofit|NULL|https://ccctx.org|Pregnancy/parenting support, diapers, classes.|Mon-Fri 8:30-5
+11|Catholic Charities of Central Texas - Bryan|Bryan, TX|NULL|Pregnancy & Parenting|0|Nonprofit|NULL|https://ccctx.org|Parenting and pregnancy services.|Mon-Fri 8:30-5
+12|Catholic Charities of Central Texas - Killeen|Killeen, TX|NULL|Pregnancy & Parenting|0|Nonprofit|NULL|https://ccctx.org|Pregnancy and parenting services.|Mon-Fri 8:30-5
+13|Center for Health Care Services - Peer Network|San Antonio, TX|NULL|Veterans Peer Support|0|Government|NULL|https://chcs.org|Support groups for veterans and families.|Mon-Fri 8:30-5:30
+14|Center for Health Care Services - HOPES|San Antonio, TX|NULL|Parent Education|0|Government|NULL|https://chcs.org|In-home parent education & support.|Mon-Fri 8:30-5:30
+15|Champion Oaks Ranch|Jasper, TX|NULL|Therapeutic Equine Program|0|Nonprofit|NULL|NULL|Equine therapy for families and children.|Mon-Fri 8-4
+16|Children’s Advocacy Center of Greater West Texas|San Angelo, TX|NULL|Youth Advocacy|0|Nonprofit|NULL|https://cacwesttexas.org|Advocacy, education, partnership meetings.|Monthly meetings
+17|CAMP - Children’s Association for Maximum Potential|San Antonio, TX|NULL|Family Support|0|Nonprofit|NULL|https://campcamp.org|Respite services & family events.|Mon-Fri 8-4
+18|Children's Organ Transplant Association (COTA)|Bloomington, IN|NULL|Transplant Support|0|Nonprofit|NULL|https://cota.org|Fundraising and patient-family support.|Mon-Fri 7-4
+19|Children’s Shelter - iParent SA|San Antonio, TX|NULL|Parenting Classes|0|Nonprofit|NULL|https://childrensshelter.org|Parenting skills and crisis support.|Varies
+20|Children's Special Needs Network|Belton, TX|NULL|Special Needs Support|0|Nonprofit|NULL|https://special-children.org|Support & resources for families of special needs children.|Mon-Fri 8-5
+21|Chinese Community Center - FOC|Houston, TX|NULL|Financial Opportunity Center|0|Nonprofit|NULL|https://ccchouston.org|Financial coaching & job placement.|Mon-Fri 9-5
+22|Chinese Community Center - Legal Clinic|Houston, TX|NULL|Legal Services|0|Nonprofit|NULL|https://ccchouston.org|Brief legal advice|3rd Wed 1:30-3:30
+23|CHRISTUS Health - Cancer Support|Tyler, TX|NULL|Cancer Support Groups|0|Healthcare|NULL|https://christushealth.org|Support groups for cancer patients.|1st/3rd Tue/Thu
+24|City of Austin - Ready Central Texas|Austin, TX|NULL|Emergency Preparedness|0|Government|NULL|https://austintexas.gov|Disaster preparedness training.|Mon-Fri 7:45-4:45
+25|City of Austin - Public Works Department|Austin, TX|NULL|Bike/Pedestrian Safety|0|Government|NULL|https://austintexas.gov|Safe Routes to School, bike safety education.|Mon-Fri 8-5
+26|City of Houston Mayor's Office of Education|Houston, TX|NULL|Youth Enrichment|0|Government|NULL|https://houstontx.gov|Youth support & educational opportunities.|Mon-Fri 8-5
+27|City of San Antonio - Metro Health (MFC)|San Antonio, TX|NULL|Health & Wellness|0|Government|NULL|https://sanantonio.gov|Fitness events, student ambassadors.|24/7
+28|SAPD Victims Advocacy Program - Frio|San Antonio, TX|NULL|Victim Support|0|Government|NULL|https://sanantonio.gov|Crisis support, victim services.|Mon-Fri 7:45-4:30
+29|SAPD Victims Advocacy Program - Houston|San Antonio, TX|NULL|Victim Support|0|Government|NULL|https://sanantonio.gov|Victim services.|Mon-Fri 7:45-4:30
+30|San Antonio Public Library - Culebra|San Antonio, TX|NULL|Library Services|0|Government|NULL|https://mysapl.org|Books, digital media, community programs.|Mon-Sun (varies)

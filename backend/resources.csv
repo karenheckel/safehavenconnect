@@ -1,0 +1,31 @@
+id|title|organization_name|services|eligibility|languages_supported|location|topic|online_availability|hours_of_operation|resource_url|image_url|description
+1|Ambassadors Leadership Resource|Best Buddies International - Central Texas|Leadership training|None|English|Austin, TX|Leadership|0|Mon-Fri 9-5|https://bestbuddies.org|NULL|Public speaking & advocacy development.
+2|Community Kitchen Meals|Bethany House of Laredo|Hot meals|All walk-ins|English/Spanish|Laredo, TX|Food|0|Daily meal times|https://bethanyhouseoflaredo.org|NULL|Daily breakfast, lunch, and dinner.
+3|Youth Mentoring Resource|Big Brothers Big Sisters of Central Texas|Mentoring|Youth 6+|English|Austin, TX|Youth|0|Mon-Fri 9-5|https://bigmentoring.org|NULL|Match support & youth guidance.
+4|Veteran Support Resource - Gonzales|Bluebonnet Trails CS|Veterans services|Veterans & families|English|Gonzales, TX|Veterans|0|Intake 7:30-5:30|https://bbtrails.org|NULL|Counseling, peer support, equine therapy.
+5|Veteran Support Resource - Bastrop|Bluebonnet Trails CS|Veterans services|Veterans & families|English|Bastrop, TX|Veterans|0|Intake 7:30-5:30|https://bbtrails.org|NULL|Emergency funds & support services.
+6|Chronic Disease Prevention Resource|Boat People SOS|Health screenings|Open|Vietnamese/English|Houston, TX|Health|0|Mon-Fri 9-5:30|https://bpsos.org|NULL|Wellness education & screenings.
+7|Children's Literacy Resource|BookSpring|Literacy programs|Schools/clinics|English|Austin, TX|Education|0|Mon-Fri 10-4|https://bookspring.org|NULL|Books for children & literacy workshops.
+8|Senior Assistance Resource|Capital City Village|Aging in place support|Adults 55+|English|Austin, TX|Seniors|0|Mon-Fri 9-3|https://capcityvillage.org|NULL|Transportation & social activities.
+9|Public Safety Resource|Cass County Sheriff's Dept|Law enforcement|Low-income adults|English|Linden, TX|Safety|0|24/7|NULL|NULL|Crime prevention & emergency response.
+10|Pregnancy & Parenting Support - Austin|Catholic Charities|Parenting services|Pregnant parents|English/Spanish|Austin, TX|Parenting|0|Mon-Fri 8:30-5|https://ccctx.org|NULL|Case management & classes.
+11|Pregnancy & Parenting Support - Bryan|Catholic Charities|Parenting services|Pregnant parents|English/Spanish|Bryan, TX|Parenting|0|Mon-Fri 8:30-5|https://ccctx.org|NULL|Material assistance & education.
+12|Pregnancy & Parenting Support - Killeen|Catholic Charities|Parenting services|Pregnant parents|English/Spanish|Killeen, TX|Parenting|0|Mon-Fri 8:30-5|https://ccctx.org|NULL|Support & parenting programs.
+13|Veteran Peer Support Resource|CHCS|Peer support groups|Veterans & families|English|San Antonio, TX|Veterans|0|Mon-Fri 8:30-5:30|https://chcs.org|NULL|Confidential support groups.
+14|Parent Education Resource|CHCS HOPES|Parent support|Parents 0-5 yrs|English|San Antonio, TX|Parenting|0|Mon-Fri 8:30-5:30|https://chcs.org|NULL|Home-based parent education.
+15|Therapeutic Equine Services|Champion Oaks Ranch|Equine therapy|Children & families|English|Jasper, TX|Therapy|0|Mon-Fri 8-4|NULL|NULL|Guidance & equine therapy.
+16|Youth Advocacy Resource|CAC Greater West Texas|Advocacy meetings|Parents & youth|English|San Angelo, TX|Youth|0|Monthly|https://cacwesttexas.org|NULL|Community education & advocacy.
+17|Respite Program Resource|CAMP|Respite events|People w/ disabilities|English|San Antonio, TX|Disability|0|Mon-Fri 8-4|https://campcamp.org|NULL|Night out events & camps.
+18|Transplant Funding Resource|COTA|Transplant support|Children 0-21|English|Bloomington, IN|Medical|0|Mon-Fri 7-4|https://cota.org|NULL|Fundraising & patient-family support.
+19|Parent Coaching Resource|Children’s Shelter|Parenting classes|Parents 0-5 yrs|English/Spanish|San Antonio, TX|Parenting|0|Varies|https://childrensshelter.org|NULL|Weekly parenting classes.
+20|Special Needs Resource|CSNN|Special needs support|Children birth-21|English|Belton, TX|Special Needs|0|Mon-Fri 8-5|https://special-children.org|NULL|Referrals & annual events.
+21|Financial Opportunity Resource|CCC Houston|Financial education|Adults 18+|English/Chinese|Houston, TX|Finance|0|Mon-Fri 9-5|https://ccchouston.org|NULL|Job help and financial counseling.
+22|Legal Clinic Resource|CCC Houston|Legal services|All residents|English|Houston, TX|Legal|0|3rd Wed 1:30-3:30|https://ccchouston.org|NULL|Brief legal consultations.
+23|Cancer Support Resource|CHRISTUS Health|Support groups|Cancer patients|English|Tyler, TX|Health|0|Varies|https://christushealth.org|NULL|Patient & caregiver groups.
+24|Emergency Preparedness Resource|City of Austin|Disaster preparedness|General public|English/Spanish|Austin, TX|Emergency|1|Mon-Fri 7:45-4:45|https://austintexas.gov|NULL|Preparedness training & materials.
+25|Bike Safety Resource|City of Austin Public Works|Bike/pedestrian safety|Residents|English|Austin, TX|Safety|0|Mon-Fri 8-5|https://austintexas.gov|NULL|Safety training & maps.
+26|Youth Support Resource|City of Houston|Youth enrichment|K-12 youth|English|Houston, TX|Youth|0|Mon-Fri 8-5|https://houstontx.gov|NULL|Education programs.
+27|Fitness Council Resource|City of San Antonio MFC|Health promotion|All residents|English|San Antonio, TX|Health|0|24/7|https://sanantonio.gov|NULL|Promotes wellbeing & events.
+28|Victim Assistance Resource - Frio|SAPD|Victim advocacy|Crime victims|English|San Antonio, TX|Victim Services|0|Mon-Fri 7:45-4:30|https://sanantonio.gov|NULL|Crisis response.
+29|Victim Assistance Resource - Houston St|SAPD|Victim advocacy|Crime victims|English|San Antonio, TX|Victim Services|0|Mon-Fri 7:45-4:30|https://sanantonio.gov|NULL|Family crisis intervention.
+30|Public Library Resource|San Antonio Public Library|Library services|All residents|English|San Antonio, TX|Library|1|Mon-Sun|https://mysapl.org|NULL|Books, events, digital access.

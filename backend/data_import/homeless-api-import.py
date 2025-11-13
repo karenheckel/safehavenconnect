@@ -6,21 +6,21 @@ from models import Organization, Resource
 app = create_app()
 
 def import_shelters():
-    api_key = os.getenv("RAPIDAPI_KEY", "9d80279d88msh249473dcbd9a85bp1312f0jsn9eab5d8b0fe6")
+    api_key = os.getenv("RAPIDAPI_KEY", "742ce9e20amsh8b8e1ea6fcec11ap1a85d5jsnc4b97d8ca925")
     headers = {
         "x-rapidapi-host": "homeless-shelter.p.rapidapi.com",
         "x-rapidapi-key": api_key
     }
 
-    cities = [
-        {"state": "Texas", "city": "Austin"},
-        {"state": "Texas", "city": "Houston"},
-        {"state": "Texas", "city": "Dallas"}
+    zipcodes = [
+        {"zipcode": "78701", "city": "Austin"},    # Austin, TX
+        {"zipcode": "77001", "city": "Houston"},   # Houston, TX
+        {"zipcode": "75201", "city": "Dallas"}     # Dallas, TX
     ]
 
-    for city in cities:
-        print(f"Fetching shelters in {city['city']}, {city['state']}...")
-        url = f"https://homeless-shelter.p.rapidapi.com/state-city?state={city['state']}&city={city['city']}"
+    for location in zipcodes:
+        print(f"Fetching shelters for zipcode {location['zipcode']} ({location['city']})...")
+        url = f"https://homeless-shelter.p.rapidapi.com/zipcode?zipcode={location['zipcode']}"
         response = requests.get(url, headers=headers)
 
         try:
@@ -54,7 +54,7 @@ def import_shelters():
             continue
 
         if not shelters:
-            print(f"No shelters found for {city['city']}, skipping.")
+            print(f"No shelters found for {location['city']} (zipcode {location['zipcode']}), skipping.")
             continue
 
         # Now process each shelter
@@ -82,6 +82,7 @@ def import_shelters():
                     organization_type="Shelter Organization",
                     website_url=website,
                     description=f"{name} provides shelter and support services in {city_name}.",
+                    map_url=f"{city_name}, {state}"
                 )
                 db.session.add(organization)
 
@@ -93,14 +94,15 @@ def import_shelters():
                 topic="Homelessness Support",
                 category="Women's Shelter" if name and "women" in name.lower() else "General Shelter",
                 resource_url=website,
-                description=f"Shelter located in {city_name}, {state}. Contact: {phone or 'N/A'}"
+                description=f"Shelter located in {city_name}, {state}. Contact: {phone or 'N/A'}",
+                map_url=f"{address or 'Unknown'}, {city_name}, {state}"
             )
 
             resource.organizations.append(organization)
             db.session.add(resource)
 
         db.session.commit()
-        print(f"Imported shelters for {city['city']}.")
+        print(f"Imported shelters for {location['city']}.")
 
     print("🎉 Done importing all shelters!")
 

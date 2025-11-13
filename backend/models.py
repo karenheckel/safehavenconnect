@@ -35,6 +35,7 @@ class Organization(db.Model):
     website_url = db.Column(db.String(500))
     description = db.Column(db.Text)
     hours_of_operation = db.Column(db.Text)
+    map_url = db.Column(db.String(500))
     
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -57,6 +58,7 @@ class Organization(db.Model):
             'website_url': self.website_url,
             'description': self.description,
             'hours_of_operation': self.hours_of_operation,
+            'map_url': self.map_url,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,
             'resource_ids': [r.id for r in self.resources],
@@ -83,6 +85,7 @@ class Resource(db.Model):
     resource_url = db.Column(db.String(500))
     image_url = db.Column(db.String(500))
     description = db.Column(db.Text)
+    map_url = db.Column(db.String(500))
     
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -107,6 +110,7 @@ class Resource(db.Model):
             'resource_url': self.resource_url,
             'image_url': self.image_url,
             'description': self.description,
+            'map_url': self.map_url,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,
             'organization_ids': [o.id for o in self.organizations],
