@@ -4,7 +4,8 @@ import InfoCard from "../components/InfoCard";
 import axios from "axios";
 import backupData from "../backupData.json";
 
-const BACKEND_URL = "https://backend.safehavenconnect.me";
+// const BACKEND_URL = "https://backend.safehavenconnect.me";
+const BACKEND_URL = "http://52.6.209.159";
 
 const Events = () => {
   const [eventsInfo, setEventsInfo] = useState([]);
@@ -26,7 +27,7 @@ const Events = () => {
 
   const getEvents = async () => {
     try {
-      const res = await axios.get(`/api/events`, {
+      const res = await axios.get(`${BACKEND_URL}/api/events`, {
         params: { 
           page: currPage, 
           per_page: cardsOnPage, 
