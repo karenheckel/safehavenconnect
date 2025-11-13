@@ -113,7 +113,7 @@ const OrganizationPage = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {orgInfo.website_url}
+                    Learn More!
                   </a>
                 ) : (
                   "N/A"

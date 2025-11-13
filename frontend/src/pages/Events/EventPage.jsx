@@ -154,7 +154,7 @@ const EventPage = () => {
                   <a href={eventInfo.event_url}
                     target="_blank"
                     rel="noopener noreferrer" >
-                    {eventInfo.event_url} </a></p>)}
+                    Learn More! </a></p>)}
             </Card>
           </Col>
         </Row>

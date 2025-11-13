@@ -117,7 +117,7 @@ const ResourcePage = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {resourceInfo.resource_url}
+                    Learn More!
                   </a>
                 ) : (
                   "N/A"
