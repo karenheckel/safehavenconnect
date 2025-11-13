@@ -4,8 +4,7 @@ import InfoCard from "../components/InfoCard";
 import axios from "axios";
 import backupData from "../backupData.json";
 
-// const BACKEND_URL = "https://backend.safehavenconnect.me";
-const BACKEND_URL = "http://52.6.209.159";
+const BACKEND_URL = "https://backend.safehavenconnect.me";
 
 const Events = () => {
   const [eventsInfo, setEventsInfo] = useState([]);
