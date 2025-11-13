@@ -26,7 +26,7 @@ const Events = () => {
 
   const getEvents = async () => {
     try {
-      const res = await axios.get(`${BACKEND_URL}/api/events`, {
+      const res = await axios.get(`/api/events`, {
         params: { 
           page: currPage, 
           per_page: cardsOnPage, 
