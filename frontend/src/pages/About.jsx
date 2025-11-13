@@ -13,15 +13,6 @@ const team = [
     unitTests: "20",
   },
   {
-    photo: "/photos/parul_photo.jpeg",
-    name: "Parul Sadasivuni",
-    role: "Full Stack Developer",
-    bio: "My name is Parul and I'm a junior in Computer Science and Business here at UT. I'm a research assistant with Dr. Caleb Kwon in the McCombs School of Business studying the impacts of minimum wage shocks on employment. In my free time, I enjoy music and watching Longhorn sports!",
-    commitIds: ["txpsree@gmail.com", "Parul S Sadasivuni"],
-    gitlabUser: "parul.sadasivuni",
-    unitTests: "0",
-  },
-  {
     photo: "/photos/brianna_photo.jpeg",
     name: "Brianna Flores",
     role: "Full Stack Developer",
@@ -31,13 +22,13 @@ const team = [
     unitTests: "10",
   },
   {
-    photo: "/photos/ali_photo.jpg",
-    name: "Ali Novruzov",
-    role: "Backend Developer",
-    bio: "My name is Ali and I'm in my final year at UT. I recently completed an AI Engineering position with Fujitsu. In my free time I like to learn history and watch sci-fi movies. Travel is also something I find really fun.",
-    commitIds: ["anovruzov"],
-    gitlabUser: "anovruzov",
-    unitTests: "20",
+    photo: "/photos/parul_photo.jpeg",
+    name: "Parul Sadasivuni",
+    role: "Full Stack Developer",
+    bio: "My name is Parul and I'm a junior in Computer Science and Business here at UT. I'm a research assistant with Dr. Caleb Kwon in the McCombs School of Business studying the impacts of minimum wage shocks on employment. In my free time, I enjoy music and watching Longhorn sports!",
+    commitIds: ["txpsree@gmail.com", "Parul S Sadasivuni"],
+    gitlabUser: "parul.sadasivuni",
+    unitTests: "0",
   },
   {
     photo: "/photos/jonathan_photo.jpg",
@@ -47,6 +38,18 @@ const team = [
     commitIds: ["B4NAN4NA"],
     gitlabUser: "jnthnho",
     unitTests: "3",
+  },
+];
+
+const prevContributors = [
+  {
+    photo: "/photos/ali_photo.jpg",
+    name: "Ali Novruzov",
+    role: "Backend Developer",
+    bio: "My name is Ali and I'm in my final year at UT. I recently completed an AI Engineering position with Fujitsu. In my free time I like to learn history and watch sci-fi movies. Travel is also something I find really fun.",
+    commitIds: ["anovruzov"],
+    gitlabUser: "anovruzov",
+    unitTests: "20",
   },
 ];
 
@@ -168,7 +171,8 @@ const About = () => {
 
           <Row className="g-4">
             {team.map((member) => (
-              <Col md={6} lg={4} key={member.name}>
+              <Col xs={12} sm={6} md={6} lg={3} key={member.name}>
+
                 <Card
                   className="shadow-lg border-0"
                   style={{
@@ -231,6 +235,88 @@ const About = () => {
                     ) : (
                       <Spinner animation="border" size="sm" className="mt-4" />
                     )}
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      </section>
+
+      {/* Previous Contributors Section */}
+      <section
+        style={{
+          padding: "4rem 0",
+          backgroundColor: "#f8faf9",
+        }}
+      >
+        <Container>
+          <h2 className="text-center fw-bold mb-5" style={{ fontSize: "2rem" }}>
+            Previous Contributors
+          </h2>
+
+          <Row className="g-4 justify-content-center">
+            {prevContributors.map((member) => (
+              <Col md={6} lg={4} key={member.name}>
+                <Card
+                  className="shadow-lg border-0"
+                  style={{
+                    borderRadius: "22px",
+                    transition: "0.25s",
+                  }}
+                >
+                  <Card.Body className="text-center px-4 py-5">
+                    <Image
+                      src={member.photo}
+                      alt={member.name}
+                      roundedCircle
+                      style={{
+                        width: "130px",
+                        height: "130px",
+                        border: "5px solid #cde5d7",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                        objectFit: "cover",
+                        marginBottom: "1rem",
+                      }}
+                    />
+
+                    <h4 className="fw-bold">{member.name}</h4>
+                    <p className="text-muted">{member.role}</p>
+
+                    <p className="mt-3" style={{ minHeight: "100px" }}>
+                      {member.bio}
+                    </p>
+
+                    {/* Hard-coded stats for Ali */}
+                    <div className="mt-4">
+                      <Row>
+                        {[
+                          ["Commits", 20],
+                          ["Issues Created", 2],
+                          ["Issues Closed", 2],
+                          ["Unit Tests", 20],
+                        ].map(([label, value]) => (
+                          <Col xs={6} className="mb-3" key={label}>
+                            <div
+                              style={{
+                                borderRadius: "12px",
+                                padding: "0.75rem",
+                                background: "#ffffff",
+                                border: "1px solid #e1e9e5",
+                              }}
+                            >
+                              <strong>{value}</strong>
+                              <p
+                                className="m-0 text-muted"
+                                style={{ fontSize: "0.8rem" }}
+                              >
+                                {label}
+                              </p>
+                            </div>
+                          </Col>
+                        ))}
+                      </Row>
+                    </div>
                   </Card.Body>
                 </Card>
               </Col>
