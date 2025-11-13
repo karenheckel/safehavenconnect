@@ -6,11 +6,11 @@ const team = [
   {
     photo: "/photos/karen_photo.jpg",
     name: "Karen Heckel",
-    role: "Frontend Developer",
+    role: "Fullstack Developer",
     bio: "I am a junior majoring in Computer Science. Currently, I am an Undergraduate Research Assistant at TACC and the Academic officer for HACS. Outside of school, I enjoy thrifting and watching movies!",
     commitIds: ["karenheckel"],
     gitlabUser: "karenheckel",
-    unitTests: "0",
+    unitTests: "20",
   },
   {
     photo: "/photos/parul_photo.jpeg",
@@ -28,7 +28,7 @@ const team = [
     bio: "Hello! I'm a junior studying Computer Science with a minor in Business. I currently serve as the Marketing Officer for the Hispanic Association of Computer Scientists (HACS) and am also a member of Longhorn Developers and TCUP. I also love to crochet and run a small business, StockysCrafts, where I sell handmade crochet plushies!",
     commitIds: ["Brianna-Flo"],
     gitlabUser: "Brianna-Flo",
-    unitTests: "0",
+    unitTests: "10",
   },
   {
     photo: "/photos/ali_photo.jpg",
@@ -37,7 +37,7 @@ const team = [
     bio: "My name is Ali and I'm in my final year at UT. I recently completed an AI Engineering position with Fujitsu. In my free time I like to learn history and watch sci-fi movies. Travel is also something I find really fun.",
     commitIds: ["anovruzov"],
     gitlabUser: "anovruzov",
-    unitTests: "0",
+    unitTests: "20",
   },
   {
     photo: "/photos/jonathan_photo.jpg",
@@ -46,7 +46,7 @@ const team = [
     bio: "Hi! My name is Jonathan Ho, and I'm currently a junior studying Computer Science and Business at UT Austin. Over the summer, I worked as a generative AI intern at Scale AI. In my free time, I enjoy playing basketball and absolutely nothing else.",
     commitIds: ["B4NAN4NA"],
     gitlabUser: "jnthnho",
-    unitTests: "0",
+    unitTests: "3",
   },
 ];
 
@@ -155,77 +155,113 @@ const About = () => {
       </div>
 
       {/* Team Section */}
-      <Container className="my-5">
-        <h2 className="text-center mb-4">Our Team</h2>
-        <Row>
-          {team.map((member) => (
-            <Col md={4} key={member.name} className="mb-4">
-              <Card className="h-100 shadow-sm">
-                <Card.Body className="text-center">
-                  <Image
-                    src={member.photo}
-                    alt={member.name}
-                    roundedCircle
-                    className="mb-3"
-                    style={{
-                      width: "120px",
-                      height: "120px",
-                      objectFit: "cover",
-                    }}
-                  />
-                  <h5 className="fw-bold">{member.name}</h5>
-                  <p className="text-muted">{member.role}</p>
-                  <p>{member.bio}</p>
-                  {stats[member.name] ? (
-                    <>
-                      <p>
-                        <strong>Commits:</strong> {stats[member.name].commits}
-                      </p>
-                      <p>
-                        <strong>Issues Created:</strong>{" "}
-                        {stats[member.name].issuesCreated}
-                      </p>
-                      <p>
-                        <strong>Issues Closed:</strong>{" "}
-                        {stats[member.name].issuesClosed}
-                      </p>
-                      <p>
-                        <strong>Unit Tests:</strong>{" "}
-                        {stats[member.name].unitTests}
-                      </p>
-                    </>
-                  ) : (
-                    <Spinner animation="border" size="sm" />
-                  )}
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </Container>
+      <section
+        style={{
+          padding: "5rem 0",
+          backgroundColor: "#ffffff",
+        }}
+      >
+        <Container>
+          <h2 className="text-center fw-bold mb-5" style={{ fontSize: "2.5rem" }}>
+            Meet the Team
+          </h2>
 
-{/* Data Integration Section */}
-<div style={{ backgroundColor: "#e9f4ef", padding: "3rem 0" }}>
-  <Container>
-    <Row className="justify-content-center text-center">
-      <Col md={9}>
-        <h2 className="fw-bold">Why Data Integration Matters</h2>
-        <p className="lead mt-3">
-          Survivors shouldn't have to dig through
-          websites, listings, and outdated information just to
-          find help. By integrating data from multiple trusted sources,
-          SafeHavenConnect brings together housing, crisis
-          support, legal aid, and community events into a single platform.
-        </p>
-        <p className="mt-3">
-          This approach makes it much easier for individuals to discover
-          resources they may not have known existed. Instead of searching
-          endlessly, users can now connect quickly with the support they need.
-        </p>
-      </Col>
-    </Row>
-  </Container>
-</div>
+          <Row className="g-4">
+            {team.map((member) => (
+              <Col md={6} lg={4} key={member.name}>
+                <Card
+                  className="shadow-lg border-0"
+                  style={{
+                    borderRadius: "22px",
+                    transition: "0.25s",
+                  }}
+                >
+                  <Card.Body className="text-center px-4 py-5">
+                    <Image
+                      src={member.photo}
+                      alt={member.name}
+                      roundedCircle
+                      style={{
+                        width: "130px",
+                        height: "130px",
+                        border: "5px solid #cde5d7",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                        objectFit: "cover",
+                        marginBottom: "1rem",
+                      }}
+                    />
+
+                    <h4 className="fw-bold">{member.name}</h4>
+                    <p className="text-muted">{member.role}</p>
+
+                    <p className="mt-3" style={{ minHeight: "100px" }}>
+                      {member.bio}
+                    </p>
+
+                    {stats[member.name] ? (
+                      <div className="mt-4">
+                        <Row>
+                          {[
+                            ["Commits", stats[member.name].commits],
+                            ["Issues Created", stats[member.name].issuesCreated],
+                            ["Issues Closed", stats[member.name].issuesClosed],
+                            ["Unit Tests", stats[member.name].unitTests],
+                          ].map(([label, value]) => (
+                            <Col xs={6} className="mb-3" key={label}>
+                              <div
+                                style={{
+                                  borderRadius: "12px",
+                                  padding: "0.75rem",
+                                  background: "#f8faf9",
+                                  border: "1px solid #e1e9e5",
+                                }}
+                              >
+                                <strong>{value}</strong>
+                                <p
+                                  className="m-0 text-muted"
+                                  style={{ fontSize: "0.8rem" }}
+                                >
+                                  {label}
+                                </p>
+                              </div>
+                            </Col>
+                          ))}
+                        </Row>
+                      </div>
+                    ) : (
+                      <Spinner animation="border" size="sm" className="mt-4" />
+                    )}
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      </section>
+
+
+      {/* Data Integration Section */}
+      <div style={{ backgroundColor: "#e9f4ef", padding: "3rem 0" }}>
+        <Container>
+          <Row className="justify-content-center text-center">
+            <Col md={9}>
+              <h2 className="fw-bold">Why Data Integration Matters</h2>
+              <p className="lead mt-3">
+                Survivors shouldn't have to dig through
+                websites, listings, and outdated information just to
+                find help. By integrating data from multiple trusted sources,
+                SafeHavenConnect brings together housing, crisis
+                support, legal aid, and community events into a single platform.
+              </p>
+              <p className="mt-3">
+                This approach makes it much easier for individuals to discover
+                resources they may not have known existed. Instead of searching
+                endlessly, users can now connect quickly with the support they need.
+              </p>
+            </Col>
+          </Row>
+        </Container>
+      </div>
 
 
       {/* Tools Section */}
