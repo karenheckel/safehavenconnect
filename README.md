@@ -66,7 +66,7 @@ d9b3a8045622f3853ceb405b7002073ba38c79b9
 - Led group meetings, made sure tasks were completed, and kept team on task.
 
 #### Phase 3 Git SHA
-1cb600b79e95809f31ed7dca8bbf98a731cf196b
+e888afb30da3338fd27375dd2ebc018e1786af32
 
 #### Phase 3 Estimated and Actual Completion Time
 | Member | Estimated (hours) | Actual (hours) |
@@ -74,7 +74,7 @@ d9b3a8045622f3853ceb405b7002073ba38c79b9
 | **Brianna Flores** | 8 | 16 |
 | **Jonathan Ho** | 10 | 13 |
 | **Karen Heckel** | 15 | 20 |
-| **Parul Sadasivuni** | 15 | 15 |
+| **Parul Sadasivuni** | 15 | 12 |
 
 
 ## Phase 4
