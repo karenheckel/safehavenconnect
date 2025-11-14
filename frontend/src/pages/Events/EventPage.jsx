@@ -72,10 +72,12 @@ const EventPage = () => {
             organization_ids: event.organization_ids,
             resource_ids: event.resource_ids,
           });
+
           // Fetch related organizations
-          if (event.organization_ids?.length) {
+          const limitedOrgIds = event.organization_ids.slice(0, 10);
+          if (limitedOrgIds.length > 0) {
             const orgResponses = await Promise.all(
-              event.organization_ids.map((oid) =>
+              limitedOrgIds.map((oid) =>
                 axios.get(`${BACKEND_URL}/api/organizations/${oid}`)
               )
             );
@@ -93,9 +95,10 @@ const EventPage = () => {
           }
 
           // Fetch related resources
-          if (event.resource_ids?.length) {
+          const limitedResIds = event.resource_ids.slice(0, 10);
+          if (limitedResIds.length > 0) {
             const resResponses = await Promise.all(
-              event.resource_ids.map((rid) =>
+              limitedResIds.map((rid) =>
                 axios.get(`${BACKEND_URL}/api/resources/${rid}`)
               )
             );
@@ -195,7 +198,7 @@ const EventPage = () => {
             </div>
           </Col>
         </Row>
-        {eventInfo.map_url && eventInfo.map_url !== "NULL" ? (
+        {/* {eventInfo.map_url && eventInfo.map_url !== "NULL" ? (
           <Row className="my-4">
             <Col>
               <iframe
@@ -216,7 +219,7 @@ const EventPage = () => {
               <p className="text-muted">Map Currently Unavailable.</p>
             </Col>
           </Row>
-        )}
+        )} */}
 
         {/* Related Section */}
         <div
