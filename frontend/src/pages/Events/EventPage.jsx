@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import InfoCard from "../../components/InfoCard";
-import backupData from "../../backupData.json"
+import backupData from "../../backupData.json";
 
 const BACKEND_URL = "https://backend.safehavenconnect.me";
 
@@ -48,11 +48,14 @@ const EventPage = () => {
           })}`;
 
           // Format date
-          const formattedDate = new Date(event.date).toLocaleDateString(undefined, {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          });
+          const formattedDate = new Date(event.date).toLocaleDateString(
+            undefined,
+            {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            }
+          );
 
           setEventInfo({
             name: event.name,
@@ -142,23 +145,57 @@ const EventPage = () => {
           </Col>
           <Col className="text-center" md={6}>
             <Card body className="shadow-sm">
-              <p><strong>Event Type:</strong> {eventInfo.event_type}</p>
-              <p><strong>Description:</strong> {eventInfo.description}</p>
-              <p><strong>Location:</strong> {eventInfo.location}</p>
-              <p><strong>Date:</strong> {eventInfo.date}</p>
-              <p><strong>Time:</strong> {eventInfo.time}</p>
-              <p><strong>Online:</strong> {eventInfo.is_online}</p>
-              <p><strong>Registration:</strong> {eventInfo.registration}</p>
-              {eventInfo.event_url && (
-                <p> <strong>Website:</strong>{" "}
-                  <a href={eventInfo.event_url.startsWith("http") ? eventInfo.event_url : `https://${eventInfo.event_url}`}
+              <p>
+                <strong>Event Type:</strong> {eventInfo.event_type}
+              </p>
+              <p>
+                <strong>Description:</strong> {eventInfo.description}
+              </p>
+              <p>
+                <strong>Location:</strong> {eventInfo.location}
+              </p>
+              <p>
+                <strong>Date:</strong> {eventInfo.date}
+              </p>
+              <p>
+                <strong>Time:</strong> {eventInfo.time}
+              </p>
+              <p>
+                <strong>Online:</strong> {eventInfo.is_online}
+              </p>
+              <p>
+                <strong>Registration:</strong> {eventInfo.registration}
+              </p>
+              <div className="d-grid gap-2 mt-3">
+                {eventInfo.event_url ? (
+                  <Button
+                    variant="success"
+                    href={
+                      eventInfo.event_url.startsWith("http")
+                        ? eventInfo.event_url
+                        : `https://${eventInfo.event_url}`
+                    }
                     target="_blank"
-                    rel="noopener noreferrer" >
-                    Learn More! </a></p>)}
+                    rel="noopener noreferrer"
+                    size="lg"
+                    style={{
+                      backgroundColor: "#2e856e",
+                      borderColor: "#2e856e",
+                    }}
+                  >
+                    Visit Website{" "}
+                    <i className="bi bi-box-arrow-up-right ms-2"></i>
+                  </Button>
+                ) : (
+                  <Button variant="secondary" size="lg" disabled>
+                    No Website Available
+                  </Button>
+                )}
+              </div>
             </Card>
           </Col>
         </Row>
-        {(eventInfo.map_url && eventInfo.map_url !== "NULL") ? (
+        {eventInfo.map_url && eventInfo.map_url !== "NULL" ? (
           <Row className="my-4">
             <Col>
               <iframe
@@ -166,7 +203,7 @@ const EventPage = () => {
                 src={eventInfo.map_url}
                 width="100%"
                 height="450"
-                style={{ border: 0, borderRadius: '8px' }}
+                style={{ border: 0, borderRadius: "8px" }}
                 allowFullScreen=""
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
@@ -180,26 +217,40 @@ const EventPage = () => {
             </Col>
           </Row>
         )}
-        
-        {/* Related Section */}
-        <div style={{ backgroundColor: "#f7faf8" }} className="py-5 px-3 my-5 rounded">
-          <Row className="gy-4">
 
+        {/* Related Section */}
+        <div
+          style={{ backgroundColor: "#f7faf8" }}
+          className="py-5 px-3 my-5 rounded"
+        >
+          <Row className="gy-4">
             {/* Related Organizations */}
             <Col md={6}>
               <div className="p-4 bg-white shadow-sm rounded">
-                <h3 className="mb-3 border-bottom pb-2">Related Organizations</h3>
+                <h3 className="mb-3 border-bottom pb-2">
+                  Related Organizations
+                </h3>
 
                 {relatedOrgs.length > 0 ? (
                   <Row>
                     {relatedOrgs.map((org) => (
-                      <Col xs={12} key={org.id} className="mb-4 d-flex justify-content-center">
-                        <InfoCard cardType="organization" cardInfo={org} id={org.id} />
+                      <Col
+                        xs={12}
+                        key={org.id}
+                        className="mb-4 d-flex justify-content-center"
+                      >
+                        <InfoCard
+                          cardType="organization"
+                          cardInfo={org}
+                          id={org.id}
+                        />
                       </Col>
                     ))}
                   </Row>
                 ) : (
-                  <p className="text-muted text-center">No related organizations found.</p>
+                  <p className="text-muted text-center">
+                    No related organizations found.
+                  </p>
                 )}
               </div>
             </Col>
@@ -212,20 +263,28 @@ const EventPage = () => {
                 {relatedResources.length > 0 ? (
                   <Row>
                     {relatedResources.map((res) => (
-                      <Col xs={12} key={res.id} className="mb-4 d-flex justify-content-center">
-                        <InfoCard cardType="resource" cardInfo={res} id={res.id} />
+                      <Col
+                        xs={12}
+                        key={res.id}
+                        className="mb-4 d-flex justify-content-center"
+                      >
+                        <InfoCard
+                          cardType="resource"
+                          cardInfo={res}
+                          id={res.id}
+                        />
                       </Col>
                     ))}
                   </Row>
                 ) : (
-                  <p className="text-muted text-center">No related resources found.</p>
+                  <p className="text-muted text-center">
+                    No related resources found.
+                  </p>
                 )}
               </div>
             </Col>
-
           </Row>
         </div>
-
       </Container>
     </>
   );

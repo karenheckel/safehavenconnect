@@ -11,20 +11,20 @@ cache:
   paths:
     - frontend/node_modules/
 
-# frontend_tests:
-#   stage: test
-#   image: node:$NODE_VERSION
-#   before_script:
-#     - cd frontend
-#     - npm ci
-#   script:
-#     - npm run lint
-#     - npm run build
-#     - npm test -- --run
-#   artifacts:
-#     paths:
-#       - frontend/dist/
-#     expire_in: 1 hour
+frontend_tests:
+  stage: test
+  image: node:$NODE_VERSION
+  before_script:
+    - cd frontend
+    - npm ci
+  script:
+    - npm run lint
+    - npm run build
+    - npm test -- --run
+  artifacts:
+    paths:
+      - frontend/dist/
+    expire_in: 1 hour
 
 backend_tests:
   stage: test
