@@ -480,7 +480,7 @@ def create_app(config_name='default', testing=False):
                 ranges = {
                     "morning": (5, 11),
                     "afternoon": (12, 16),
-                    "evening": (17, 21),
+                    "evening": (17, 23),
                 }
 
                 filters = []

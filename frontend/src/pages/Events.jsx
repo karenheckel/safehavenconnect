@@ -120,6 +120,9 @@ const Events = () => {
               : undefined,
           sort: sort,
         },
+        paramsSerializer: {
+          indexes: null,
+        }, 
       });
       const pagination = res.data.pagination;
       const formatted = res.data.data.map(formatEventData);
@@ -369,15 +372,15 @@ const Events = () => {
               <Accordion.Item eventKey="3">
                 <Accordion.Header>Hours</Accordion.Header>
                 <Accordion.Body>
-                  {["Morning", "Afternoon", "Evening", "N/A"].map((option) => (
-                    <Form.Check
-                      key={option}
-                      type="checkbox"
-                      label={option}
-                      checked={filter.hours.includes(option)}
-                      onChange={() => handleHoursChange(option)}
-                    />
-                  ))}
+                {[{label: "Morning (5 AM - 11 AM)", value: "Morning"}, {label: "Afternoon (12 PM - 4 PM)", value: "Afternoon"}, {label: "Evening (5 PM - 11 PM)", value: "Evening"}, {label: "All Day/Unspecified", value: "N/A"}].map((option) => (
+                   <Form.Check
+                     key={option.value}
+                     type="checkbox"
+                     label={option.label}
+                     checked={filter.hours.includes(option.value)}
+                     onChange={() => handleHoursChange(option.value)}
+                   />
+                 ))}
                 </Accordion.Body>
               </Accordion.Item>
 
