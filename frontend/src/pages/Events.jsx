@@ -219,7 +219,7 @@ const Events = () => {
     <Container className="text-center my-5">
       <h1>Upcoming Events</h1>
       <p>Number of events: {total}</p>
-      <p>Showing {eventsInfo.length} organizations on this page</p>
+      <p>Showing {eventsInfo.length} events on this page</p>
       <Form
         onSubmit={handleSearch}
         className="d-flex justify-content-center mb-5"

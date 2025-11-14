@@ -195,7 +195,7 @@ const EventPage = () => {
             </div>
           </Col>
         </Row>
-        {eventInfo.map_url && eventInfo.map_url !== "NULL" ? (
+        {/* {eventInfo.map_url && eventInfo.map_url !== "NULL" ? (
           <Row className="my-4">
             <Col>
               <iframe
@@ -216,7 +216,7 @@ const EventPage = () => {
               <p className="text-muted">Map Currently Unavailable.</p>
             </Col>
           </Row>
-        )}
+        )} */}
 
         {/* Related Section */}
         <div
