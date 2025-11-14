@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Container, Row, Col } from "react-bootstrap";
+import { Card, Container, Row, Col, Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -12,6 +12,7 @@ const ResourcePage = () => {
   const { id } = useParams();
   const [resourceInfo, setResourceInfo] = useState(null);
   const [relatedOrgs, setRelatedOrgs] = useState([]);
+  const [relatedEvents, setRelatedEvents] = useState([]);
 
   useEffect(() => {
     if (id.startsWith("default")) {
@@ -80,6 +81,56 @@ const ResourcePage = () => {
     fetchRelatedOrgs();
   }, [resourceInfo]);
 
+  useEffect(() => {
+    const fetchRelatedEvents = async () => {
+      if (resourceInfo?.event_ids?.length) {
+        try {
+          const responses = await Promise.all(
+            resourceInfo.event_ids.map((eventId) =>
+              axios.get(`${BACKEND_URL}/api/events/${eventId}`)
+            )
+          );
+
+          const formatted = responses.map((res) => {
+            const e = res.data;
+
+            const start = e.start_time ? new Date(e.start_time) : null;
+            const end = e.end_time ? new Date(e.end_time) : null;
+
+            return {
+              id: e.id,
+              title: e.name,
+              location: e.location,
+              description: e.description,
+              event_type: e.event_type,
+              date: e.date
+                ? new Date(e.date + "T00:00:00").toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+                : "N/A",
+              time:
+                start && end
+                  ? `${start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} - ${end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`
+                  : "N/A",
+              registration: e.registration_open ? "Open" : "Closed",
+              online_availability: e.is_online ? "Yes" : "No",
+              image_url: e.image_url,
+            };
+          });
+
+          setRelatedEvents(formatted);
+        } catch (err) {
+          console.error("Error fetching related events:", err);
+        }
+      }
+    };
+
+    fetchRelatedEvents();
+  }, [resourceInfo]);
+
+
   if (!resourceInfo) {
     return (
       <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
@@ -110,52 +161,81 @@ const ResourcePage = () => {
               <p><strong>Type:</strong> {resourceInfo.type}</p>
               <p><strong>Hours:</strong> {resourceInfo.hours}</p>
               <p><strong>Online Availability:</strong> {resourceInfo.online_availability}</p>
-              <p><strong>Website:</strong>{" "}
-                {resourceInfo.resource_url ? (
-                  <a
-                    href={resourceInfo.resource_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Learn More!
-                  </a>
-                ) : (
-                  "N/A"
-                )}
-              </p>
-
             </Card>
+
+            <div className="d-grid gap-2 mt-3">
+              {resourceInfo.resource_url ? (
+                <Button
+                  variant="success"
+                  href={resourceInfo.resource_url.startsWith("http") ? resourceInfo.resource_url : `http://${resourceInfo.resource_url}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="lg"
+                  style={{
+                    backgroundColor: "#2e856e",
+                    borderColor: "#2e856e",
+                  }}
+                >
+                  Visit Website <i className="bi bi-box-arrow-up-right ms-2"></i>
+                </Button>
+              ) : (
+                <Button variant="secondary" size="lg" disabled>
+                  No Website Available
+                </Button>
+              )}
+            </div>
+
           </Col>
         </Row>
 
-        <Row className="my-3">
-          <Col className="text-center" md={6}>
-            <h3>Related Organizations</h3>
-            {relatedOrgs.length > 0 ? (
-              relatedOrgs.map((org) => (
-                <InfoCard key={org.id} cardType="organization" cardInfo={org} id={org.id} />
-              ))
-            ) : (
-              <p className="text-muted">No related organizations found.</p>
-            )}
-          </Col>
+        <div style={{ backgroundColor: "#f7faf8" }} className="py-5 px-3 my-5 rounded">
+          <Row className="gy-4">
+            <Col md={6}>
+              <div className="p-4 rounded shadow-sm bg-white mb-4">
+                <h3 className="mb-3 border-bottom pb-2">Related Organizations</h3>
 
-          <Col className="text-center" md={6}>
-            <h3>Related Events</h3>
-            {resourceInfo.event_ids?.length > 0 ? (
-              resourceInfo.event_ids.map((eventId) => (
-                <InfoCard
-                  key={eventId}
-                  cardType="event"
-                  cardInfo={{ id: eventId }}
-                  id={eventId}
-                />
-              ))
-            ) : (
-              <p className="text-muted">No related events found.</p>
-            )}
-          </Col>
-        </Row>
+                {relatedOrgs.length > 0 ? (
+                  <Row>
+                    {relatedOrgs.map((org) => (
+                      <Col xs={12} className="mb-4 d-flex justify-content-center">
+                        <InfoCard
+                          cardType="organization"
+                          cardInfo={org}
+                          id={org.id}
+                        />
+                      </Col>
+                    ))}
+                  </Row>
+                ) : (
+                  <p className="text-muted text-center">No related organizations found.</p>
+                )}
+              </div>
+            </Col>
+
+            <Col md={6}>
+              <div className="p-4 rounded shadow-sm bg-white mb-4">
+                <h3 className="mb-3 border-bottom pb-2">Related Events</h3>
+
+                {relatedEvents.length > 0 ? (
+                  <Row>
+                    {relatedEvents.map((event) => (
+                      <Col xs={12} className="mb-4 d-flex justify-content-center">
+                        <InfoCard
+                          cardType="event"
+                          cardInfo={event}
+                          id={event.id}
+                        />
+                      </Col>
+                    ))}
+                  </Row>
+                ) : (
+                  <p className="text-muted text-center">No related events found.</p>
+                )}
+              </div>
+            </Col>
+          </Row>
+        </div>
+
       </Container>
     </>
   );
