@@ -24,7 +24,7 @@ def populate_images():
         # ============ ORGANIZATIONS ============
         print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Fetching images for organizations...")
         orgs = Organization.query.filter(
-            (Organization.image_url.is_(None)) | (Organization.image_url == 'None')
+            (Organization.image_url.is_(None)) | (Organization.image_url == 'None') | (Organization.image_url == '') | (Organization.image_url == 'NULL')
         ).all()
         
         print(f"Found {len(orgs)} organizations without images")
@@ -53,7 +53,7 @@ def populate_images():
         # ============ RESOURCES ============
         print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Fetching images for resources...")
         resources = Resource.query.filter(
-            (Resource.image_url.is_(None)) | (Resource.image_url == 'None')
+            (Resource.image_url.is_(None)) | (Resource.image_url == 'None') | (Resource.image_url == '') | (Resource.image_url == 'NULL')
         ).all()
         
         print(f"Found {len(resources)} resources without images")
@@ -81,24 +81,31 @@ def populate_images():
         
         # ============ EVENTS ============
         print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Fetching images for events...")
+        # Get events without images OR with invalid image URLs (like HRSA logos that return 404)
         events = Event.query.filter(
-            (Event.image_url.is_(None)) | (Event.image_url == 'None')
+            (Event.image_url.is_(None)) | (Event.image_url == 'None') | (Event.image_url == '') | (Event.image_url == 'NULL') | (Event.image_url.like('%.hrsa.gov%'))
         ).all()
+        
+        print(f"Found {len(events)} events without images")
         
         if events:
             event_queries = [
                 (evt.id, evt.event_type or evt.name)
                 for evt in events
             ]
+            print(f"Fetching images for {len(event_queries)} items...")
             event_images = get_images_batch_cached(event_queries, max_workers=5)
             
+            updated = 0
             for evt in events:
-                if evt.id in event_images:
+                if evt.id in event_images and event_images[evt.id]:
                     evt.image_url = event_images[evt.id]
-                    print(f"  ✓ {evt.name}: {evt.image_url}")
+                    updated += 1
+                    if updated <= 5:  # Print first 5
+                        print(f"  ✓ {evt.name}: {evt.image_url}")
             
             db.session.commit()
-            print(f"[{datetime.now().strftime('%H:%M:%S')}] Updated {len(events)} events")
+            print(f"[{datetime.now().strftime('%H:%M:%S')}] Updated {updated} events")
         else:
             print(f"[{datetime.now().strftime('%H:%M:%S')}] No events need images")
         

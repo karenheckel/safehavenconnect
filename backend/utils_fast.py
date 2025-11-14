@@ -25,12 +25,23 @@ TOPIC_MAPPINGS = {
     "women's shelter": ["women's support", "safe housing for women", "women's assistance"],
     "general shelter": ["emergency housing", "temporary shelter", "safe shelter"],
     
-    # Events
+    # Events - Common types
     "training": ["workshop", "educational training", "skill development"],
     "meal service": ["community meal", "food service", "food bank"],
     "orientation": ["group meeting", "welcome event", "new member orientation"],
     "community health awareness": ["health awareness", "community health", "wellness event"],
     "workshop": ["training session", "educational workshop", "learning event"],
+    "wellness": ["wellness event", "health fair", "fitness class"],
+    "outreach": ["community outreach", "public event", "community engagement"],
+    "health fair": ["health screening", "medical fair", "health event"],
+    "mentoring": ["mentorship", "youth mentoring", "guidance"],
+    "veterans": ["veterans support", "veteran services", "military support"],
+    "youth": ["youth program", "teen event", "young people"],
+    "job training": ["job training", "employment", "career training"],
+    "health screening": ["medical screening", "health check", "wellness screening"],
+    "support group": ["support group", "peer support", "community support"],
+    "class": ["educational class", "training class", "learning class"],
+    "seminar": ["seminar", "educational seminar", "professional development"],
 }
 
 # Cache for API responses to avoid redundant calls
@@ -123,7 +134,9 @@ def get_images_batch(queries, fallback_url=None, max_workers=5):
         photos = _fetch_images_batch(search_query, search_query)
         
         if photos:
-            url = random.choice(photos)["src"]["medium"]
+            # Use index to distribute photos for diversity
+            photo_idx = index % len(photos)
+            url = photos[photo_idx]["src"]["medium"]
             results[index] = url
         else:
             results[index] = fallback_url
@@ -184,10 +197,20 @@ def get_images_batch_cached(items_with_queries, fallback_url=None, max_workers=5
                 photos = future.result()
                 
                 # Assign images to all items with this query
-                for idx, item_id in query_to_indices[search_query]:
-                    if photos:
-                        results[item_id] = random.choice(photos)["src"]["medium"]
-                    else:
+                # Distribute photos across items to maximize diversity
+                num_items = len(query_to_indices[search_query])
+                
+                if photos:
+                    # Create a list of photo indices, shuffled for diversity
+                    photo_indices = list(range(len(photos)))
+                    random.shuffle(photo_indices)
+                    
+                    for position, (idx, item_id) in enumerate(query_to_indices[search_query]):
+                        # Cycle through photos to distribute them
+                        photo_idx = photo_indices[position % len(photo_indices)]
+                        results[item_id] = photos[photo_idx]["src"]["medium"]
+                else:
+                    for idx, item_id in query_to_indices[search_query]:
                         results[item_id] = fallback_url
             except Exception as e:
                 print(f"Error fetching images: {e}")
