@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Container, Row, Col } from "react-bootstrap";
+import { Card, Container, Row, Col, Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -103,7 +103,13 @@ const ResourcePage = () => {
               location: e.location,
               description: e.description,
               event_type: e.event_type,
-              date: e.date,
+              date: e.date
+                ? new Date(e.date + "T00:00:00").toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+                : "N/A",
               time:
                 start && end
                   ? `${start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} - ${end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`
@@ -155,51 +161,81 @@ const ResourcePage = () => {
               <p><strong>Type:</strong> {resourceInfo.type}</p>
               <p><strong>Hours:</strong> {resourceInfo.hours}</p>
               <p><strong>Online Availability:</strong> {resourceInfo.online_availability}</p>
-              <p><strong>Website:</strong>{" "}
-                {resourceInfo.resource_url ? (
-                  <a
-                    href={resourceInfo.resource_url.startsWith("http") ? resourceInfo.resource_url : `http://${resourceInfo.resource_url}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Learn More!
-                  </a>
-                ) : (
-                  "N/A"
-                )}
-              </p>
-
             </Card>
-          </Col>
-        </Row>
 
-        <Row className="my-3">
-          <Col className="text-center" md={6}>
-            <h3>Related Organizations</h3>
-            {relatedOrgs.length > 0 ? (
-              relatedOrgs.map((org) => (
-                <InfoCard key={org.id} cardType="organization" cardInfo={org} id={org.id} />
-              ))
-            ) : (
-              <p className="text-muted">No related organizations found.</p>
-            )}
-          </Col>
-
-          <Col className="text-center" md={6}>
-            <h3>Related Events</h3>
-            {relatedEvents.length > 0 ? (
-              relatedEvents.map((event) => (
-                <InfoCard key={event.id} 
-                cardType="event" 
-                cardInfo={event} 
-                id={event.id} />
-              ))
-            ) : (
-              <p className="text-muted">No related events found.</p>
-            )}
+            <div className="d-grid gap-2 mt-3">
+              {resourceInfo.resource_url ? (
+                <Button
+                  variant="success"
+                  href={resourceInfo.resource_url.startsWith("http") ? resourceInfo.resource_url : `http://${resourceInfo.resource_url}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="lg"
+                  style={{
+                    backgroundColor: "#2e856e",
+                    borderColor: "#2e856e",
+                  }}
+                >
+                  Visit Website <i className="bi bi-box-arrow-up-right ms-2"></i>
+                </Button>
+              ) : (
+                <Button variant="secondary" size="lg" disabled>
+                  No Website Available
+                </Button>
+              )}
+            </div>
 
           </Col>
         </Row>
+
+        <div style={{ backgroundColor: "#f7faf8" }} className="py-5 px-3 my-5 rounded">
+          <Row className="gy-4">
+            <Col md={6}>
+              <div className="p-4 rounded shadow-sm bg-white mb-4">
+                <h3 className="mb-3 border-bottom pb-2">Related Organizations</h3>
+
+                {relatedOrgs.length > 0 ? (
+                  <Row>
+                    {relatedOrgs.map((org) => (
+                      <Col xs={12} className="mb-4 d-flex justify-content-center">
+                        <InfoCard
+                          cardType="organization"
+                          cardInfo={org}
+                          id={org.id}
+                        />
+                      </Col>
+                    ))}
+                  </Row>
+                ) : (
+                  <p className="text-muted text-center">No related organizations found.</p>
+                )}
+              </div>
+            </Col>
+
+            <Col md={6}>
+              <div className="p-4 rounded shadow-sm bg-white mb-4">
+                <h3 className="mb-3 border-bottom pb-2">Related Events</h3>
+
+                {relatedEvents.length > 0 ? (
+                  <Row>
+                    {relatedEvents.map((event) => (
+                      <Col xs={12} className="mb-4 d-flex justify-content-center">
+                        <InfoCard
+                          cardType="event"
+                          cardInfo={event}
+                          id={event.id}
+                        />
+                      </Col>
+                    ))}
+                  </Row>
+                ) : (
+                  <p className="text-muted text-center">No related events found.</p>
+                )}
+              </div>
+            </Col>
+          </Row>
+        </div>
+
       </Container>
     </>
   );

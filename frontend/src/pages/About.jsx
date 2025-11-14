@@ -169,79 +169,92 @@ const About = () => {
             Meet the Team
           </h2>
 
-          <Row className="g-4">
+          <Row className="g-4 justify-content-center">
             {team.map((member) => (
-              <Col xs={12} sm={6} md={6} lg={3} key={member.name}>
-
+              <Col xs={12} md={6} key={member.name}>
                 <Card
-                  className="shadow-lg border-0"
+                  className="shadow-sm border-0 h-100"
                   style={{
-                    borderRadius: "22px",
-                    transition: "0.25s",
+                    borderRadius: "20px",
+                    overflow: "hidden",
+                    padding: "1.25rem",
                   }}
                 >
-                  <Card.Body className="text-center px-4 py-5">
-                    <Image
-                      src={member.photo}
-                      alt={member.name}
-                      roundedCircle
-                      style={{
-                        width: "130px",
-                        height: "130px",
-                        border: "5px solid #cde5d7",
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                        objectFit: "cover",
-                        marginBottom: "1rem",
-                      }}
-                    />
+                  <Row className="g-3 align-items-center">
 
-                    <h4 className="fw-bold">{member.name}</h4>
-                    <p className="text-muted">{member.role}</p>
+                    <Col
+                      md={5}
+                      className="d-flex flex-column align-items-center"
+                    >
+                      <Image
+                        src={member.photo}
+                        alt={member.name}
+                        style={{
+                          width: "150px",
+                          height: "150px",
+                          borderRadius: "18px",
+                          objectFit: "cover",
+                          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                          marginBottom: "1rem",
+                        }}
+                      />
 
-                    <p className="mt-3" style={{ minHeight: "100px" }}>
-                      {member.bio}
-                    </p>
-
-                    {stats[member.name] ? (
-                      <div className="mt-4">
-                        <Row>
-                          {[
-                            ["Commits", stats[member.name].commits],
-                            ["Issues Created", stats[member.name].issuesCreated],
-                            ["Issues Closed", stats[member.name].issuesClosed],
-                            ["Unit Tests", stats[member.name].unitTests],
-                          ].map(([label, value]) => (
-                            <Col xs={6} className="mb-3" key={label}>
-                              <div
-                                style={{
-                                  borderRadius: "12px",
-                                  padding: "0.75rem",
-                                  background: "#f8faf9",
-                                  border: "1px solid #e1e9e5",
-                                }}
-                              >
-                                <strong>{value}</strong>
-                                <p
-                                  className="m-0 text-muted"
-                                  style={{ fontSize: "0.8rem" }}
+                      {stats[member.name] ? (
+                        <div style={{ width: "100%", padding: "0 .5rem" }}>
+                          <Row className="g-2">
+                            {[
+                              ["Commits", stats[member.name].commits],
+                              ["Issues Created", stats[member.name].issuesCreated],
+                              ["Issues Closed", stats[member.name].issuesClosed],
+                              ["Unit Tests", stats[member.name].unitTests],
+                            ].map(([label, value]) => (
+                              <Col xs={6} key={label}>
+                                <div
+                                  style={{
+                                    borderRadius: "10px",
+                                    padding: "0.55rem",
+                                    background: "#f8faf9",
+                                    border: "1px solid #eef3f1",
+                                    textAlign: "center",
+                                  }}
                                 >
-                                  {label}
-                                </p>
-                              </div>
-                            </Col>
-                          ))}
-                        </Row>
-                      </div>
-                    ) : (
-                      <Spinner animation="border" size="sm" className="mt-4" />
-                    )}
-                  </Card.Body>
+                                  <strong>{value}</strong>
+                                  <p
+                                    className="m-0 text-muted"
+                                    style={{ fontSize: "0.75rem" }}
+                                  >
+                                    {label}
+                                  </p>
+                                </div>
+                              </Col>
+                            ))}
+                          </Row>
+                        </div>
+                      ) : (
+                        <Spinner animation="border" size="sm" className="mt-3" />
+                      )}
+                    </Col>
+
+                    <Col md={7}>
+                      <Card.Body className="px-2">
+                        <h4 className="fw-bold mb-1">{member.name}</h4>
+                        <p className="text-muted mb-3">{member.role}</p>
+
+                        <p style={{ minHeight: "90px", lineHeight: "1.45" }}>
+                          {member.bio}
+                        </p>
+                      </Card.Body>
+                    </Col>
+
+                  </Row>
                 </Card>
               </Col>
             ))}
           </Row>
         </Container>
       </section>
+
+
 
       {/* Previous Contributors Section */}
       <section
@@ -257,74 +270,91 @@ const About = () => {
 
           <Row className="g-4 justify-content-center">
             {prevContributors.map((member) => (
-              <Col md={6} lg={4} key={member.name}>
+              <Col xs={12} md={8} key={member.name}>
                 <Card
-                  className="shadow-lg border-0"
+                  className="shadow-sm border-0"
                   style={{
-                    borderRadius: "22px",
-                    transition: "0.25s",
+                    borderRadius: "18px",
+                    padding: "1.25rem",
+                    overflow: "hidden",
                   }}
                 >
-                  <Card.Body className="text-center px-4 py-5">
-                    <Image
-                      src={member.photo}
-                      alt={member.name}
-                      roundedCircle
-                      style={{
-                        width: "130px",
-                        height: "130px",
-                        border: "5px solid #cde5d7",
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                        objectFit: "cover",
-                        marginBottom: "1rem",
-                      }}
-                    />
+                  <Row className="g-3 align-items-center">
 
-                    <h4 className="fw-bold">{member.name}</h4>
-                    <p className="text-muted">{member.role}</p>
+                    <Col
+                      md={4}
+                      className="d-flex flex-column align-items-center"
+                    >
+                      <Image
+                        src={member.photo}
+                        alt={member.name}
+                        style={{
+                          width: "120px",
+                          height: "120px",
+                          borderRadius: "16px",
+                          objectFit: "cover",
+                          boxShadow: "0 4px 10px rgba(0,0,0,0.12)",
+                          marginBottom: "0.75rem",
+                        }}
+                      />
 
-                    <p className="mt-3" style={{ minHeight: "100px" }}>
-                      {member.bio}
-                    </p>
-
-                    {/* Hard-coded stats for Ali */}
-                    <div className="mt-4">
-                      <Row>
-                        {[
-                          ["Commits", 20],
-                          ["Issues Created", 2],
-                          ["Issues Closed", 2],
-                          ["Unit Tests", 20],
-                        ].map(([label, value]) => (
-                          <Col xs={6} className="mb-3" key={label}>
-                            <div
-                              style={{
-                                borderRadius: "12px",
-                                padding: "0.75rem",
-                                background: "#ffffff",
-                                border: "1px solid #e1e9e5",
-                              }}
-                            >
-                              <strong>{value}</strong>
-                              <p
-                                className="m-0 text-muted"
-                                style={{ fontSize: "0.8rem" }}
+                      <div style={{ width: "100%", padding: "0 .5rem" }}>
+                        <Row className="g-2">
+                          {[
+                            ["Commits", 20],
+                            ["Issues Created", 2],
+                            ["Issues Closed", 2],
+                            ["Unit Tests", 20],
+                          ].map(([label, value]) => (
+                            <Col xs={6} key={label}>
+                              <div
+                                style={{
+                                  borderRadius: "10px",
+                                  padding: "0.55rem",
+                                  background: "#ffffff",
+                                  border: "1px solid #eef3f1",
+                                  textAlign: "center",
+                                }}
                               >
-                                {label}
-                              </p>
-                            </div>
-                          </Col>
-                        ))}
-                      </Row>
-                    </div>
-                  </Card.Body>
+                                <strong style={{ fontSize: "0.9rem" }}>{value}</strong>
+                                <p
+                                  className="m-0 text-muted"
+                                  style={{ fontSize: "0.75rem" }}
+                                >
+                                  {label}
+                                </p>
+                              </div>
+                            </Col>
+                          ))}
+                        </Row>
+                      </div>
+                    </Col>
+
+                    {/* RIGHT: name + role + bio */}
+                    <Col md={8}>
+                      <Card.Body className="px-2">
+                        <h4 className="fw-bold mb-1">{member.name}</h4>
+                        <p className="text-muted mb-3">{member.role}</p>
+
+                        <p
+                          style={{
+                            minHeight: "70px",
+                            fontSize: "0.95rem",
+                            lineHeight: "1.45",
+                          }}
+                        >
+                          {member.bio}
+                        </p>
+                      </Card.Body>
+                    </Col>
+
+                  </Row>
                 </Card>
               </Col>
             ))}
           </Row>
         </Container>
       </section>
-
 
       {/* Data Integration Section */}
       <div style={{ backgroundColor: "#e9f4ef", padding: "3rem 0" }}>
@@ -383,6 +413,7 @@ const About = () => {
       <Container className="my-5">
         <h2 className="text-center mb-4">Explore More</h2>
         <Row className="g-4 justify-content-center">
+
           {/* GitLab Repository Card */}
           <Col md={4}>
             <Card className="h-100 shadow-sm text-center">
@@ -396,15 +427,19 @@ const About = () => {
                   href="https://gitlab.com/parul.sadasivuni/cs373-fall-2025-55085_03"
                   target="_blank"
                   rel="noreferrer"
-                  className="btn btn-primary"
+                  className="btn"
                   style={{
-                    backgroundColor: "#cde5d7",
-                    color: "#000000",
-                    border: "none",
+                    backgroundColor: "#2e856e",
+                    borderColor: "#2e856e",
+                    color: "white",
+                    borderRadius: "50px",
+                    padding: "0.6rem 1.3rem",
+                    fontWeight: "500",
                   }}
                 >
                   Visit GitLab
                 </a>
+
               </Card.Body>
             </Card>
           </Col>
@@ -422,15 +457,19 @@ const About = () => {
                   href="https://www.postman.com/karen-heckel-749077/group-3-workspace/collection/p7zssag/safehavenconnect-api?action=share&creator=48953322"
                   target="_blank"
                   rel="noreferrer"
-                  className="btn btn-primary"
+                  className="btn"
                   style={{
-                    backgroundColor: "#cde5d7",
-                    color: "#000000",
-                    border: "none",
+                    backgroundColor: "#2e856e",
+                    borderColor: "#2e856e",
+                    color: "white",
+                    borderRadius: "50px",
+                    padding: "0.6rem 1.3rem",
+                    fontWeight: "500",
                   }}
                 >
                   View API
                 </a>
+
               </Card.Body>
             </Card>
           </Col>
@@ -443,66 +482,41 @@ const About = () => {
                 <Card.Text className="mb-3">
                   Access the APIs that provide our data.
                 </Card.Text>
-                <a
-                  href="https://apiportal.211.org/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn btn-primary mb-2"
-                  style={{
-                    backgroundColor: "#cde5d7",
-                    color: "#000000",
-                    border: "none",
-                  }}
-                >
-                  211 National Data Platform
-                </a>
-                <br />
-                <a
-                  href="https://topapis.com/homeless-shelter-api/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn btn-primary mb-2"
-                  style={{
-                    backgroundColor: "#cde5d7",
-                    color: "#000000",
-                    border: "none",
-                  }}
-                >
-                  Homeless Shelter API
-                </a>
-                <br />
-                <a
-                  href="https://www.eventbrite.com/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn btn-primary mb-2"
-                  style={{
-                    backgroundColor: "#cde5d7",
-                    color: "#000000",
-                    border: "none",
-                  }}
-                >
-                  Eventbrite API
-                </a>
-                <br />
-                <a
-                  href="https://data.hrsa.gov/tools/web-services"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn btn-primary"
-                  style={{
-                    backgroundColor: "#cde5d7",
-                    color: "#000000",
-                    border: "none",
-                  }}
-                >
-                  Medical Centers API
-                </a>
+
+                {[
+                  ["211 National Data Platform", "https://apiportal.211.org/"],
+                  ["Homeless Shelter API", "https://topapis.com/homeless-shelter-api/"],
+                  ["Eventbrite API", "https://www.eventbrite.com/"],
+                  ["Medical Centers API", "https://data.hrsa.gov/tools/web-services"],
+                ].map(([label, link]) => (
+                  <a
+                    key={label}
+                    href={link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn mb-2"
+                    style={{
+                      backgroundColor: "#2e856e",
+                      borderColor: "#2e856e",
+                      color: "white",
+                      borderRadius: "50px",
+                      padding: "0.6rem 1.3rem",
+                      width: "100%",
+                      fontWeight: "500",
+                    }}
+                  >
+                    {label}
+                  </a>
+
+                ))}
+
               </Card.Body>
             </Card>
           </Col>
+
         </Row>
       </Container>
+
     </>
   );
 };
