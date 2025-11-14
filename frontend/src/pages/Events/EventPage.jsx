@@ -180,38 +180,52 @@ const EventPage = () => {
             </Col>
           </Row>
         )}
-        <Row className="my-3">
-          <Col className="text-center" md={6}>
-            <h3>Related Organizations</h3>
-            {relatedOrgs.length > 0 ? (
-              relatedOrgs.map((org) => (
-                <InfoCard
-                  key={org.id}
-                  cardType="organization"
-                  cardInfo={org}
-                  id={org.id}
-                />
-              ))
-            ) : (
-              <p className="text-muted">No related organizations found.</p>
-            )}
-          </Col>
-          <Col className="text-center" md={6}>
-            <h3>Related Resources</h3>
-            {relatedResources.length > 0 ? (
-              relatedResources.map((res) => (
-                <InfoCard
-                  key={res.id}
-                  cardType="resource"
-                  cardInfo={res}
-                  id={res.id}
-                />
-              ))
-            ) : (
-              <p className="text-muted">No related resources found.</p>
-            )}
-          </Col>
-        </Row>
+        
+        {/* Related Section */}
+        <div style={{ backgroundColor: "#f7faf8" }} className="py-5 px-3 my-5 rounded">
+          <Row className="gy-4">
+
+            {/* Related Organizations */}
+            <Col md={6}>
+              <div className="p-4 bg-white shadow-sm rounded">
+                <h3 className="mb-3 border-bottom pb-2">Related Organizations</h3>
+
+                {relatedOrgs.length > 0 ? (
+                  <Row>
+                    {relatedOrgs.map((org) => (
+                      <Col xs={12} key={org.id} className="mb-4 d-flex justify-content-center">
+                        <InfoCard cardType="organization" cardInfo={org} id={org.id} />
+                      </Col>
+                    ))}
+                  </Row>
+                ) : (
+                  <p className="text-muted text-center">No related organizations found.</p>
+                )}
+              </div>
+            </Col>
+
+            {/* Related Resources */}
+            <Col md={6}>
+              <div className="p-4 bg-white shadow-sm rounded">
+                <h3 className="mb-3 border-bottom pb-2">Related Resources</h3>
+
+                {relatedResources.length > 0 ? (
+                  <Row>
+                    {relatedResources.map((res) => (
+                      <Col xs={12} key={res.id} className="mb-4 d-flex justify-content-center">
+                        <InfoCard cardType="resource" cardInfo={res} id={res.id} />
+                      </Col>
+                    ))}
+                  </Row>
+                ) : (
+                  <p className="text-muted text-center">No related resources found.</p>
+                )}
+              </div>
+            </Col>
+
+          </Row>
+        </div>
+
       </Container>
     </>
   );

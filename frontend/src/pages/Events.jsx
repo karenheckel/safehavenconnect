@@ -14,6 +14,72 @@ import backupData from "../backupData.json";
 
 const BACKEND_URL = "https://backend.safehavenconnect.me";
 
+const formatEventData = (event) => {
+  let formattedTime = "N/A";
+  let formattedDate = "N/A";
+
+  if (event.start_time && event.end_time) {
+    try {
+      const start = new Date(event.start_time);
+      const end = new Date(event.end_time);
+      formattedTime = `${start.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit",
+      })} - ${end.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit",
+      })}`;
+    } catch (e) {
+      console.error("Could not parse event time:", e);
+    }
+  } else if (event.time && event.time.includes(" - ")) {
+    try {
+      const [startStr, endStr] = event.time.split(" - ");
+      const start = new Date(startStr);
+      const end = new Date(endStr);
+      formattedTime = `${start.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit",
+      })} - ${end.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit",
+      })}`;
+    } catch (e) {
+      console.error("Could not parse search time:", e);
+    }
+  } else if (event.time) {
+    formattedTime = event.time;
+  }
+
+  if (event.date) {
+    try {
+      const dateObj = new Date(event.date + "T00:00:00");
+      formattedDate = dateObj.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } catch (e) {
+      console.error("Could not parse event date:", e);
+    }
+  }
+
+  return {
+    id: event.id,
+    title: event.name,
+    description: event.description,
+    event_type: event.event_type || event.type_label || "N/A",
+    location: event.location,
+    date: formattedDate,
+    time: formattedTime,
+    online_availability: event.is_online
+      ? "Yes"
+      : event.online_availability || "No",
+    registration: event.registration_open ? "Open" : "Closed",
+    image_url: event.image_url,
+  };
+};
+
 const Events = () => {
   const [eventsInfo, setEventsInfo] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,13 +98,13 @@ const Events = () => {
   const [query, setQuery] = useState("");
   const [searchActive, setSearchActive] = useState(false);
 
-  const getEvents = async () => {
+  const getEvents = async (pageToFetch = 1) => {
     try {
       const res = await axios.get(`${BACKEND_URL}/api/events`, {
         params: {
-          page: currPage,
+          page: pageToFetch,
           per_page: cardsOnPage,
-          event_type: filter.types,
+          event_type: filter.type,
           hours: filter.hours,
           online:
             filter.online === "Yes"
@@ -56,35 +122,8 @@ const Events = () => {
         },
       });
       const pagination = res.data.pagination;
-      const formatted = res.data.data.map((event) => {
-        const start = new Date(event.start_time);
-        const end = new Date(event.end_time);
-        const formattedTime = `${start.toLocaleTimeString([], {
-          hour: "numeric",
-          minute: "2-digit",
-        })} - ${end.toLocaleTimeString([], {
-          hour: "numeric",
-          minute: "2-digit",
-        })}`;
-
-        return {
-          id: event.id,
-          title: event.name,
-          description: event.description,
-          event_type: event.event_type,
-          location: event.location,
-          date: new Date(event.date).toLocaleDateString(undefined, {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          }),
-          time: formattedTime,
-          online_availability: event.is_online ? "Yes" : "No",
-          registration: event.registration_open ? "Open" : "Closed",
-          image_url: event.image_url,
-        };
-      });
-      setEventsInfo(formatted);
+      const formatted = res.data.data.map(formatEventData);
+      setEventsInfo(formatted.length > 0 ? formatted : backupData.events);
       setNumPages(pagination.pages || 1);
       setTotal(pagination.total);
       console.log(filter)
@@ -111,18 +150,7 @@ const Events = () => {
         },
       });
       const pagination = res.data.pagination;
-      const formatEvents = res.data.results.map((event) => ({
-        id: event.id,
-        title: event.name,
-        description: event.description,
-        event_type: event.type_label,
-        location: event.location,
-        date: event.date || "N/A",
-        time: event.time || "N/A",
-        online_availability: event.online_availability,
-        registration: event.registration_open ? "Open" : "Closed",
-        image_url: event.image_url,
-      }));
+      const formatEvents = res.data.results.map(formatEventData);
       setEventsInfo(formatEvents);
       setNumPages(pagination.pages || 1);
       setTotal(pagination.total);
@@ -143,11 +171,15 @@ const Events = () => {
 
   useEffect(() => {
     if (searchActive) {
-      handleSearch({ preventDefault: () => {} });
+      handleSearch({ preventDefault: () => { } });
     } else {
       getEvents(currPage);
     }
   }, [currPage, searchActive, filter, sort]);
+
+  useEffect(() => {
+    getEvents(1);
+  }, []);
 
   const handleHoursChange = (hour) => {
     setFilter((prev) => {
@@ -349,6 +381,22 @@ const Events = () => {
                 </Accordion.Body>
               </Accordion.Item>
 
+              <Accordion.Item eventKey="4">
+                <Accordion.Header>Sort</Accordion.Header>
+                <Accordion.Body>
+                  <Form.Select
+                    value={sort}
+                    onChange={(e) => setSort(e.target.value)}
+                  >
+                    <option value="none">No Sort</option>
+                    <option value="name">Event Name</option>
+                    <option value="state">Location (State)</option>
+                    <option value="date">Event Date</option>
+                  </Form.Select>
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+          </Col>
               <Accordion.Item eventKey="4">
                 <Accordion.Header>Sort</Accordion.Header>
                 <Accordion.Body>
