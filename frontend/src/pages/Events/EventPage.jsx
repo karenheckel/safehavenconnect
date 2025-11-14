@@ -166,33 +166,33 @@ const EventPage = () => {
               <p>
                 <strong>Registration:</strong> {eventInfo.registration}
               </p>
-              <div className="d-grid gap-2 mt-3">
-                {eventInfo.event_url ? (
-                  <Button
-                    variant="success"
-                    href={
-                      eventInfo.event_url.startsWith("http")
-                        ? eventInfo.event_url
-                        : `https://${eventInfo.event_url}`
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    size="lg"
-                    style={{
-                      backgroundColor: "#2e856e",
-                      borderColor: "#2e856e",
-                    }}
-                  >
-                    Visit Website{" "}
-                    <i className="bi bi-box-arrow-up-right ms-2"></i>
-                  </Button>
-                ) : (
-                  <Button variant="secondary" size="lg" disabled>
-                    No Website Available
-                  </Button>
-                )}
-              </div>
             </Card>
+            <div className="d-grid gap-2 mt-3">
+              {eventInfo.event_url ? (
+                <Button
+                  variant="success"
+                  href={
+                    eventInfo.event_url.startsWith("http")
+                      ? eventInfo.event_url
+                      : `https://${eventInfo.event_url}`
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="lg"
+                  style={{
+                    backgroundColor: "#2e856e",
+                    borderColor: "#2e856e",
+                  }}
+                >
+                  Visit Website{" "}
+                  <i className="bi bi-box-arrow-up-right ms-2"></i>
+                </Button>
+              ) : (
+                <Button variant="secondary" size="lg" disabled>
+                  No Website Available
+                </Button>
+              )}
+            </div>
           </Col>
         </Row>
         {eventInfo.map_url && eventInfo.map_url !== "NULL" ? (

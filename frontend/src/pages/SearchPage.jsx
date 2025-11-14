@@ -112,6 +112,26 @@ const SearchPage = () => {
                 services: r.services || "N/A",
               };
             } else if (r.type === "Event") {
+              const formattedDate = r.date
+                ? new Date(r.date + "T00:00:00").toLocaleDateString([], {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+                : "N/A";
+
+              let formattedTime = "N/A";
+              if (r.time && r.time.includes(" - ")) {
+                const [startStr, endStr] = r.time.split(" - ");
+                const startObj = new Date(startStr);
+                const endObj = new Date(endStr);
+                if (!isNaN(startObj) && !isNaN(endObj)) {
+                  formattedTime =
+                    `${startObj.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })} - ` +
+                    `${endObj.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}`;
+                }
+              }
+
               cardInfo = {
                 title: r.name,
                 event_type: r.type_label || "N/A",
@@ -120,6 +140,8 @@ const SearchPage = () => {
                 online_availability: r.online_availability,
                 image_url: r.image_url,
                 id: r.id,
+                date: formattedDate,
+                time: formattedTime,
               };
             }
 
