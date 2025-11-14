@@ -129,8 +129,6 @@ const Events = () => {
       setEventsInfo(formatted);
       setNumPages(pagination.pages || 1);
       setTotal(pagination.total);
-      console.log(filter)
-      console.log(formatted)
     } catch (err) {
       console.error("Error fetching events:", err);
       setEventsInfo(backupData.events);

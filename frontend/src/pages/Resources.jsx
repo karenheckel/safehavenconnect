@@ -70,7 +70,6 @@ const Resources = () => {
 
   useEffect(() => {
     if (!searchActive) getResources();
-    console.log(filter, sort);
   }, [filter, sort, currPage, searchActive]);
 
   const handleSearch = async (e) => {
