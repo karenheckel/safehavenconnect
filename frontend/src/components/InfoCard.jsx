@@ -12,6 +12,8 @@ const InfoCard = ({ cardType, cardInfo, id }) => {
     online_availability,
     organization,
     services,
+    time,
+    date,
     event_type,
     resource_type,
     org_type,
