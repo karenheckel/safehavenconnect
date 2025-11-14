@@ -68,7 +68,7 @@ const formatEventData = (event) => {
     id: event.id,
     title: event.name,
     description: event.description,
-    event_type: event.event_type || event.type_label || "N/A",
+    event_type: event.event_type|| "N/A",
     location: event.location,
     date: formattedDate,
     time: formattedTime,
@@ -348,19 +348,19 @@ const Events = () => {
                   <Form.Check
                     type="radio"
                     name="registration"
-                    label="Yes"
-                    checked={filter.registration === "Yes"}
+                    label="Open"
+                    checked={filter.registration === "Open"}
                     onChange={() =>
-                      setFilter({ ...filter, registration: "Yes" })
+                      setFilter({ ...filter, registration: "Open" })
                     }
                   />
                   <Form.Check
                     type="radio"
                     name="registration"
-                    label="No"
-                    checked={filter.registration === "No"}
+                    label="Closed"
+                    checked={filter.registration === "Closed"}
                     onChange={() =>
-                      setFilter({ ...filter, registration: "No" })
+                      setFilter({ ...filter, registration: "Closed" })
                     }
                   />
                 </Accordion.Body>

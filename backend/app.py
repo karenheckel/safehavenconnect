@@ -3,7 +3,7 @@ from flask_cors import CORS
 from config import config
 from models import db, Organization, Resource, Event
 import os, re
-from sqlalchemy import inspect, text, or_, func, and_
+from sqlalchemy import inspect, text, or_, func, and_, extract
 from datetime import datetime, date, timedelta
 from utils import get_image_for_topic
 
@@ -457,20 +457,15 @@ def create_app(config_name='default', testing=False):
             sort = request.args.get('sort', default='none')
             page = request.args.get('page', default=1, type=int)
             per_page = request.args.get('per_page', default=10, type=int)
-            raw_hours = request.args.getlist('hours')
-            hours = []
-            for item in raw_hours:
-                hours.extend([h.strip() for h in item.split(",") if h.strip()])
-
+            hours = request.args.getlist('hours')
             
             query = Event.query
             
             if location:
                 query = query.filter(Event.location.ilike(f'%{location}%'))
             if event_types and len(event_types) > 0:
-                query = query.filter(or_(*[
-                    Event.event_type.ilike(f"%{t}%") for t in event_types
-                ]))
+                trimed_types = [t.strip().lower() for t in event_types]
+                query = query.filter(func.lower(Event.event_type).in_(trimed_types))
             if online is not None and online != "":
                 query = query.filter(Event.is_online == (online.lower() == 'true'))
             
@@ -479,8 +474,8 @@ def create_app(config_name='default', testing=False):
 
             if hours and len(hours) > 0:
 
-                hour = func.substr(Event.start_time, 12, 2)
-                hour_int = func.cast(hour, db.Integer)
+                hour = extract('hour', Event.start_time)
+
 
                 ranges = {
                     "morning": (5, 11),
@@ -493,7 +488,7 @@ def create_app(config_name='default', testing=False):
                     key = h.lower()
                     if key in ranges:
                         low, high = ranges[key]
-                        filters.append(hour_int.between(low, high))
+                        filters.append(hour.between(low, high))
 
                 if filters:
                     query = query.filter(or_(*filters))
