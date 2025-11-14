@@ -819,8 +819,7 @@ def create_app(config_name='default', testing=False):
                     "registration_open": getattr(item, "registration_open", None),
                     "organization_name": highlight(org_name),                
                     "date": str(item.date) if getattr(item, "date", None) else None,
-                    "start_time": item.start_time.isoformat() if item.start_time else None,
-                    "end_time": item.end_time.isoformat() if item.end_time else None,
+                    "time": f"{getattr(item, 'start_time', '')} - {getattr(item, 'end_time', '')}",
                     "score": score,
                 })
 

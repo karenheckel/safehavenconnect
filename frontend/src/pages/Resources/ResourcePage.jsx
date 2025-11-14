@@ -94,15 +94,26 @@ const ResourcePage = () => {
           const formatted = responses.map((res) => {
             const e = res.data;
 
+            const start = e.start_time ? new Date(e.start_time) : null;
+            const end = e.end_time ? new Date(e.end_time) : null;
+
             return {
               id: e.id,
               title: e.name,
               location: e.location,
               description: e.description,
               event_type: e.event_type,
-              date: e.date,
-              start_time: e.start_time,
-              end_time: e.end_time,
+              date: e.date
+                ? new Date(e.date + "T00:00:00").toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+                : "N/A",
+              time:
+                start && end
+                  ? `${start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} - ${end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`
+                  : "N/A",
               registration: e.registration_open ? "Open" : "Closed",
               online_availability: e.is_online ? "Yes" : "No",
               image_url: e.image_url,

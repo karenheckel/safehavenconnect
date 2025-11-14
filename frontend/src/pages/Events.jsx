@@ -1,10 +1,84 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, InputGroup, Form, Button, Accordion, } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  InputGroup,
+  Form,
+  Button,
+  Accordion,
+} from "react-bootstrap";
 import InfoCard from "../components/InfoCard";
 import axios from "axios";
 import backupData from "../backupData.json";
 
 const BACKEND_URL = "https://backend.safehavenconnect.me";
+
+const formatEventData = (event) => {
+  let formattedTime = "N/A";
+  let formattedDate = "N/A";
+
+  if (event.start_time && event.end_time) {
+    try {
+      const start = new Date(event.start_time);
+      const end = new Date(event.end_time);
+      formattedTime = `${start.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit",
+      })} - ${end.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit",
+      })}`;
+    } catch (e) {
+      console.error("Could not parse event time:", e);
+    }
+  } else if (event.time && event.time.includes(" - ")) {
+    try {
+      const [startStr, endStr] = event.time.split(" - ");
+      const start = new Date(startStr);
+      const end = new Date(endStr);
+      formattedTime = `${start.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit",
+      })} - ${end.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit",
+      })}`;
+    } catch (e) {
+      console.error("Could not parse search time:", e);
+    }
+  } else if (event.time) {
+    formattedTime = event.time;
+  }
+
+  if (event.date) {
+    try {
+      const dateObj = new Date(event.date + "T00:00:00");
+      formattedDate = dateObj.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } catch (e) {
+      console.error("Could not parse event date:", e);
+    }
+  }
+
+  return {
+    id: event.id,
+    title: event.name,
+    description: event.description,
+    event_type: event.event_type|| "N/A",
+    location: event.location,
+    date: formattedDate,
+    time: formattedTime,
+    online_availability: event.is_online
+      ? "Yes"
+      : event.online_availability || "No",
+    registration: event.registration_open ? "Open" : "Closed",
+    image_url: event.image_url,
+  };
+};
 
 const Events = () => {
   const [eventsInfo, setEventsInfo] = useState([]);
@@ -33,33 +107,27 @@ const Events = () => {
           event_type: filter.types,
           hours: filter.hours,
           online:
-            filter.online === "Yes" ? "true" : filter.online === "No"
-              ? "false" : undefined,
-          registration_open: filter.registration === "Open" ? "true"
-            : filter.registration === "Closed" ? "false" : undefined,
+            filter.online === "Yes"
+              ? "true"
+              : filter.online === "No"
+              ? "false"
+              : undefined,
+          registration_open:
+            filter.registration === "Open"
+              ? "true"
+              : filter.registration === "Closed"
+              ? "false"
+              : undefined,
           sort: sort,
         },
       });
-
       const pagination = res.data.pagination;
-
-      const formatted = res.data.data.map((e) => ({
-        id: e.id,
-        title: e.name,
-        description: e.description,
-        event_type: e.event_type,
-        location: e.location,
-        date: e.date,
-        start_time: e.start_time,
-        end_time: e.end_time,
-        online_availability: e.is_online ? "Yes" : "No",
-        registration: e.registration_open ? "Open" : "Closed",
-        image_url: e.image_url,
-      }));
-
+      const formatted = res.data.data.map(formatEventData);
       setEventsInfo(formatted);
       setNumPages(pagination.pages || 1);
       setTotal(pagination.total);
+      console.log(filter)
+      console.log(formatted)
     } catch (err) {
       console.error("Error fetching events:", err);
       setEventsInfo(backupData.events);
@@ -82,22 +150,8 @@ const Events = () => {
         },
       });
       const pagination = res.data.pagination;
-
-      const formatted = res.data.results.map((r) => ({
-        id: r.id,
-        title: r.name,
-        description: r.description,
-        event_type: r.type_label,
-        location: r.location,
-        date: r.date,
-        start_time: r.start_time,
-        end_time: r.end_time,
-        online_availability: r.online_availability,
-        registration: r.registration_open ? "Open" : "Closed",
-        image_url: r.image_url,
-      }));
-
-      setEventsInfo(formatted);
+      const formatEvents = res.data.results.map(formatEventData);
+      setEventsInfo(formatEvents);
       setNumPages(pagination.pages || 1);
       setTotal(pagination.total);
       setSearchActive(true);

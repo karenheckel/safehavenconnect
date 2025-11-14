@@ -120,8 +120,6 @@ const SearchPage = () => {
                 online_availability: r.online_availability,
                 image_url: r.image_url,
                 id: r.id,
-                start_time: r.start_time,
-                end_time: r.end_time,
               };
             }
 

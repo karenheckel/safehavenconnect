@@ -24,7 +24,6 @@ const EventPage = () => {
           location: backupEvent.location,
           date: backupEvent.date,
           start_time: backupEvent.start_time,
-          end_time: backupEvent.end_time,
           event_type: backupEvent.event_type,
           event_url: backupEvent.event_url,
           organization_ids: backupEvent.organization_ids,
@@ -35,16 +34,36 @@ const EventPage = () => {
       const getEventInfo = async () => {
         try {
           const res = await axios.get(`${BACKEND_URL}/api/events/${id}`);
+
+          // Format times
           const event = res.data;
+          const start = new Date(event.start_time);
+          const end = new Date(event.end_time);
+          const formattedTime = `${start.toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit",
+          })} - ${end.toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit",
+          })}`;
+
+          // Format date
+          const formattedDate = new Date(event.date).toLocaleDateString(
+            undefined,
+            {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            }
+          );
 
           setEventInfo({
             name: event.name,
             description: event.description,
             event_type: event.event_type,
             location: event.location,
-            date: event.date,
-            start_time: event.start_time,
-            end_time: event.end_time,
+            date: formattedDate,
+            time: formattedTime,
             is_online: event.is_online ? "Yes" : "No",
             registration: event.registration_open ? "Open" : "Closed",
             image_url: event.image_url,
@@ -126,13 +145,27 @@ const EventPage = () => {
           </Col>
           <Col className="text-center" md={6}>
             <Card body className="shadow-sm">
-              <p><strong>Event Type:</strong> {eventInfo.event_type}</p>
-              <p><strong>Description:</strong> {eventInfo.description}</p>
-              <p><strong>Location:</strong> {eventInfo.location}</p>
-              <p> <strong>Date:</strong> {eventInfo.date}</p>
-              <p><strong>Time:</strong> {eventInfo.start_time && eventInfo.end_time ? `${eventInfo.start_time} - ${eventInfo.end_time}` : "N/A"}</p>
-              <p><strong>Online:</strong> {eventInfo.is_online}</p>
-              <p><strong>Registration:</strong> {eventInfo.registration}</p>
+              <p>
+                <strong>Event Type:</strong> {eventInfo.event_type}
+              </p>
+              <p>
+                <strong>Description:</strong> {eventInfo.description}
+              </p>
+              <p>
+                <strong>Location:</strong> {eventInfo.location}
+              </p>
+              <p>
+                <strong>Date:</strong> {eventInfo.date}
+              </p>
+              <p>
+                <strong>Time:</strong> {eventInfo.time}
+              </p>
+              <p>
+                <strong>Online:</strong> {eventInfo.is_online}
+              </p>
+              <p>
+                <strong>Registration:</strong> {eventInfo.registration}
+              </p>
               <div className="d-grid gap-2 mt-3">
                 {eventInfo.event_url ? (
                   <Button
