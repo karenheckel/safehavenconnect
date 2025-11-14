@@ -450,23 +450,27 @@ def create_app(config_name='default', testing=False):
     @app.route('/api/events', methods=['GET'])
     def get_events():
         try:
-            event_type = request.args.get('event_type')
+            event_types = request.args.getlist('event_type')
             location = request.args.get('location')
             online = request.args.get('online')
             registration_open = request.args.get('registration_open')
-            hours = request.args.getlist('hours')
             sort = request.args.get('sort', default='none')
             page = request.args.get('page', default=1, type=int)
             per_page = request.args.get('per_page', default=10, type=int)
+            raw_hours = request.args.getlist('hours')
+            hours = []
+            for item in raw_hours:
+                hours.extend([h.strip() for h in item.split(",") if h.strip()])
+
             
             query = Event.query
             
             if location:
                 query = query.filter(Event.location.ilike(f'%{location}%'))
-            if event_type and len(event_type) > 0:
-                query = query.filter(
-                    or_(*[Event.event_type.ilike(f"%{t}%") for t in event_type])
-                )
+            if event_types and len(event_types) > 0:
+                query = query.filter(or_(*[
+                    Event.event_type.ilike(f"%{t}%") for t in event_types
+                ]))
             if online is not None and online != "":
                 query = query.filter(Event.is_online == (online.lower() == 'true'))
             
@@ -474,6 +478,7 @@ def create_app(config_name='default', testing=False):
                 query = query.filter(Event.registration_open == (registration_open.lower() == 'true'))
 
             if hours and len(hours) > 0:
+
                 hour = func.substr(Event.start_time, 12, 2)
                 hour_int = func.cast(hour, db.Integer)
 
