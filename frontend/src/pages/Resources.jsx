@@ -74,6 +74,7 @@ const Resources = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
+    setCurrPage(1);
     if (!query.trim()) return;
     try {
       setLoading(true);
@@ -122,6 +123,7 @@ const Resources = () => {
         : [...prev.hours, hour];
       return { ...prev, hours: newHours };
     });
+    setCurrPage(1);
   };
 
   const handleOrgChange = (org) => {
@@ -131,6 +133,7 @@ const Resources = () => {
         : [...prev.orgs, org];
       return { ...prev, orgs: newOrgs };
     });
+    setCurrPage(1);
   };
 
   const handleTypeChange = (type) => {
@@ -140,6 +143,7 @@ const Resources = () => {
         : [...prev.types, type];
       return { ...prev, types: newTypes };
     });
+    setCurrPage(1);
   };
 
   if (loading) {
@@ -159,7 +163,7 @@ const Resources = () => {
       <Container className="text-center my-5">
         <h1>Resources</h1>
         <p>Number of resources: {total}</p>
-
+        <p>Showing {resources.length} resources on this page</p>
         <Form onSubmit={handleSearch} className="d-flex justify-content-center mb-5">
           <InputGroup style={{ maxWidth: "550px" }} className="shadow-sm rounded-pill">
             <InputGroup.Text
@@ -237,21 +241,24 @@ const Resources = () => {
                       name="online"
                       label="All"
                       checked={filter.online === ""}
-                      onChange={() => setFilter({ ...filter, online: "" })}
+                      onChange={() => {setCurrPage(1) 
+                        setFilter({ ...filter, online: "" })}}
                     />
                     <Form.Check
                       type="radio"
                       name="online"
                       label="Yes"
                       checked={filter.online === "Yes"}
-                      onChange={() => setFilter({ ...filter, online: "Yes" })}
+                      onChange={() => {setCurrPage(1) 
+                        setFilter({ ...filter, online: "Yes" })}}
                     />
                     <Form.Check
                       type="radio"
                       name="online"
                       label="No"
                       checked={filter.online === "No"}
-                      onChange={() => setFilter({ ...filter, online: "No" })}
+                      onChange={() => {setCurrPage(1) 
+                        setFilter({ ...filter, online: "No" })}}
                     />
                   </Accordion.Body>
                 </Accordion.Item>
@@ -321,6 +328,13 @@ const Resources = () => {
         <Container className="d-flex justify-content-center mt-4">
           <button
             className="btn btn-secondary mx-2"
+            onClick={() => setCurrPage(1)}
+            disabled={currPage === 1}
+          >
+            First
+          </button>
+          <button
+            className="btn btn-secondary mx-2"
             onClick={() => setCurrPage((prev) => Math.max(prev - 1, 1))}
             disabled={currPage === 1}
           >
@@ -339,6 +353,13 @@ const Resources = () => {
             disabled={currPage >= numPages}
           >
             Next
+          </button>
+          <button
+            className="btn btn-secondary mx-2"
+            onClick={() => setCurrPage(numPages)}
+            disabled={currPage >= numPages}
+          >
+            Last
           </button>
         </Container>
       </Container>
