@@ -104,7 +104,7 @@ const Events = () => {
         params: {
           page: pageToFetch,
           per_page: cardsOnPage,
-          event_type: filter.type,
+          event_type: filter.types,
           hours: filter.hours,
           online:
             filter.online === "Yes"
@@ -123,7 +123,7 @@ const Events = () => {
       });
       const pagination = res.data.pagination;
       const formatted = res.data.data.map(formatEventData);
-      setEventsInfo(formatted.length > 0 ? formatted : backupData.events);
+      setEventsInfo(formatted);
       setNumPages(pagination.pages || 1);
       setTotal(pagination.total);
       console.log(filter)
@@ -381,22 +381,6 @@ const Events = () => {
                 </Accordion.Body>
               </Accordion.Item>
 
-              <Accordion.Item eventKey="4">
-                <Accordion.Header>Sort</Accordion.Header>
-                <Accordion.Body>
-                  <Form.Select
-                    value={sort}
-                    onChange={(e) => setSort(e.target.value)}
-                  >
-                    <option value="none">No Sort</option>
-                    <option value="name">Event Name</option>
-                    <option value="state">Location (State)</option>
-                    <option value="date">Event Date</option>
-                  </Form.Select>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
-          </Col>
               <Accordion.Item eventKey="4">
                 <Accordion.Header>Sort</Accordion.Header>
                 <Accordion.Body>
