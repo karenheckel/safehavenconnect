@@ -136,7 +136,8 @@ const mockEvent = {
   id: "1",
   name: "Sample Event",
   location: "Austin, TX",
-  start_time: "10:00 AM",
+  start_time: "2025-10-25T10:00:00",
+  end_time: "2025-10-25T11:00:00",
   date: "2025-10-25",
   event_type: "Workshop",
   image_url: "sample-event.jpg",
@@ -145,6 +146,7 @@ const mockEvent = {
   organization_ids: [101, 102],
   resource_ids: [201, 202],
 };
+
 
 describe("EventPage", () => {
   beforeEach(() => {
@@ -204,12 +206,14 @@ describe("InfoCard", () => {
   const mockEventCard = {
     title: "Sample Event",
     location: "Austin, TX",
-    time: "10:00 AM",
+    start_time: "2025-10-25T10:00:00",
+    end_time: "2025-10-25T11:00:00",
     date: "2025-10-25",
     event_type: "Workshop",
     organization: "SafeHavenConnect",
     image_url: "/sample.jpg",
   };
+  
 
   test("renders event card with correct info", () => {
     render(
@@ -226,7 +230,7 @@ describe("InfoCard", () => {
     expect(screen.getByText(/Location:/i)).toBeInTheDocument();
     expect(screen.getByText(/Austin, TX/i)).toBeInTheDocument();
     expect(screen.getByText(/Time:/i)).toBeInTheDocument();
-    expect(screen.getByText(/10:00 AM/i)).toBeInTheDocument();
+    expect(screen.getByText(/10:00 AM - 11:00 AM/i)).toBeInTheDocument();
     expect(screen.getByText(/Date:/i)).toBeInTheDocument();
     expect(screen.getByText(/2025-10-25/i)).toBeInTheDocument();
     expect(screen.getByText(/Event Type:/i)).toBeInTheDocument();
