@@ -450,11 +450,11 @@ def create_app(config_name='default', testing=False):
     @app.route('/api/events', methods=['GET'])
     def get_events():
         try:
-            event_type = request.args.get('type')
+            event_type = request.args.get('event_type')
             location = request.args.get('location')
             online = request.args.get('online')
             registration_open = request.args.get('registration_open')
-            hours = request.args.get('hours')
+            hours = request.args.getlist('hours')
             sort = request.args.get('sort', default='none')
             page = request.args.get('page', default=1, type=int)
             per_page = request.args.get('per_page', default=10, type=int)
@@ -474,56 +474,24 @@ def create_app(config_name='default', testing=False):
                 query = query.filter(Event.registration_open == (registration_open.lower() == 'true'))
 
             if hours and len(hours) > 0:
-                hour_filters = []
+                hour = func.substr(Event.start_time, 12, 2)
+                hour_int = func.cast(hour, db.Integer)
+
+                ranges = {
+                    "morning": (5, 11),
+                    "afternoon": (12, 16),
+                    "evening": (17, 21),
+                }
+
+                filters = []
                 for h in hours:
-                    h_lower = h.lower()
+                    key = h.lower()
+                    if key in ranges:
+                        low, high = ranges[key]
+                        filters.append(hour_int.between(low, high))
 
-                    if h_lower == "morning":
-                        hour_filters.append(
-                            or_(
-                                Event.start_time.ilike("%12am%"),
-                                Event.start_time.ilike("%1am%"),
-                                Event.start_time.ilike("%2am%"),
-                                Event.start_time.ilike("%3am%"),
-                                Event.start_time.ilike("%4am%"),
-                                Event.start_time.ilike("%5am%"),
-                                Event.start_time.ilike("%6am%"),
-                                Event.start_time.ilike("%7am%"),
-                                Event.start_time.ilike("%8am%"),
-                                Event.start_time.ilike("%9am%"),
-                                Event.start_time.ilike("%10am%"),
-                                Event.start_time.ilike("%11am%"),
-                            )
-                        )
-                    elif h_lower == "afternoon":
-                        hour_filters.append(
-                            or_(
-                                Event.start_time.ilike("%12pm%"),
-                                Event.start_time.ilike("%1pm%"),
-                                Event.start_time.ilike("%2pm%"),
-                                Event.start_time.ilike("%3pm%"),
-                                Event.start_time.ilike("%4pm%"),
-                            )
-                        )
-                    elif h_lower == "evening":
-                        hour_filters.append(
-                            or_(
-                                Event.start_time.ilike("%5pm%"),
-                                Event.start_time.ilike("%6pm%"),
-                                Event.start_time.ilike("%7pm%"),
-                                Event.start_time.ilike("%8pm%"),
-                                Event.start_time.ilike("%9pm%"),
-                                Event.start_time.ilike("%10pm%"),
-                                Event.start_time.ilike("%11pm%"),
-                            )
-                        )
-                    elif h_lower == "n/a":
-                        hour_filters.append(
-                            Event.start_time.ilike("%n/a%")
-                        )
-
-                if hour_filters:
-                    query = query.filter(or_(*hour_filters))
+                if filters:
+                    query = query.filter(or_(*filters))
             if sort == "state":
                 query = query.order_by(func.split_part(Event.location, ', ', 2).asc())
             elif sort == "name":

@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, InputGroup, Form, Button, Accordion } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  InputGroup,
+  Form,
+  Button,
+  Accordion,
+} from "react-bootstrap";
 import InfoCard from "../components/InfoCard";
 import axios from "axios";
 import backupData from "../backupData.json";
@@ -27,24 +35,25 @@ const Events = () => {
   const getEvents = async () => {
     try {
       const res = await axios.get(`${BACKEND_URL}/api/events`, {
-        params: { 
-          page: currPage, 
-          per_page: cardsOnPage, 
-          type: filter.type, 
-          hours: filter.hours, 
+        params: {
+          page: currPage,
+          per_page: cardsOnPage,
+          event_type: filter.types,
+          hours: filter.hours,
           online:
             filter.online === "Yes"
               ? "true"
               : filter.online === "No"
-                ? "false"
-                : undefined,
-          registration:
-            filter.registration === "Yes"
+              ? "false"
+              : undefined,
+          registration_open:
+            filter.registration === "Open"
               ? "true"
-              : filter.registration === "No"
-                ? "false"
-                : undefined,
-          sort: sort,},
+              : filter.registration === "Closed"
+              ? "false"
+              : undefined,
+          sort: sort,
+        },
       });
       const pagination = res.data.pagination;
       const formatted = res.data.data.map((event) => {
@@ -75,9 +84,11 @@ const Events = () => {
           image_url: event.image_url,
         };
       });
-      setEventsInfo(formatted.length > 0 ? formatted : backupData.events);
+      setEventsInfo(formatted);
       setNumPages(pagination.pages || 1);
       setTotal(pagination.total);
+      console.log(filter)
+      console.log(formatted)
     } catch (err) {
       console.error("Error fetching events:", err);
       setEventsInfo(backupData.events);
@@ -92,7 +103,12 @@ const Events = () => {
     try {
       setLoading(true);
       const res = await axios.get(`${BACKEND_URL}/api/search`, {
-        params: { q: query, model: "Event", page: currPage, per_page: cardsOnPage },
+        params: {
+          q: query,
+          model: "Event",
+          page: currPage,
+          per_page: cardsOnPage,
+        },
       });
       const pagination = res.data.pagination;
       const formatEvents = res.data.results.map((event) => ({
@@ -131,11 +147,7 @@ const Events = () => {
     } else {
       getEvents(currPage);
     }
-  }, [currPage, searchActive]);
-
-  useEffect(() => {
-    getEvents();
-  }, []);
+  }, [currPage, searchActive, filter, sort]);
 
   const handleHoursChange = (hour) => {
     setFilter((prev) => {
@@ -172,8 +184,14 @@ const Events = () => {
       <h1>Upcoming Events</h1>
       <p>Number of events: {total}</p>
 
-      <Form onSubmit={handleSearch} className="d-flex justify-content-center mb-5">
-        <InputGroup style={{ maxWidth: "550px" }} className="shadow-sm rounded-pill">
+      <Form
+        onSubmit={handleSearch}
+        className="d-flex justify-content-center mb-5"
+      >
+        <InputGroup
+          style={{ maxWidth: "550px" }}
+          className="shadow-sm rounded-pill"
+        >
           <InputGroup.Text
             id="search-icon"
             style={{
@@ -220,120 +238,146 @@ const Events = () => {
           )}
         </InputGroup>
       </Form>
-      
+
       <Container fluid>
         <Row>
-            <Col xs={12} md={3} className="mb-3 mb-md-0" style={{ order: 1 }}>
-              <Accordion defaultActiveKey="" alwaysOpen>
-                <Accordion.Item eventKey="0">
-                  <Accordion.Header>Type</Accordion.Header>
-                  <Accordion.Body>
-                    {["Medical Assistance", "Legal"].map((type) => (
-                      <Form.Check
-                        key={type}
-                        type="checkbox"
-                        label={type}
-                        checked={filter.types.includes(type)}
-                        onChange={() => handleTypeChange(type)}
-                      />
-                    ))}
-                  </Accordion.Body>
-                </Accordion.Item>
+          <Col xs={12} md={3} className="mb-3 mb-md-0" style={{ order: 1 }}>
+            <Accordion defaultActiveKey="" alwaysOpen>
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>Event Type</Accordion.Header>
+                <Accordion.Body>
+                  {[
+                    "Class",
+                    "Education",
+                    "Family Event",
+                    "Health",
+                    "Legal Clinic",
+                    "Meal Service",
+                    "Meeting",
+                    "Orientation",
+                    "Outreach",
+                    "Preparedness",
+                    "Respite",
+                    "Safety",
+                    "Social",
+                    "Support",
+                    "Therapy",
+                    "Training",
+                    "Wellness",
+                    "Workshop",
+                  ].map((type) => (
+                    <Form.Check
+                      key={type}
+                      type="checkbox"
+                      label={type}
+                      checked={filter.types.includes(type)}
+                      onChange={() => handleTypeChange(type)}
+                    />
+                  ))}
+                </Accordion.Body>
+              </Accordion.Item>
 
-                <Accordion.Item eventKey="1">
-                  <Accordion.Header>Online Availability</Accordion.Header>
-                  <Accordion.Body>
-                    <Form.Check
-                      type="radio"
-                      name="online"
-                      label="All"
-                      checked={filter.online === ""}
-                      onChange={() => setFilter({ ...filter, online: "" })}
-                    />
-                    <Form.Check
-                      type="radio"
-                      name="online"
-                      label="Yes"
-                      checked={filter.online === "Yes"}
-                      onChange={() => setFilter({ ...filter, online: "Yes" })}
-                    />
-                    <Form.Check
-                      type="radio"
-                      name="online"
-                      label="No"
-                      checked={filter.online === "No"}
-                      onChange={() => setFilter({ ...filter, online: "No" })}
-                    />
-                  </Accordion.Body>
-                </Accordion.Item>
-                <Accordion.Item eventKey="2">
-                  <Accordion.Header>Registration Open</Accordion.Header>
-                  <Accordion.Body>
-                    <Form.Check
-                      type="radio"
-                      name="registration"
-                      label="All"
-                      checked={filter.registration === ""}
-                      onChange={() => setFilter({ ...filter, registration: "" })}
-                    />
-                    <Form.Check
-                      type="radio"
-                      name="registration"
-                      label="Yes"
-                      checked={filter.registration === "Yes"}
-                      onChange={() => setFilter({ ...filter, registration: "Yes" })}
-                    />
-                    <Form.Check
-                      type="radio"
-                      name="registration"
-                      label="No"
-                      checked={filter.registration === "No"}
-                      onChange={() => setFilter({ ...filter, registration: "No" })}
-                    />
-                  </Accordion.Body>
-                </Accordion.Item>
+              <Accordion.Item eventKey="1">
+                <Accordion.Header>Online Availability</Accordion.Header>
+                <Accordion.Body>
+                  <Form.Check
+                    type="radio"
+                    name="online"
+                    label="All"
+                    checked={filter.online === ""}
+                    onChange={() => setFilter({ ...filter, online: "" })}
+                  />
+                  <Form.Check
+                    type="radio"
+                    name="online"
+                    label="Yes"
+                    checked={filter.online === "Yes"}
+                    onChange={() => setFilter({ ...filter, online: "Yes" })}
+                  />
+                  <Form.Check
+                    type="radio"
+                    name="online"
+                    label="No"
+                    checked={filter.online === "No"}
+                    onChange={() => setFilter({ ...filter, online: "No" })}
+                  />
+                </Accordion.Body>
+              </Accordion.Item>
+              <Accordion.Item eventKey="2">
+                <Accordion.Header>Registration Open</Accordion.Header>
+                <Accordion.Body>
+                  <Form.Check
+                    type="radio"
+                    name="registration"
+                    label="All"
+                    checked={filter.registration === ""}
+                    onChange={() => setFilter({ ...filter, registration: "" })}
+                  />
+                  <Form.Check
+                    type="radio"
+                    name="registration"
+                    label="Yes"
+                    checked={filter.registration === "Yes"}
+                    onChange={() =>
+                      setFilter({ ...filter, registration: "Yes" })
+                    }
+                  />
+                  <Form.Check
+                    type="radio"
+                    name="registration"
+                    label="No"
+                    checked={filter.registration === "No"}
+                    onChange={() =>
+                      setFilter({ ...filter, registration: "No" })
+                    }
+                  />
+                </Accordion.Body>
+              </Accordion.Item>
 
-                <Accordion.Item eventKey="3">
-                  <Accordion.Header>Hours</Accordion.Header>
-                  <Accordion.Body>
-                    {["Morning", "Afternoon", "Evening", "N/A"].map(
-                      (option) => (
-                        <Form.Check
-                          key={option}
-                          type="checkbox"
-                          label={option}
-                          checked={filter.hours.includes(option)}
-                          onChange={() => handleHoursChange(option)}
-                        />
-                      )
-                    )}
-                  </Accordion.Body>
-                </Accordion.Item>
+              <Accordion.Item eventKey="3">
+                <Accordion.Header>Hours</Accordion.Header>
+                <Accordion.Body>
+                  {["Morning", "Afternoon", "Evening", "N/A"].map((option) => (
+                    <Form.Check
+                      key={option}
+                      type="checkbox"
+                      label={option}
+                      checked={filter.hours.includes(option)}
+                      onChange={() => handleHoursChange(option)}
+                    />
+                  ))}
+                </Accordion.Body>
+              </Accordion.Item>
 
-                <Accordion.Item eventKey="4">
-                  <Accordion.Header>Sort</Accordion.Header>
-                  <Accordion.Body>
-                    <Form.Select
-                      value={sort}
-                      onChange={(e) => setSort(e.target.value)}
-                    >
-                      <option value="none">No Sort</option>
-                      <option value="name">Event Name</option>
-                      <option value="state">Location (State)</option>
-                      <option value="date">Event Date</option>
-                    </Form.Select>
-                  </Accordion.Body>
-                </Accordion.Item>
-              </Accordion>
-            </Col>
+              <Accordion.Item eventKey="4">
+                <Accordion.Header>Sort</Accordion.Header>
+                <Accordion.Body>
+                  <Form.Select
+                    value={sort}
+                    onChange={(e) => setSort(e.target.value)}
+                  >
+                    <option value="none">No Sort</option>
+                    <option value="name">Event Name</option>
+                    <option value="state">Location (State)</option>
+                    <option value="date">Event Date</option>
+                  </Form.Select>
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+          </Col>
 
-        <Col xs={12} md={9} style={{ order: 2 }}>
-          <Row className="justify-content-center">
-            {eventsInfo.map((event, i) => (
-              <InfoCard key={i} cardType="event" cardInfo={event} id={event.id} />
-            ))}
-          </Row>
-        </Col>
+          <Col xs={12} md={9} style={{ order: 2 }}>
+            <Row className="justify-content-center">
+              {eventsInfo.map((event, i) => (
+                <InfoCard
+                  key={i}
+                  cardType="event"
+                  cardInfo={event}
+                  id={event.id}
+                />
+              ))}
+            </Row>
+          </Col>
         </Row>
       </Container>
 
