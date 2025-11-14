@@ -232,7 +232,7 @@ describe("InfoCard", () => {
     expect(screen.getByText(/Time:/i)).toBeInTheDocument();
     expect(screen.getByText(/10:00 AM - 11:00 AM/i)).toBeInTheDocument();
     expect(screen.getByText(/Date:/i)).toBeInTheDocument();
-    expect(screen.getByText(/October 25, 2025/i)).toBeInTheDocument();
+    expect(screen.getByText(/2025-10-25/i)).toBeInTheDocument();
     expect(screen.getByText(/Event Type:/i)).toBeInTheDocument();
     expect(screen.getByText(/Workshop/i)).toBeInTheDocument();
 
