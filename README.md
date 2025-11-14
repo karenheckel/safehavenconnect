@@ -66,7 +66,7 @@ d9b3a8045622f3853ceb405b7002073ba38c79b9
 - Led group meetings, made sure tasks were completed, and kept team on task.
 
 #### Phase 3 Git SHA
-e888afb30da3338fd27375dd2ebc018e1786af32
+be23c02abccc9da48f1b5c94c412b63445c4cb75
 
 #### Phase 3 Estimated and Actual Completion Time
 | Member | Estimated (hours) | Actual (hours) |
