@@ -12,6 +12,7 @@ const ResourcePage = () => {
   const { id } = useParams();
   const [resourceInfo, setResourceInfo] = useState(null);
   const [relatedOrgs, setRelatedOrgs] = useState([]);
+  const [relatedEvents, setRelatedEvents] = useState([]);
 
   useEffect(() => {
     if (id.startsWith("default")) {
@@ -80,6 +81,50 @@ const ResourcePage = () => {
     fetchRelatedOrgs();
   }, [resourceInfo]);
 
+  useEffect(() => {
+    const fetchRelatedEvents = async () => {
+      if (resourceInfo?.event_ids?.length) {
+        try {
+          const responses = await Promise.all(
+            resourceInfo.event_ids.map((eventId) =>
+              axios.get(`${BACKEND_URL}/api/events/${eventId}`)
+            )
+          );
+
+          const formatted = responses.map((res) => {
+            const e = res.data;
+
+            const start = e.start_time ? new Date(e.start_time) : null;
+            const end = e.end_time ? new Date(e.end_time) : null;
+
+            return {
+              id: e.id,
+              title: e.name,
+              location: e.location,
+              description: e.description,
+              event_type: e.event_type,
+              date: e.date,
+              time:
+                start && end
+                  ? `${start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} - ${end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`
+                  : "N/A",
+              registration: e.registration_open ? "Open" : "Closed",
+              online_availability: e.is_online ? "Yes" : "No",
+              image_url: e.image_url,
+            };
+          });
+
+          setRelatedEvents(formatted);
+        } catch (err) {
+          console.error("Error fetching related events:", err);
+        }
+      }
+    };
+
+    fetchRelatedEvents();
+  }, [resourceInfo]);
+
+
   if (!resourceInfo) {
     return (
       <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
@@ -142,18 +187,17 @@ const ResourcePage = () => {
 
           <Col className="text-center" md={6}>
             <h3>Related Events</h3>
-            {resourceInfo.event_ids?.length > 0 ? (
-              resourceInfo.event_ids.map((eventId) => (
-                <InfoCard
-                  key={eventId}
-                  cardType="event"
-                  cardInfo={{ id: eventId }}
-                  id={eventId}
-                />
+            {relatedEvents.length > 0 ? (
+              relatedEvents.map((event) => (
+                <InfoCard key={event.id} 
+                cardType="event" 
+                cardInfo={event} 
+                id={event.id} />
               ))
             ) : (
               <p className="text-muted">No related events found.</p>
             )}
+
           </Col>
         </Row>
       </Container>
