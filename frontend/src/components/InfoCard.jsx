@@ -21,6 +21,40 @@ const InfoCard = ({ cardType, cardInfo, id }) => {
     registration,
   } = cardInfo;
 
+  // Time formatter
+  let formattedTime = "N/A";
+  if (cardInfo.start_time && cardInfo.end_time) {
+    try {
+      const start = new Date(cardInfo.start_time);
+      const end = new Date(cardInfo.end_time);
+
+      formattedTime = `${start.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit",
+      })} - ${end.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit",
+      })}`;
+    } catch {
+      formattedTime = "N/A";
+    }
+  }
+
+  // Date formatter
+  let formattedDate = "N/A";
+  if (cardInfo.date) {
+    try {
+      const d = new Date(cardInfo.date + "T00:00:00");
+      formattedDate = d.toLocaleDateString([], {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } catch {
+      formattedDate = "N/A";
+    }
+  }
+
   const infoToPresent = {
     resource: [
       { label: "Location", value: location },
@@ -40,8 +74,8 @@ const InfoCard = ({ cardType, cardInfo, id }) => {
       { label: "Event Type", value: event_type },
       { label: "Description", value: description },
       { label: "Location", value: location },
-      { label: "Date", value: date },
-      { label: "Time", value: time },
+      { label: "Date", value: formattedDate },
+      { label: "Time", value: formattedTime },
       { label: "Online", value: online_availability },
       { label: "Registration", value: registration },
     ],
