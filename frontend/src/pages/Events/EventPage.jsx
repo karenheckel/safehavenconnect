@@ -151,7 +151,7 @@ const EventPage = () => {
               <p><strong>Registration:</strong> {eventInfo.registration}</p>
               {eventInfo.event_url && (
                 <p> <strong>Website:</strong>{" "}
-                  <a href={eventInfo.event_url}
+                  <a href={eventInfo.event_url.startsWith("http") ? eventInfo.event_url : `https://${eventInfo.event_url}`}
                     target="_blank"
                     rel="noopener noreferrer" >
                     Learn More! </a></p>)}

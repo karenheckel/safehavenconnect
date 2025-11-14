@@ -113,7 +113,7 @@ const ResourcePage = () => {
               <p><strong>Website:</strong>{" "}
                 {resourceInfo.resource_url ? (
                   <a
-                    href={resourceInfo.resource_url}
+                    href={resourceInfo.resource_url.startsWith("http") ? resourceInfo.resource_url : `http://${resourceInfo.resource_url}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

@@ -109,7 +109,7 @@ const OrganizationPage = () => {
               <p><strong>Website:</strong>{" "}
                 {orgInfo.website_url ? (
                   <a
-                    href={orgInfo.website_url}
+                    href={orgInfo.website_url.startsWith("http") ? orgInfo.website_url : `https://${orgInfo.website_url}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -119,6 +119,7 @@ const OrganizationPage = () => {
                   "N/A"
                 )}
               </p>
+
             </Card>
           </Col>
         </Row>
