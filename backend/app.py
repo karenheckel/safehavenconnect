@@ -206,6 +206,15 @@ def create_app(config_name='default', testing=False):
         except Exception as e:
             return jsonify({'error': str(e)}), 500
     
+    @app.route('/api/organizations/all', methods=['GET'])
+    def get_all_organizations():
+        try:
+            orgs = Organization.query.all()
+            return jsonify([org.to_dict() for org in orgs]), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+
     @app.route('/api/organizations/<int:org_id>', methods=['GET'])
     def get_organization(org_id):
         try:
@@ -384,6 +393,14 @@ def create_app(config_name='default', testing=False):
         except Exception as e:
             return jsonify({'error': str(e)}), 500
     
+    @app.route('/api/resources/all', methods=['GET'])
+    def get_all_resources():
+        try:
+            resources = Resource.query.all()
+            return jsonify([resouce.to_dict() for resource in resources]), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
     @app.route('/api/resources/<int:resource_id>', methods=['GET'])
     def get_resource(resource_id):
         try:
