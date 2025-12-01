@@ -4,7 +4,7 @@ import * as d3 from "d3";
 
 const BACKEND_URL = "https://backend.safehavenconnect.me";
 
-export default function ResourceBubbleChart() {
+export default function ResourceChart() {
   const [resources, setResources] = useState([]);
   const svgRef = useRef(null);
 
@@ -18,10 +18,14 @@ export default function ResourceBubbleChart() {
     if (!resources.length) return;
 
     const counts = d3.rollups(
-      resources,
-      v => v.length,
-      d => d.location
-    )
+        resources,
+        v => v.length,
+        d => {
+          // Split by commas and take city + state
+          const parts = d.location.split(",");
+          return parts.length >= 2 ? parts.slice(-2).join(",").trim() : d.location;
+        }
+      )
     .map(([location, count]) => ({ location, count }))
     .sort((a, b) => b.count - a.count);
 
