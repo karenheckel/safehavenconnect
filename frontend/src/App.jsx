@@ -9,6 +9,7 @@ import OrganizationPage from "./pages/Organizations/OrganizationPage";
 import ResourcePage from "./pages/Resources/ResourcePage";
 import NavigationBar from "./components/NavigationBar";
 import SearchPage from "./pages/SearchPage";
+import Visualizations from "./pages/Visualizations";
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path="/events/:id" element={<EventPage />} />
         <Route path="/organizations/:id" element={<OrganizationPage />} />
         <Route path="/resources/:id" element={<ResourcePage />} />
+        <Route path="/visualizations" element={<Visualizations />} />
         <Route path="/search" element={<SearchPage />} />
       </Routes>
     </BrowserRouter>

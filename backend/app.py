@@ -515,6 +515,14 @@ def create_app(config_name='default', testing=False):
         except Exception as e:
             return jsonify({'error': str(e)}), 500
     
+    @app.route('/api/events/all', methods=['GET'])
+    def get_all_events():
+        try:
+            events = Event.query.all()
+            return jsonify([event.to_dict() for event in events]), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
     @app.route('/api/events/<int:event_id>', methods=['GET'])
     def get_event(event_id):
         try:
