@@ -69,7 +69,7 @@ def test_about_page_content(driver):
 
 # Test the navbar
 def test_navbar(driver):
-    pages = ["", "resources", "events", "organizations", "about"]
+    pages = ["", "resources", "events", "organizations", "about", "visualizations"]
     for page in pages:
         driver.get(BASE_URL + page)
         navbar = driver.find_element(By.TAG_NAME, "nav")
