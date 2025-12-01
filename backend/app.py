@@ -397,7 +397,7 @@ def create_app(config_name='default', testing=False):
     def get_all_resources():
         try:
             resources = Resource.query.all()
-            return jsonify([resouce.to_dict() for resource in resources]), 200
+            return jsonify([resource.to_dict() for resource in resources]), 200
         except Exception as e:
             return jsonify({'error': str(e)}), 500
 
