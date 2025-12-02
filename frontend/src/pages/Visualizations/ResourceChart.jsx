@@ -21,7 +21,6 @@ export default function ResourceChart() {
         resources,
         v => v.length,
         d => {
-          // Split by commas and take city + state
           const parts = d.location.split(",");
           return parts.length >= 2 ? parts.slice(-2).join(",").trim() : d.location;
         }
@@ -35,7 +34,7 @@ export default function ResourceChart() {
     svg.selectAll("*").remove();
 
     const root = d3.pack()
-      .size([width, height])
+      .size([width, height - 40])
       .padding(10)(
         d3.hierarchy({ children: counts })
           .sum(d => d.count)
@@ -60,9 +59,8 @@ export default function ResourceChart() {
       .data(root.leaves())
       .enter()
       .append("g")
-      .attr("transform", d => `translate(${d.x},${d.y})`);
+      .attr("transform", d => `translate(${d.x},${d.y + 40})`);
 
-    // Circles
     node.append("circle")
       .attr("r", d => d.r)
       .attr("fill", d => color(d.data.location))
@@ -87,11 +85,11 @@ export default function ResourceChart() {
       .style("text-anchor", "middle")
       .style("font-size", d => (d.r > 30 ? "12px" : "0px"))
       .style("pointer-events", "none")
-      .text(d => d.data.location.split(",")[0]); // City only
+      .text(d => d.data.location.split(",")[0]);
 
     svg.append("text")
       .attr("x", width / 2)
-      .attr("y", 30)
+      .attr("y", 40)
       .attr("text-anchor", "middle")
       .style("font-size", "20px")
       .style("font-weight", "bold")
