@@ -42,12 +42,20 @@ All responses are in JSON format.
 
 **Query Parameters:**
 - `location` (optional) - Filter by location (case-insensitive partial match)
-- `type` (optional) - Filter by organization type
+- `type` (optional) - Filter by organization type (can be repeated for multiple types)
 - `online` (optional) - Filter by online availability (true/false)
+- `services` (optional) - Filter by services offered (can be repeated for multiple services)
+- `hours` (optional) - Filter by hours of operation: "24/7", "weekdays", "weekends", "night", "n/a" (can be repeated)
+- `sort` (optional) - Sort results: "name" (alphabetical), "state" (by state), default is "none"
+- `page` (optional) - Page number for pagination (default: 1)
+- `per_page` (optional) - Results per page (default: 12)
 
-**Example Request:**
+**Example Requests:**
 ```bash
 GET /api/organizations?location=Austin&online=true
+GET /api/organizations?type=Shelter&type=Clinic&sort=name
+GET /api/organizations?hours=24/7&page=1&per_page=10
+GET /api/organizations?services=counseling&services=legal&sort=state
 ```
 
 **Example Response:**
@@ -183,13 +191,21 @@ GET /api/organizations/1
 **Endpoint:** `GET /api/resources`
 
 **Query Parameters:**
-- `topic` (optional) - Filter by topic (case-insensitive partial match)
 - `location` (optional) - Filter by location (case-insensitive partial match)
-- `service` (optional) - Filter by service type (case-insensitive partial match)
+- `type` (optional) - Filter by resource topic/type (can be repeated for multiple types)
+- `orgs` (optional) - Filter by organization name range (e.g., "A-C", "D-M") using alphabetical ranges
+- `online` (optional) - Filter by online availability (true/false)
+- `hours` (optional) - Filter by hours of operation: "24/7", "weekdays", "weekends", "night", "n/a" (can be repeated)
+- `sort` (optional) - Sort results: "name" (by title), "state" (by state), default is "none"
+- `page` (optional) - Page number for pagination (default: 1)
+- `per_page` (optional) - Results per page (default: 12)
 
-**Example Request:**
+**Example Requests:**
 ```bash
 GET /api/resources?topic=Legal&location=Austin
+GET /api/resources?type=Financial&type=Medical&sort=name
+GET /api/resources?online=true&hours=24/7
+GET /api/resources?orgs=A-C&page=1&per_page=20
 ```
 
 **Example Response:**
@@ -257,14 +273,21 @@ GET /api/resources?topic=Legal&location=Austin
 **Endpoint:** `GET /api/events`
 
 **Query Parameters:**
-- `type` (optional) - Filter by event type
+- `type` (optional) - Filter by event type (can be repeated for multiple types)
 - `location` (optional) - Filter by location (case-insensitive partial match)
 - `online` (optional) - Filter by online status (true/false)
-- `registration_open` (optional) - Filter by registration status (true/false)
+- `registration_open` (optional) - Filter by registration availability (true/false)
+- `hours` (optional) - Filter by event time: "morning" (12am-11am), "afternoon" (12pm-4pm), "evening" (5pm-11pm), "n/a" (can be repeated)
+- `sort` (optional) - Sort results: "name" (by event name), "state" (by state), default is "none"
+- `page` (optional) - Page number for pagination (default: 1)
+- `per_page` (optional) - Results per page (default: 10)
 
-**Example Request:**
+**Example Requests:**
 ```bash
 GET /api/events?online=true&registration_open=true
+GET /api/events?type=Workshop&type=Support&sort=name
+GET /api/events?location=Austin&hours=evening
+GET /api/events?registration_open=true&sort=state&page=2
 ```
 
 **Example Response:**
@@ -422,6 +445,95 @@ GET /api/events?online=true&registration_open=true
 - **Organizations ↔ Events**: Many-to-Many (via `organization_events` table)
 - **Resources ↔ Events**: Many-to-Many (via `resource_events` table)
 
+## Filtering & Sorting Guide
+
+### Filtering Overview
+All filtering parameters are applied as **AND** conditions unless they have multiple values (like `type`, `services`, `hours`), in which case multiple values are combined as **OR** within that filter.
+
+**Example:** `?location=Austin&type=Shelter&type=Clinic&online=true` means:
+- Location contains "Austin" **AND**
+- (Type contains "Shelter" **OR** type contains "Clinic") **AND**
+- Online availability is true
+
+### Pagination Response
+All list endpoints (`/api/organizations`, `/api/resources`, `/api/events`) return paginated responses with the following structure:
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "Example",
+      ...
+    }
+  ],
+  "pagination": {
+    "total": 50,
+    "page": 1,
+    "per_page": 12,
+    "pages": 5,
+    "has_next": true,
+    "has_prev": false
+  }
+}
+```
+
+### Sorting Options
+
+#### Organizations
+- `sort=name` - Sort alphabetically by organization name
+- `sort=state` - Sort by state (extracted from location field)
+
+#### Resources
+- `sort=name` - Sort alphabetically by resource title
+- `sort=state` - Sort by state (extracted from location field)
+
+#### Events
+- `sort=name` - Sort alphabetically by event name
+- `sort=state` - Sort by state (extracted from location field)
+
+### Hours of Operation Filters
+
+#### Organizations & Resources
+- `hours=24/7` - Available 24 hours
+- `hours=weekdays` - Available on weekdays (Mon-Fri)
+- `hours=weekends` - Available on weekends (Sat-Sun)
+- `hours=night` - Available during night hours (8pm-5am)
+- `hours=n/a` - No hours specified
+
+#### Events
+- `hours=morning` - Events starting 12am-11am
+- `hours=afternoon` - Events starting 12pm-4pm
+- `hours=evening` - Events starting 5pm-11pm
+- `hours=n/a` - No specific time
+
+### Advanced Filter Examples
+
+#### Get all 24/7 shelters in Austin, sorted by name
+```bash
+GET /api/organizations?location=Austin&organization_type=Shelter&hours=24/7&sort=name
+```
+
+#### Get legal and financial resources available online
+```bash
+GET /api/resources?type=Legal&type=Financial&online=true&sort=name
+```
+
+#### Get evening workshops with open registration
+```bash
+GET /api/events?type=Workshop&hours=evening&registration_open=true&sort=name
+```
+
+#### Get in-person resources in Dallas, paginate with 20 results per page
+```bash
+GET /api/resources?location=Dallas&online=false&page=1&per_page=20
+```
+
+#### Get all organizations with multiple filters and pagination
+```bash
+GET /api/organizations?location=Texas&services=counseling&hours=weekdays&sort=state&page=2&per_page=15
+```
+
 ## Notes
 
 1. All datetime fields are in ISO 8601 format
@@ -429,3 +541,5 @@ GET /api/events?online=true&registration_open=true
 3. The API uses Flask-CORS to allow cross-origin requests
 4. All IDs are auto-incrementing integers
 5. Timestamps are automatically managed by SQLAlchemy
+6. Multiple query parameters with the same name (e.g., `type=X&type=Y`) create OR conditions
+7. Location filtering uses the full location string (e.g., "Austin, TX")
