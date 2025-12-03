@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import About from "./pages/About";
 import Events from "./pages/Events";
@@ -10,6 +10,7 @@ import ResourcePage from "./pages/Resources/ResourcePage";
 import NavigationBar from "./components/NavigationBar";
 import SearchPage from "./pages/SearchPage";
 import Visualizations from "./pages/Visualizations";
+import DevVisualizations from "./pages/DevVisualizations";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/organizations/:id" element={<OrganizationPage />} />
         <Route path="/resources/:id" element={<ResourcePage />} />
         <Route path="/visualizations" element={<Visualizations />} />
+        <Route path="/devvisualizations" element={<DevVisualizations />} />
         <Route path="/search" element={<SearchPage />} />
       </Routes>
     </BrowserRouter>

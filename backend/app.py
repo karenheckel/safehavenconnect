@@ -6,7 +6,7 @@ import os, re
 from sqlalchemy import inspect, text, or_, func, and_, extract
 from datetime import datetime, date, timedelta
 from utils import get_image_for_topic
-
+import requests
 
 def parse_datetime(value):
     if not value:
@@ -106,6 +106,36 @@ def create_app(config_name='default', testing=False):
             except Exception:
                 pass
     
+    # Developer proxy routes (myhealthmatters)
+    DEV_BASE = "https://myhealthmatters.me"
+
+    @app.route("/api/dev/services", methods=["GET"])
+    def dev_services():
+        try:
+            resp = requests.get(f"{DEV_BASE}/api/services", params=request.args, timeout=10)
+            resp.raise_for_status()
+            return jsonify(resp.json()), resp.status_code
+        except requests.RequestException as e:
+            return jsonify({"error": str(e)}), 502
+
+    @app.route("/api/dev/pharmacies", methods=["GET"])
+    def dev_pharmacies():
+        try:
+            resp = requests.get(f"{DEV_BASE}/api/pharmacies", params=request.args, timeout=10)
+            resp.raise_for_status()
+            return jsonify(resp.json()), resp.status_code
+        except requests.RequestException as e:
+            return jsonify({"error": str(e)}), 502
+
+    @app.route("/api/dev/clinics", methods=["GET"])
+    def dev_clinics():
+        try:
+            resp = requests.get(f"{DEV_BASE}/api/clinics", params=request.args, timeout=10)
+            resp.raise_for_status()
+            return jsonify(resp.json()), resp.status_code
+        except requests.RequestException as e:
+            return jsonify({"error": str(e)}), 502
+
     @app.route('/api/organizations', methods=['GET'])
     def get_organizations():
         try:
