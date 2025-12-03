@@ -28,7 +28,7 @@ function App() {
         <Route path="/organizations/:id" element={<OrganizationPage />} />
         <Route path="/resources/:id" element={<ResourcePage />} />
         <Route path="/visualizations" element={<Visualizations />} />
-        <Route path="/devvisualizations" element={<DevVisualizations />} />
+        <Route path="/provider-visualizations" element={<DevVisualizations />} />
         <Route path="/search" element={<SearchPage />} />
       </Routes>
     </BrowserRouter>

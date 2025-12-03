@@ -87,14 +87,6 @@ export default function ResourceChart() {
       .style("pointer-events", "none")
       .text(d => d.data.location.split(",")[0]);
 
-    svg.append("text")
-      .attr("x", width / 2)
-      .attr("y", 40)
-      .attr("text-anchor", "middle")
-      .style("font-size", "20px")
-      .style("font-weight", "bold")
-      .text("Resource Availability by Location");
-
   }, [resources]);
 
   return <svg ref={svgRef} width={800} height={500}></svg>;

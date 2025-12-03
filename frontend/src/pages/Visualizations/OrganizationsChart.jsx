@@ -81,23 +81,6 @@ export default function OrganizationsChart() {
       })
       .on("mouseout", () => tooltip.style("opacity", 0));
 
-    g.selectAll("text")
-      .data(pie(topCities))
-      .enter()
-      .append("text")
-      .attr("transform", d => `translate(${arc.centroid(d)})`)
-      .attr("text-anchor", "middle")
-      .attr("font-size", d => d.data.count > 5 ? "10px" : "0px")
-      .text(d => d.data.city);
-
-    svg.append("text")
-      .attr("x", width/2)
-      .attr("y", 25)
-      .attr("text-anchor", "middle")
-      .style("font-size", "18px")
-      .style("font-weight", "bold")
-      .text("Top 20 Cities with the Most Organizations");
-
   }, [orgs]);
 
   return <svg ref={svgRef}></svg>;

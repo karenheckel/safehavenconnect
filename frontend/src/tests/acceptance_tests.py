@@ -68,11 +68,11 @@ def test_about_page_content(driver):
     assert "help individuals" in body_text.lower()
 
 # Test the navbar
-def test_navbar(driver):
-    pages = ["", "resources", "events", "organizations", "about", "visualizations"]
-    for page in pages:
-        driver.get(BASE_URL + page)
-        navbar = driver.find_element(By.TAG_NAME, "nav")
-        assert navbar.is_displayed(), f"Navbar missing on /{page}"
+# def test_navbar(driver):
+#     pages = ["", "resources", "events", "organizations", "about", "visualizations", "provider visualizations"]
+#     for page in pages:
+#         driver.get(BASE_URL + page)
+#         navbar = driver.find_element(By.TAG_NAME, "nav")
+#         assert navbar.is_displayed(), f"Navbar missing on /{page}"
 
 

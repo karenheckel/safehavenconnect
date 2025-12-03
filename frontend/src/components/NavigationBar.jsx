@@ -35,7 +35,7 @@ const NavigationBar = () => {
             <Nav.Link as={NavLink} to="/events"> Events </Nav.Link>
             <Nav.Link as={NavLink} to="/resources"> Resources </Nav.Link>
             <Nav.Link as={NavLink} to="/visualizations"> Visualizations </Nav.Link>
-            <Nav.Link as={NavLink} to="/devvisualizations"> Developer Visualizations </Nav.Link>
+            <Nav.Link as={NavLink} to="/provider-visualizations"> Provider Visualizations </Nav.Link>
           </Nav>
 
           {/* Search + Language Selector */}

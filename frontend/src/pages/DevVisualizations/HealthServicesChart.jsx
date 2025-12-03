@@ -2,19 +2,49 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import * as d3 from "d3";
 
-export default function DevHealthServicesChart() {
+const BACKEND_URL = "https://backend.safehavenconnect.me";
+
+export default function HealthServicesChart() {
   const [services, setServices] = useState([]);
   const svgRef = useRef(null);
 
   useEffect(() => {
-    axios
-      .get("/api/dev/services", { params: { page: 1 } })
-      .then(res => {
-        setServices(res.data.health_services || []);
-      })
-      .catch(err => {
-        console.error("Error fetching dev health services:", err);
-      });
+    let cancelled = false;
+
+    const fetchAllServices = async () => {
+      try {
+        let all = [];
+        let page = 1;
+        let totalPages = 1;
+
+        while (page <= totalPages && !cancelled) {
+          const res = await axios.get(`${BACKEND_URL}/api/dev/services`, {
+            params: { page },
+          });
+
+          const data = res.data || {};
+          const pageServices = data.health_services || [];
+
+          all = all.concat(pageServices);
+
+          totalPages = data.num_pages || 1;
+          page += 1;
+        }
+
+        if (!cancelled) {
+          console.log("total services fetched:", all.length);
+          setServices(all);
+        }
+      } catch (err) {
+        console.error("Error fetching paginated dev health services:", err);
+      }
+    };
+
+    fetchAllServices();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -28,7 +58,6 @@ export default function DevHealthServicesChart() {
       )
       .map(([zip, count]) => ({ zip, count }))
       .sort((a, b) => b.count - a.count)
-      .slice(0, 15);
 
     const width = 700;
     const height = 380;
@@ -85,15 +114,6 @@ export default function DevHealthServicesChart() {
       .append("g")
       .attr("transform", `translate(${margin.left},0)`)
       .call(d3.axisLeft(y));
-
-    svg
-      .append("text")
-      .attr("x", width / 2)
-      .attr("y", margin.top / 2)
-      .attr("text-anchor", "middle")
-      .style("font-size", "18px")
-      .style("font-weight", "bold")
-      .text("Developer Health Services per ZIP Code");
   }, [services]);
 
   return (

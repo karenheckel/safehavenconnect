@@ -78,14 +78,6 @@ export default function EventsChart() {
       .attr("transform", `translate(${margin.left},0)`)
       .call(d3.axisLeft(y));
 
-    // Title
-    svg.append("text")
-      .attr("x", width / 2)
-      .attr("y", margin.top / 2)
-      .attr("text-anchor", "middle")
-      .style("font-size", "18px")
-      .style("font-weight", "bold")
-      .text("Events per Category");
   }, [events]);
 
   return <svg ref={svgRef} width={650} height={380}></svg>;
