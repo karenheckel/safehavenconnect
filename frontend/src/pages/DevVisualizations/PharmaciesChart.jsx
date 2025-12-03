@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import * as d3 from "d3";
+import { Spinner } from "react-bootstrap";
 
 const BACKEND_URL = "https://backend.safehavenconnect.me";
 
 export default function PharmaciesChart() {
   const [pharmacies, setPharmacies] = useState([]);
+  const [loading, setLoading] = useState(true);
   const svgRef = useRef(null);
 
   useEffect(() => {
@@ -36,6 +38,8 @@ export default function PharmaciesChart() {
         }
       } catch (err) {
         console.error("Error fetching pharmacies:", err);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     };
 
@@ -65,8 +69,8 @@ export default function PharmaciesChart() {
     const counts = d3
       .rollups(
         pharmacies,
-        v => v.length,
-        d => stripZip5(d.pharmacy_zip)
+        (v) => v.length,
+        (d) => stripZip5(d.pharmacy_zip)
       )
       .map(([zip, count]) => ({ zip, count }))
       .sort((a, b) => b.count - a.count);
@@ -77,12 +81,12 @@ export default function PharmaciesChart() {
       .padding(10)(
         d3
           .hierarchy({ children: counts })
-          .sum(d => d.count)
+          .sum((d) => d.count)
       );
 
     const color = d3
       .scaleOrdinal()
-      .domain(counts.map(d => d.zip))
+      .domain(counts.map((d) => d.zip))
       .range(d3.schemeSet3);
 
     const tooltip = d3
@@ -102,12 +106,12 @@ export default function PharmaciesChart() {
       .data(root.leaves())
       .enter()
       .append("g")
-      .attr("transform", d => `translate(${d.x},${d.y + 40})`);
+      .attr("transform", (d) => `translate(${d.x},${d.y + 40})`);
 
     node
       .append("circle")
-      .attr("r", d => d.r)
-      .attr("fill", d => color(d.data.zip))
+      .attr("r", (d) => d.r)
+      .attr("fill", (d) => color(d.data.zip))
       .attr("stroke", "#555")
       .attr("stroke-width", 1.5)
       .on("mouseover", (event, d) => {
@@ -117,7 +121,7 @@ export default function PharmaciesChart() {
             `<strong>ZIP: ${d.data.zip}</strong><br/>${d.data.count} pharmacies`
           );
       })
-      .on("mousemove", event => {
+      .on("mousemove", (event) => {
         tooltip
           .style("left", event.pageX + 15 + "px")
           .style("top", event.pageY + "px");
@@ -125,8 +129,30 @@ export default function PharmaciesChart() {
       .on("mouseout", () => {
         tooltip.style("opacity", 0);
       });
-      
   }, [pharmacies]);
 
-  return <svg ref={svgRef} width={800} height={500}></svg>;
+  return (
+    <div
+      style={{
+        width: "100%",
+        maxWidth: "800px",
+        margin: "0 auto",
+      }}
+    >
+      {loading && !pharmacies.length && (
+        <div className="d-flex justify-content-center align-items-center mb-2">
+          <Spinner animation="border" role="status" size="sm" className="me-2">
+            <span className="visually-hidden">Loading chart…</span>
+          </Spinner>
+          <span className="text-muted">Loading chart…</span>
+        </div>
+      )}
+
+      <svg
+        ref={svgRef}
+        viewBox="0 0 800 500"
+        style={{ width: "100%", height: "auto", display: "block" }}
+      ></svg>
+    </div>
+  );
 }

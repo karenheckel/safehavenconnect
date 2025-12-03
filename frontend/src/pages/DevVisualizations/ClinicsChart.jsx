@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import * as d3 from "d3";
+import { Spinner } from "react-bootstrap";
 
 const BACKEND_URL = "https://backend.safehavenconnect.me";
 
 export default function ClinicsChart() {
     const [clinics, setClinics] = useState([]);
+    const [loading, setLoading] = useState(true);
     const svgRef = useRef(null);
 
     useEffect(() => {
@@ -37,6 +39,8 @@ export default function ClinicsChart() {
                 }
             } catch (err) {
                 console.error("Error fetching paginated dev clinics:", err);
+            } finally {
+                if (!cancelled) setLoading(false);
             }
         };
 
@@ -95,7 +99,6 @@ export default function ClinicsChart() {
             .append("title")
             .text(d => `${d.data.type}: ${d.data.count} clinics`);
 
-
         const totalClinics = d3.sum(counts, d => d.count);
         g.append("text")
             .attr("text-anchor", "middle")
@@ -112,7 +115,7 @@ export default function ClinicsChart() {
 
         const legend = svg
             .append("g")
-            .attr("transform", `translate(${width - 180}, ${60})`);
+            .attr("transform", `translate(${width - 180}, 60)`);
 
         const legendRow = legend
             .selectAll(".legend-row")
@@ -139,8 +142,27 @@ export default function ClinicsChart() {
     }, [clinics]);
 
     return (
-        <div>
-            <svg ref={svgRef} width={700} height={380}></svg>
+        <div
+            style={{
+                width: "100%",
+                maxWidth: "700px",
+                margin: "0 auto",
+            }}
+        >
+            {loading && !clinics.length && (
+                <div className="d-flex justify-content-center align-items-center mb-2">
+                    <Spinner animation="border" role="status" size="sm" className="me-2">
+                        <span className="visually-hidden">Loading chart…</span>
+                    </Spinner>
+                    <span className="text-muted">Loading chart…</span>
+                </div>
+            )}
+
+            <svg
+                ref={svgRef}
+                viewBox="0 0 700 380"
+                style={{ width: "100%", height: "auto", display: "block" }}
+            ></svg>
         </div>
     );
 }

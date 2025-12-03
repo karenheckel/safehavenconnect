@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import * as d3 from "d3";
+import { Spinner } from "react-bootstrap";
 
 const BACKEND_URL = "https://backend.safehavenconnect.me";
 
 export default function HealthServicesChart() {
   const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
   const svgRef = useRef(null);
 
   useEffect(() => {
@@ -37,6 +39,8 @@ export default function HealthServicesChart() {
         }
       } catch (err) {
         console.error("Error fetching paginated dev health services:", err);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     };
 
@@ -57,7 +61,7 @@ export default function HealthServicesChart() {
         d => d.zip_code || "Unknown"
       )
       .map(([zip, count]) => ({ zip, count }))
-      .sort((a, b) => b.count - a.count)
+      .sort((a, b) => b.count - a.count);
 
     const width = 700;
     const height = 380;
@@ -117,8 +121,27 @@ export default function HealthServicesChart() {
   }, [services]);
 
   return (
-    <div>
-      <svg ref={svgRef} width={700} height={380}></svg>
+    <div
+      style={{
+        width: "100%",
+        maxWidth: "700px",
+        margin: "0 auto",
+      }}
+    >
+      {loading && !services.length && (
+        <div className="d-flex justify-content-center align-items-center mb-2">
+          <Spinner animation="border" role="status" size="sm" className="me-2">
+            <span className="visually-hidden">Loading chart…</span>
+          </Spinner>
+          <span className="text-muted">Loading chart…</span>
+        </div>
+      )}
+
+      <svg
+        ref={svgRef}
+        viewBox="0 0 700 380"
+        style={{ width: "100%", height: "auto", display: "block" }}
+      ></svg>
     </div>
   );
 }

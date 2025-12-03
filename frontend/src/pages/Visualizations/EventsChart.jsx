@@ -1,29 +1,44 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import * as d3 from "d3";
+import { Spinner } from "react-bootstrap";
+
 const BACKEND_URL = "https://backend.safehavenconnect.me";
 
 export default function EventsChart() {
   const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
   const svgRef = useRef(null);
 
   useEffect(() => {
-    axios.get(`${BACKEND_URL}/api/events/all`)
-      .then(res => setEvents(res.data))
-      .catch(console.error);
+    let cancelled = false;
+
+    axios
+      .get(`${BACKEND_URL}/api/events/all`)
+      .then((res) => {
+        if (!cancelled) setEvents(res.data || []);
+      })
+      .catch((err) => console.error(err))
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
     if (!events?.length) return;
 
-    const counts = d3.rollups(events, v => v.length, d => d.event_type);
+    const counts = d3.rollups(events, v => v.length, d => d.event_type || "Unknown");
     const sortedCounts = counts.sort((a, b) => b[1] - a[1]);
 
-    const svg = d3.select(svgRef.current);
     const width = 650;
     const height = 380;
     const margin = { top: 40, right: 20, bottom: 80, left: 60 };
 
+    const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
 
     const x = d3.scaleBand()
@@ -77,8 +92,30 @@ export default function EventsChart() {
     svg.append("g")
       .attr("transform", `translate(${margin.left},0)`)
       .call(d3.axisLeft(y));
-
   }, [events]);
 
-  return <svg ref={svgRef} width={650} height={380}></svg>;
+  return (
+    <div
+      style={{
+        width: "100%",
+        maxWidth: "650px",
+        margin: "0 auto",
+      }}
+    >
+      {loading && !events.length && (
+        <div className="d-flex justify-content-center align-items-center mb-2">
+          <Spinner animation="border" role="status" size="sm" className="me-2">
+            <span className="visually-hidden">Loading chart…</span>
+          </Spinner>
+          <span className="text-muted">Loading chart…</span>
+        </div>
+      )}
+
+      <svg
+        ref={svgRef}
+        viewBox="0 0 650 380"
+        style={{ width: "100%", height: "auto", display: "block" }}
+      ></svg>
+    </div>
+  );
 }
