@@ -164,6 +164,13 @@ const SearchPage = () => {
         <Container className="d-flex justify-content-center mt-4">
           <button
             className="btn btn-secondary mx-2"
+            onClick={() => handlePageChange(1)}
+            disabled={currPage === 1}
+          >
+            First
+          </button>
+          <button
+            className="btn btn-secondary mx-2"
             onClick={() => handlePageChange(Math.max(currPage - 1, 1))}
             disabled={currPage === 1}
           >
@@ -182,6 +189,13 @@ const SearchPage = () => {
             disabled={currPage >= numPages}
           >
             Next
+          </button>
+          <button
+            className="btn btn-secondary mx-2"
+            onClick={() => handlePageChange(numPages)}
+            disabled={currPage === numPages}
+          >
+            Last
           </button>
         </Container>
       )}
