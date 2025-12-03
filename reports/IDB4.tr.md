@@ -112,6 +112,9 @@ Data was primarily sourced from the Health Resources and Services Administration
     - Added a website button and relevant photo next to each organization description
     - Estimated time: 2 hours → Actual: 2 hours
 
+20. Developer wants a page dedicated to visualizations of the website data
+    - Added Visualizations with a bar chart, pie chart, and bubble chart for each model page
+    - Estimated time: 1 hour → Actual: 2 hours
 ---
 
 ## Data Scraping
