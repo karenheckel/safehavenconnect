@@ -1,6 +1,5 @@
 # SafeHavenConnect Technical Report
 
----
 
 
 ## Purpose/Motivation
@@ -259,8 +258,33 @@ Sorting and filtering is accomplished by using query parameters when calling fro
 - Attributes: member name, role, photo, short biography, commits, issues created, issues closed, and unit tests
     - GitLab API Integration to retrieve commits, issues created, issues closed, and unit tests
 
+### Visualization Pages
+We implemented two visualization pages to show both our site's datasets and our developer's.
+
+---
+#### Developer Visualizations (MyHealthMatters Data):
+- Tools: React, JavaScript, D3, Axios
+- Purpose: monitor clinic, pharmacy, and health service data
+- Charts:
+    1. Clinics by License Type (Donut Chart)
+    2. Health Services per ZIP Code (Bar Chart)
+    3. Pharmacies by ZIP Code (Bubble Chart)
+- Data: retrieved from a developer facing backend endpoint
+
+---
+#### Our Visualizations:
+- Tools: React, JavaScript, D3, Axios
+- Purpose: give users insight into resource availability
+- Charts:
+    1. Events per Category (Bar Chart)
+    2. Resources by Location (Bubble Chart)
+    3. Top 20 Cities with the Most Organizations (Pie Chart)
+- Data: fetched live from our models based on the database
+
+All visualizations are fully responsive using dynamic scaling.
+
+
 ## Challenges 
-- The Google Translate widget initially rendered multiple times due to React's re-renders. However, once we added a script check and conditional initialization, it ensured that the widget only loaded once. 
-- We struggled with finding good APIs to source our data. We originally planned to use the 211 API as our primary data source, which would have provided comprehensive social services data. However, our subscription request was not approved in time, forcing us to pivot to alternative APIs. This required adapting our data import scripts to handle varying response formats, API rate limits, and quota restrictions. 
-- We struggled with figuring out a way to query from our backend when sorting the location since we grouped by state, however the format of the address varied in formats, for example (city, state), (address, city, state), (address, city, state, zip code), however this was accomplished in the backend by adding a helper method to parse and extract the state from the location
-- We also struggled with filtering data in the backend when the filter contained a range, specifically hours of operation, which we used filters of "Weekdays", "Weekends", "Nights", "24/7" for. However, since the hours were formatted in various ways (Mon-Fri 8am-5pm), (Monday: 8 AM-5 PM, Tuesday: 8 AM-5 PM, Wednesday: 8 AM-5 PM, Thursday: 8 AM-5 PM, Friday: 8 AM-5 PM) and various other formats, being able to determine that this operats on "Weekdays" required a helper function in the backend.
+- Because each visualization retrieves live API data, loading time depends on network speed, backend pagination queries, computation needed for chart rendering. We overcame blank screen issues by adding loading spinners for user feedback and breaking large dataset requests into paginated fetch loops
+- Initial visualizations were fixed width and overflowing the page on mobile devices. This was fixed by replacing static width/height with full-width scaling.
+- D3 learning curve
