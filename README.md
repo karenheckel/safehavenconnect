@@ -81,7 +81,8 @@ be23c02abccc9da48f1b5c94c412b63445c4cb75
 - Project Leader: Jonathan Ho
 - 
 
-#### Phase 4 Git SHA 
+#### Phase 4 Git SHA: 098128c5
+
 
 #### Phase 4 Estimated and Actual Completion Time
 | Member | Estimated (hours) | Actual (hours) |
