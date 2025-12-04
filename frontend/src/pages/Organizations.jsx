@@ -70,14 +70,14 @@ const Organizations = () => {
   };
 
   // Fetch search results
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    setCurrPage(1);
+  const handleSearch = async (e, page = 1) => {
+    if (e) e.preventDefault();
+    setCurrPage(page);
     if (!query.trim()) return;
     try {
       setLoading(true);
       const res = await axios.get(`${BACKEND_URL}/api/search`, {
-        params: { q: query, model: "Organization", page: currPage, per_page: cardsOnPage },
+        params: { q: query, model: "Organization", page, per_page: cardsOnPage },
       });
       const pagination = res.data.pagination;
       const formatOrgs = res.data.results.map((org) => ({
@@ -115,13 +115,6 @@ const Organizations = () => {
       getOrganizations(currPage);
     }
   }, [filter, currPage, sort, searchActive]);
-
-  // Re-run search when changing page during active search
-  useEffect(() => {
-    if (searchActive) {
-      handleSearch(new Event("submit"));
-    }
-  }, [currPage]);
 
   const handleHoursChange = (hour) => {
     setFilter((prev) => {
@@ -339,7 +332,7 @@ const Organizations = () => {
         <Container className="d-flex justify-content-center mt-4">
           <button
             className="btn btn-secondary mx-2"
-            onClick={() => setCurrPage(1)}
+            onClick={() => handleSearch(null, 1)}
             disabled={currPage === 1}
           >
             First
@@ -347,7 +340,7 @@ const Organizations = () => {
 
           <button
             className="btn btn-secondary mx-2"
-            onClick={() => setCurrPage((prev) => Math.max(prev - 1, 1))}
+            onClick={() => handleSearch(null, Math.max(currPage - 1, 1))}
             disabled={currPage === 1}
           >
             Previous
@@ -360,7 +353,7 @@ const Organizations = () => {
           <button
             className="btn btn-secondary mx-2"
             onClick={() =>
-              setCurrPage((prev) => (prev < numPages ? prev + 1 : prev))
+              handleSearch(null, Math.min(currPage + 1, numPages))            
             }
             disabled={currPage >= numPages}
           >
@@ -368,7 +361,7 @@ const Organizations = () => {
           </button>
           <button
             className="btn btn-secondary mx-2"
-            onClick={() => setCurrPage(numPages)}
+            onClick={() => handleSearch(null, numPages)}
             disabled={currPage >= numPages}
           >
             Last
