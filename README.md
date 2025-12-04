@@ -26,6 +26,9 @@ https://backend.safehavenconnect.me
 ## Link to API Documentation
 https://documenter.getpostman.com/view/48794305/2sB3WjzjPd
 
+## Link to Demonstration Video
+https://youtu.be/8QxRENdTUl8
+
 
 ## Phase 1 
 - Project Leader: Brianna Flores
@@ -79,7 +82,6 @@ be23c02abccc9da48f1b5c94c412b63445c4cb75
 
 ## Phase 4
 - Project Leader: Jonathan Ho
-- 
 
 #### Phase 4 Git SHA
 098128c548fad3d0e32fa69f3f27a459ae76eca4
