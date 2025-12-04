@@ -137,9 +137,9 @@ const Events = () => {
     }
   };
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    setCurrPage(1)
+  const handleSearch = async (e, page = 1) => {
+    if (e) e.preventDefault();
+    setCurrPage(page)
     if (!query.trim()) return;
     try {
       setLoading(true);
@@ -147,7 +147,7 @@ const Events = () => {
         params: {
           q: query,
           model: "Event",
-          page: currPage,
+          page,
           per_page: cardsOnPage,
         },
       });
@@ -171,10 +171,16 @@ const Events = () => {
     getEvents(1);
   };
 
-  useEffect(() => {
+  const pageChange = (newPage) => {
     if (searchActive) {
-      handleSearch({ preventDefault: () => { } });
+      handleSearch(null, newPage)
     } else {
+      setCurrPage(newPage)
+    }
+  }
+
+  useEffect(() => {
+    if (!searchActive) {
       getEvents(currPage);
     }
   }, [currPage, searchActive, filter, sort]);
@@ -422,39 +428,42 @@ const Events = () => {
       </Container>
 
       <Container className="d-flex justify-content-center mt-4">
-        <button
-          className="btn btn-secondary mx-2"
-          onClick={() => setCurrPage(1)}
-          disabled={currPage === 1}
-        >
-          First
-        </button>
-        <button
-          className="btn btn-secondary mx-2"
-          onClick={() => setCurrPage((p) => Math.max(p - 1, 1))}
-          disabled={currPage === 1}
-        >
-          Previous
-        </button>
+      <button
+            className="btn btn-secondary mx-2"
+            onClick={() => pageChange(1)}
+            disabled={currPage === 1}
+          >
+            First
+          </button>
 
-        <span className="align-self-center mx-2">
-          Page {currPage} of {numPages}
-        </span>
+          <button
+            className="btn btn-secondary mx-2"
+            onClick={() => pageChange(Math.max(currPage - 1, 1))}
+            disabled={currPage === 1}
+          >
+            Previous
+          </button>
 
-        <button
-          className="btn btn-secondary mx-2"
-          onClick={() => setCurrPage((p) => (p < numPages ? p + 1 : p))}
-          disabled={currPage >= numPages}
-        >
-          Next
-        </button>
-        <button
-          className="btn btn-secondary mx-2"
-          onClick={() => setCurrPage(numPages)}
-          disabled={currPage >= numPages}
-        >
-          Last
-        </button>
+          <span className="align-self-center mx-2">
+            Page {currPage} of {numPages}
+          </span>
+
+          <button
+            className="btn btn-secondary mx-2"
+            onClick={() =>
+              pageChange(Math.min(currPage + 1, numPages))            
+            }
+            disabled={currPage >= numPages}
+          >
+            Next
+          </button>
+          <button
+            className="btn btn-secondary mx-2"
+            onClick={() => pageChange(numPages)}
+            disabled={currPage >= numPages}
+          >
+            Last
+          </button>
       </Container>
     </Container>
   );

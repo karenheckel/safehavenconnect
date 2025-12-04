@@ -72,14 +72,14 @@ const Resources = () => {
     if (!searchActive) getResources();
   }, [filter, sort, currPage, searchActive]);
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    setCurrPage(1);
+  const handleSearch = async (e, page = 1) => {
+    if (e) e.preventDefault();
+    setCurrPage(page);
     if (!query.trim()) return;
     try {
       setLoading(true);
       const res = await axios.get(`${BACKEND_URL}/api/search`, {
-        params: { q: query, model: "Resource", page: currPage, per_page: cardsOnPage },
+        params: { q: query, model: "Resource", page, per_page: cardsOnPage },
       });
       const pagination = res.data.pagination;
       const formatResources = res.data.results.map((res) => ({
@@ -109,12 +109,6 @@ const Resources = () => {
     setSearchActive(false);
     setCurrPage(1);
   };
-
-  useEffect(() => {
-    if (searchActive) {
-      handleSearch({ preventDefault: () => { } });
-    }
-  }, [currPage]);
 
   const handleHoursChange = (hour) => {
     setFilter((prev) => {
@@ -326,16 +320,17 @@ const Resources = () => {
         </Container>
 
         <Container className="d-flex justify-content-center mt-4">
-          <button
+        <button
             className="btn btn-secondary mx-2"
-            onClick={() => setCurrPage(1)}
+            onClick={() => handleSearch(null, 1)}
             disabled={currPage === 1}
           >
             First
           </button>
+
           <button
             className="btn btn-secondary mx-2"
-            onClick={() => setCurrPage((prev) => Math.max(prev - 1, 1))}
+            onClick={() => handleSearch(null, Math.max(currPage - 1, 1))}
             disabled={currPage === 1}
           >
             Previous
@@ -348,7 +343,7 @@ const Resources = () => {
           <button
             className="btn btn-secondary mx-2"
             onClick={() =>
-              setCurrPage((prev) => (prev < numPages ? prev + 1 : prev))
+              handleSearch(null, Math.min(currPage + 1, numPages))            
             }
             disabled={currPage >= numPages}
           >
@@ -356,7 +351,7 @@ const Resources = () => {
           </button>
           <button
             className="btn btn-secondary mx-2"
-            onClick={() => setCurrPage(numPages)}
+            onClick={() => handleSearch(null, numPages)}
             disabled={currPage >= numPages}
           >
             Last
