@@ -78,18 +78,18 @@ be23c02abccc9da48f1b5c94c412b63445c4cb75
 
 
 ## Phase 4
-- Project Leader:
+- Project Leader: Jonathan Ho
 - 
 
-#### Phase 4 Git SHA
+#### Phase 4 Git SHA 
 
 #### Phase 4 Estimated and Actual Completion Time
 | Member | Estimated (hours) | Actual (hours) |
 | ------ | ------ | ------ |
-| **Brianna Flores** | |  |
-| **Jonathan Ho** |  |  |
-| **Karen Heckel** |  |  |
-| **Parul Sadasivuni** |  |  |
+| **Brianna Flores** | 4 | 8 |
+| **Jonathan Ho** | 3 | 4 |
+| **Karen Heckel** | 5 | 10 |
+| **Parul Sadasivuni** | 3 | 4 |
 
 
 ## Data sources 
