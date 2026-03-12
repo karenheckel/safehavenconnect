@@ -1,0 +1,190 @@
+stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  NODE_VERSION: "20"
+
+# Cache frontend dependencies
+cache:
+  paths:
+    - frontend/node_modules/
+
+frontend_tests:
+  stage: test
+  image: node:$NODE_VERSION
+  before_script:
+    - cd frontend
+    - npm ci
+  script:
+    - npm run lint
+    - npm run build
+    - npm test -- --run
+  artifacts:
+    paths:
+      - frontend/dist/
+    expire_in: 1 hour
+
+backend_tests:
+  stage: test
+  image: python:3.11-slim
+  before_script:
+    - python --version
+    - python -m pip install --upgrade pip
+    - pip install -r backend/requirements.txt
+  script:
+    - pytest -q backend/test_api.py
+
+build:
+  stage: build
+  image: node:$NODE_VERSION
+  before_script:
+    - cd frontend
+    - npm ci
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/dist/
+    expire_in: 1 week
+  only:
+    - main
+    - develop
+
+pages:
+  stage: deploy
+  script:
+    - cd frontend
+    - echo "Checking dist directory..."
+    - ls -la dist/ || echo "dist directory not found"
+    - echo "Creating public directory..."
+    - mkdir -p ../public
+    - echo "Copying files..."
+    - |
+      if [ -d "dist" ] && [ "$(ls -A dist)" ]; then
+        cp -r dist/* ../public/
+        echo "Files copied successfully"
+      else
+        echo "ERROR: dist directory is empty or missing"
+        exit 1
+      fi
+    - echo "Final public directory contents:"
+    - ls -la ../public/
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+  dependencies:
+    - build
+
+
+# Build and push backend image to AWS ECR
+backend_ecr_build_push:
+  stage: build
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+    IMAGE_TAG: ${CI_COMMIT_SHORT_SHA}
+  before_script:
+    - apk add --no-cache python3 py3-pip bash curl jq git
+    - pip install --no-cache-dir awscli
+    - aws --version
+    - |
+      if [ -n "$AWS_ACCOUNT_ID" ] && [ -n "$AWS_DEFAULT_REGION" ] && [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+        export ECR_REPO_NAME="${ECR_REPO_NAME:-safehavenconnect-backend}"
+        echo "Logging in to ECR..."
+        aws ecr describe-repositories --repository-names "$ECR_REPO_NAME" >/dev/null 2>&1 || aws ecr create-repository --repository-name "$ECR_REPO_NAME"
+        aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
+      else
+        echo "AWS credentials missing; skipping ECR login"
+      fi
+    - export ECR_REPO_NAME="${ECR_REPO_NAME:-safehavenconnect-backend}"
+    - echo "Logging in to ECR..."
+    - >
+      aws ecr describe-repositories --repository-names "$ECR_REPO_NAME" >/dev/null 2>&1 ||
+      aws ecr create-repository --repository-name "$ECR_REPO_NAME"
+    - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
+  script:
+    - |
+      if [ -z "$AWS_ACCOUNT_ID" ] || [ -z "$AWS_DEFAULT_REGION" ] || [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
+        echo "Skipping backend image build: required AWS credentials are not set."
+        exit 0
+      fi
+    - echo "Building backend image..."
+    - docker build -t "$ECR_REPO_NAME:$IMAGE_TAG" -f backend/Dockerfile backend
+    - docker tag "$ECR_REPO_NAME:$IMAGE_TAG" "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$IMAGE_TAG"
+    - docker push "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$IMAGE_TAG"
+    - |
+      if [ "$CI_COMMIT_BRANCH" = "main" ]; then
+        docker tag "$ECR_REPO_NAME:$IMAGE_TAG" "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:latest"
+        docker push "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:latest"
+      fi
+  only:
+    - main
+    - develop
+
+
+# Deploy backend to EC2 via SSH
+backend_deploy_ec2:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh-client rsync busybox-extras
+    - mkdir -p ~/.ssh
+    - |
+      # Use the GitLab deployment key (shared across all team members)
+      if [ -z "$GITLAB_DEPLOY_KEY" ]; then
+        echo "ERROR: GITLAB_DEPLOY_KEY variable is not set."
+        echo "Please add it to GitLab CI/CD variables with the base64-encoded private key."
+        exit 1
+      fi
+      echo "Using deployment key for SSH access (decoding from base64)"
+      # Decode from base64 to avoid newline corruption during copy/paste
+      echo "$GITLAB_DEPLOY_KEY" | base64 -d > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - echo "$EC2_HOST_IP" > /tmp/ec2_host
+  script:
+    - |
+      EC2_HOST=$(cat /tmp/ec2_host)
+      
+      # Preflight check: verify EC2 is reachable on port 22
+      echo "Checking SSH connectivity to $EC2_HOST..."
+      if ! nc -z -w 10 "$EC2_HOST" 22; then
+        echo "ERROR: Cannot reach $EC2_HOST on port 22"
+        echo "Please check:"
+        echo "  1. EC2 instance is running"
+        echo "  2. Security Group allows inbound SSH from GitLab runner IPs"
+        echo "  3. EC2 has a public IP address"
+        echo "  4. EC2_HOST_IP variable is set correctly"
+        exit 1
+      fi
+      echo "SSH port is reachable, proceeding with deployment..."
+      
+      # Fail fast if authentication can't succeed (avoids confusing libcrypto/publickey errors later)
+      if ! ssh -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectTimeout=15 -i ~/.ssh/id_rsa ubuntu@"$EC2_HOST" "echo SSH OK"; then
+        echo "ERROR: SSH authentication failed. Common causes:"
+        echo "  - EC2_SSH_PRIVATE_KEY is a GitLab file variable but pipeline wrote its path string (use cp as above)"
+        echo "  - EC2_SSH_PRIVATE_KEY text lost newlines or has Windows CRLF (use printf | tr -d '\r')"
+        echo "  - Key doesn't match ~/.ssh/authorized_keys on the instance or is passphrase-protected"
+        exit 1
+      fi
+      
+      # Copy backend files to EC2
+      ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 ubuntu@$EC2_HOST "mkdir -p ~/app/backend"
+      rsync -avz -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" --delete ./backend/ ubuntu@$EC2_HOST:~/app/backend/
+      
+      # Restart Docker Compose backend container to pick up new code
+      ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -i ~/.ssh/id_rsa ubuntu@$EC2_HOST << 'ENDSSH'
+        cd ~/app/backend
+        sudo docker compose restart backend
+        echo "Backend container restarted successfully"
+      ENDSSH
+  only:
+    - main
+  needs:
+    - build
+  when: manual  # change to on_success for automatic deploy
