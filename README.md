@@ -1,4 +1,9 @@
-# SafeHavenConnect 
+# SafeHavenConnect
+
+## Preview
+
+![Main Page](documentation/screenshots/main_page.png)
+![Organizations Page](documentation/screenshots/org_page.png)
 
 ## Description
 SafeHavenConnect is a full-stack web platform that helps individuals locate and access domestic-violence support resources, including shelters, advocacy organizations, legal aid, and community services.
