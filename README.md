@@ -1,5 +1,8 @@
 # SafeHavenConnect
 
+## Live Demo
+https://youtu.be/8QxRENdTUl8
+
 ## Preview
 
 ![Main Page](documentation/screenshots/main_page.png)
@@ -11,9 +14,6 @@ SafeHavenConnect is a full-stack web platform that helps individuals locate and 
 The platform aggregates and visualizes information from multiple sources to make support services easier to find. Users can search and filter organizations, explore resource availability, and interact with data visualizations that highlight service distribution.
 
 This project focuses on technology for social impact, aiming to reduce barriers to accessing support resources.
-
-## Live Demo
-https://youtu.be/8QxRENdTUl8
 
 ## Full-Stack Architecture
 SafeHavenConnect is implemented using a modern full-stack architecture:
